@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:startDestination="@id/dashboardFragment">
+
+    <!-- Primary destinations (bottom navigation visible) -->
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="com.example.volatiledemandforecasting.feature.dashboard.DashboardFragment"
+        android:label="@string/nav_dashboard" />
+    <fragment
+        android:id="@+id/productsFragment"
+        android:name="com.example.volatiledemandforecasting.feature.products.ProductsFragment"
+        android:label="@string/nav_products" />
+    <fragment
+        android:id="@+id/dataManagementFragment"
+        android:name="com.example.volatiledemandforecasting.feature.data.DataManagementFragment"
+        android:label="@string/nav_data" />
+    <fragment
+        android:id="@+id/forecastsFragment"
+        android:name="com.example.volatiledemandforecasting.feature.forecasts.ForecastsFragment"
+        android:label="@string/nav_forecasts" />
+
+    <!-- Supporting destinations (bottom navigation hidden) -->
+    <fragment
+        android:id="@+id/placeholderFragment"
+        android:name="com.example.volatiledemandforecasting.feature.placeholder.PlaceholderFragment" />
+    <fragment
+        android:id="@+id/devGalleryFragment"
+        android:name="com.example.volatiledemandforecasting.feature.devgallery.DevGalleryFragment"
+        android:label="@string/screen_dev_gallery" />
+</navigation>

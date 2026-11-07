@@ -1,3 +1,95 @@
 <resources>
     <string name="app_name">Volatile Demand Forecasting</string>
+
+    <!-- Navigation -->
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_products">Products</string>
+    <string name="nav_data">Data</string>
+    <string name="nav_forecasts">Forecasts</string>
+    <string name="nav_back">Back</string>
+
+    <!-- Workspace chip -->
+    <string name="workspace_none">No workspace selected</string>
+    <string name="workspace_chip_description">Workspace: %1$s. Tap to switch.</string>
+    <string name="demo_data_badge">Demo data</string>
+
+    <!-- Options menu (spec §6.1) -->
+    <string name="options_menu_description">More options</string>
+    <string name="menu_switch_workspace">Switch workspace or store</string>
+    <string name="menu_model_info">About the forecasting model</string>
+    <string name="menu_manage_team">Manage team</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_help">Help and support</string>
+    <string name="menu_about">About this application</string>
+    <string name="menu_sign_out">Sign out</string>
+    <string name="menu_dev_gallery">Developer gallery (debug only)</string>
+
+    <string name="about_title">About this application</string>
+    <string name="about_body">%1$s\nVersion %2$s</string>
+    <string name="action_close">Close</string>
+
+    <!-- Screens that are not built yet -->
+    <string name="screen_workspace_picker">Workspaces</string>
+    <string name="screen_model_info">Forecasting model</string>
+    <string name="screen_team">Team</string>
+    <string name="screen_settings">Settings</string>
+    <string name="screen_help">Help and support</string>
+    <string name="screen_dev_gallery">Developer gallery</string>
+    <string name="not_built_title">Not built yet</string>
+    <string name="not_built_body">This screen is part of build step %1$d.</string>
+
+    <!-- State components -->
+    <string name="state_loading">Loading…</string>
+    <string name="state_error_title">Couldn\'t load this</string>
+    <string name="state_retry">Try again</string>
+    <string name="state_offline_title">You\'re offline</string>
+    <string name="state_offline_body">Connect to the internet and try again.</string>
+    <string name="state_offline_banner">Showing saved data.</string>
+    <string name="state_offline_banner_synced">Showing saved data. Last synced %1$s.</string>
+
+    <!-- Shared actions -->
+    <string name="action_cancel">Cancel</string>
+    <string name="action_confirm">Confirm</string>
+    <string name="action_delete">Delete</string>
+
+    <!-- Context menu / popup menu accessibility -->
+    <string name="context_menu_long_press_label">Open actions menu</string>
+    <string name="popup_menu_selected">Selected</string>
+
+    <!-- Developer gallery (sample items are not real data) -->
+    <string name="gallery_section_states">State components</string>
+    <string name="gallery_section_context">Context menu: long-press a row</string>
+    <string name="gallery_section_popup">Popup menu: tap the button</string>
+    <string name="gallery_section_buttons">Buttons, chips and dialog</string>
+    <string name="gallery_sample_note">Sample items for checking components. Not real data.</string>
+    <string name="gallery_sample_item">Sample item %1$d</string>
+    <string name="gallery_sample_chip">Sample label</string>
+    <string name="gallery_context_open">Open</string>
+    <string name="gallery_context_edit">Edit</string>
+    <string name="gallery_context_delete">Delete…</string>
+    <string name="gallery_last_action">Last action: %1$s</string>
+    <string name="gallery_none">none</string>
+    <string name="gallery_sort_label">Sort: %1$s</string>
+    <string name="gallery_sort_name">Name</string>
+    <string name="gallery_sort_sku">SKU</string>
+    <string name="gallery_sort_category">Category</string>
+    <string name="gallery_state_content">Content</string>
+    <string name="gallery_state_loading">Loading</string>
+    <string name="gallery_state_empty">Empty</string>
+    <string name="gallery_state_error">Error</string>
+    <string name="gallery_state_offline">Offline</string>
+    <string name="gallery_empty_title">Nothing here yet</string>
+    <string name="gallery_empty_body">An empty state explains what will appear and what to do next.</string>
+    <string name="gallery_error_message">The server couldn\'t be reached. Check your connection and try again.</string>
+    <string name="gallery_content_text">Loaded content appears here.</string>
+    <string name="gallery_primary">Primary</string>
+    <string name="gallery_secondary">Secondary</string>
+    <string name="gallery_destructive">Destructive</string>
+    <string name="gallery_confirm_title">Delete sample item?</string>
+    <string name="gallery_confirm_body">Destructive actions always ask first.</string>
+    <string name="gallery_status_ready">Ready</string>
+    <string name="gallery_status_attention">Needs attention</string>
+    <string name="gallery_status_failed">Failed</string>
+    <string name="gallery_metric_label">Sample metric</string>
+    <string name="gallery_metric_value">12.3</string>
 </resources>

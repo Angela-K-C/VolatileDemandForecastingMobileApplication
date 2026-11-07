@@ -2,4 +2,11 @@
 <resources>
 
     <style name="Theme.VolatileDemandForecastingMobileApplication" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <!-- Splash screen (spec §8.1): shown only while the app starts, then swapped for the app theme. -->
+    <style name="Theme.VolatileDemandForecastingMobileApplication.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.VolatileDemandForecastingMobileApplication</item>
+    </style>
 </resources>

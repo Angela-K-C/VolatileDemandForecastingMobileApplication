@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Container for the NavHostFragment, created in code (no XML screen layouts). -->
+    <item name="nav_host_container" type="id" />
+</resources>
