@@ -24,7 +24,8 @@ Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 64 unit tests, l
 
 | File | Contents |
 |------|----------|
-| `README.md` | This overview, setup, how to run and test |
+| `SETUP.md` | **Start here as a new collaborator:** full setup of all three repositories, from cloning and the M5 data to the app running |
+| `README.md` | This overview, a short setup, how to run and test |
 | `docs/ARCHITECTURE.md` | Stack, layering, packages, patterns, networking, auth, caching, UI conventions |
 | `docs/FEATURES.md` | Every screen: what it does, the API it uses, and the rules it follows |
 | `docs/BUILD_LOG.md` | What was built in each step, the decisions made, problems hit and how they were fixed |
@@ -38,6 +39,8 @@ Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 64 unit tests, l
 - An Android phone or emulator.
 
 ## Setup
+
+New to the project? Follow **[SETUP.md](SETUP.md)**: it covers all three repositories, the M5 data download and the Windows setup script. The short version, for when the backend is already set up:
 
 1. Start the backend (in `../SemProject_Backend`): `docker compose up`. It serves `http://localhost:8000`.
 2. Create `local.properties` in this repo's root (it is git-ignored) with the SDK path and the API address:
