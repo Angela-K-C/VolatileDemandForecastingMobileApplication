@@ -588,4 +588,25 @@
     <string name="error_last_owner">A workspace must keep at least one owner. Make someone else an owner first.</string>
     <string name="error_already_member">That person is already in this workspace.</string>
     <string name="error_invitation_not_pending">This invitation is no longer open.</string>
+    <string name="menu_research">Research summary</string>
+    <string name="screen_research">Research summary</string>
+    <string name="research_empty_title">Nothing to compare yet</string>
+    <string name="research_empty_body">Run replays or import actual sales, then come back to compare the methods.</string>
+    <string name="research_filter">As-of date range</string>
+    <string name="research_from">From</string>
+    <string name="research_to">To</string>
+    <string name="research_filter_hint">Optional. Use YYYY-MM-DD. Leave blank for all dates.</string>
+    <string name="research_apply">Apply</string>
+    <string name="research_date_invalid">Use a date like 2016-05-20.</string>
+    <string name="research_none_in_range">No forecast days with known actual sales in this range.</string>
+    <string name="research_counts">%1$d runs, %2$d forecast days compared.</string>
+    <string name="research_overall">Overall</string>
+    <string name="research_by_class">By demand type</string>
+    <string name="research_by_day">By day ahead</string>
+    <string name="research_day_n">Day %1$s ahead</string>
+    <string name="research_block_body">%1$d forecast days. All three methods are measured on these same days.</string>
+    <string name="research_ai">AI</string>
+    <string name="research_naive">Same as last day</string>
+    <string name="research_seasonal">Same weekday last week</string>
+    <string name="research_export">Export CSV</string>
 </resources>

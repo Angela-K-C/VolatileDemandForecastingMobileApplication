@@ -37,6 +37,9 @@
         android:id="@+id/workspacePickerFragment"
         android:name="com.example.volatiledemandforecasting.feature.workspace.WorkspacePickerFragment" />
     <fragment
+        android:id="@+id/researchFragment"
+        android:name="com.example.volatiledemandforecasting.feature.research.ResearchFragment" />
+    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.volatiledemandforecasting.feature.settings.SettingsFragment" />
     <fragment

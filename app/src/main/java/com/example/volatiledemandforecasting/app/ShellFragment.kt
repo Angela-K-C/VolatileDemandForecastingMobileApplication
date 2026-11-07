@@ -80,6 +80,9 @@ abstract class ShellFragment : ComposeFragment() {
             if (state.canManageTeam) {
                 add(MenuEntry(stringResource(R.string.menu_manage_team), { navController.navigate(R.id.teamFragment) }, Icons.Outlined.Groups))
             }
+            if (state.user?.isResearch == true) {
+                add(MenuEntry(stringResource(R.string.menu_research), { navController.navigate(R.id.researchFragment) }, Icons.Outlined.Info))
+            }
             add(MenuEntry(
                 if (state.pendingInvitations > 0) stringResource(R.string.menu_settings_badge, state.pendingInvitations) else stringResource(R.string.menu_settings),
                 { navController.navigate(R.id.settingsFragment) },
