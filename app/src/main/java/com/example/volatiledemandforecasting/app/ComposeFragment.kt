@@ -22,7 +22,8 @@ abstract class ComposeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-        setContent { VolatileDemandForecastingTheme { Content() } }
+        // `this` is the ComposeView, which has its own Content(); name the Fragment explicitly.
+        setContent { VolatileDemandForecastingTheme { this@ComposeFragment.Content() } }
     }
 
     @Composable
