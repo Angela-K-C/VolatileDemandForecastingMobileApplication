@@ -12,15 +12,13 @@ import java.util.Locale
  */
 object Formatting {
 
-    private val longDate = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
-    private val shortDate = DateTimeFormatter.ofPattern("d MMM", Locale.getDefault())
 
     fun parseDate(iso: String?): LocalDate? = iso?.let { runCatching { LocalDate.parse(it.take(10)) }.getOrNull() }
 
     /** "8 May 2016", in the user's locale. Falls back to the raw text if it is not a date. */
-    fun date(iso: String?): String = parseDate(iso)?.format(longDate) ?: iso.orEmpty()
+    fun date(iso: String?): String = parseDate(iso)?.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)) ?: iso.orEmpty()
 
-    fun shortDate(iso: String?): String = parseDate(iso)?.format(shortDate) ?: iso.orEmpty()
+    fun shortDate(iso: String?): String = parseDate(iso)?.format(DateTimeFormatter.ofPattern("d MMM", Locale.getDefault())) ?: iso.orEmpty()
 
     /** A decimal with one place by default, or a rounded whole number. Null is "not known", never 0. */
     fun units(value: Double?, display: TableDisplay = TableDisplay.Decimals, notKnown: String = "–"): String = when {

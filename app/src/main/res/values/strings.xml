@@ -56,7 +56,6 @@
     <string name="back_to_sign_in">Back to sign in</string>
     <string name="sign_out_title">Sign out?</string>
     <string name="sign_out_body">You\'ll need to sign in again to see your forecasts.</string>
-    <string name="signed_in_as">Signed in as %1$s (%2$s)</string>
 
     <!-- Form validation -->
     <string name="error_email_required">Enter your email address.</string>
@@ -101,7 +100,6 @@
 
     <!-- Shared actions -->
     <string name="action_cancel">Cancel</string>
-    <string name="action_confirm">Confirm</string>
     <string name="action_delete">Delete</string>
 
     <!-- Context menu / popup menu accessibility -->
@@ -222,7 +220,6 @@
     <string name="cfg_as_of_help_replay">This date is in the past. The result will be compared with what really sold (a replay).</string>
     <string name="cfg_as_of_help_forecast">A true forecast from the latest recorded day. Real sales for these days are not known yet.</string>
     <string name="cfg_as_of_fixed">Forecasts start after the latest recorded sales day, %1$s.</string>
-    <string name="cfg_as_of_range">Choose a date from %1$s to %2$s.</string>
     <string name="cfg_horizon">How far ahead</string>
     <string name="cfg_horizon_days">%1$d days</string>
     <string name="cfg_horizon_next_day">Next day</string>
@@ -283,7 +280,7 @@
     <string name="res_delete">Delete forecast</string>
     <string name="res_delete_confirm_title">Delete this forecast?</string>
     <string name="res_delete_confirm_body">It will be removed from your history.</string>
-    <string name="res_four_percent">Days 2 to 7 are forecast from the model\'s own earlier predictions and run about 4% high on average.</string>
+    <string name="res_four_percent" formatted="false">Days 2 to 7 are forecast from the model\'s own earlier predictions and run about 4% high on average.</string>
     <string name="res_ev_run_title">Error on these days (actual sales known)</string>
     <string name="res_ev_run_body">Average miss per day, over %1$d days compared with real sales (%2$s).</string>
     <string name="res_ev_product_title">This product in the past</string>
@@ -303,7 +300,6 @@
     <string name="metrics_last_week">Same day last week</string>
     <string name="res_failed">This forecast failed: %1$s</string>
     <string name="res_not_ready">This forecast isn\'t finished yet.</string>
-    <string name="res_see_progress">See progress</string>
 
     <!-- Forecast history -->
     <string name="hist_empty_title">No forecasts yet</string>
@@ -333,7 +329,6 @@
     <string name="chart_description">Chart of daily units: %1$s</string>
     <string name="action_ok">OK</string>
     <string name="product_no_history">No sales were recorded for this product in this period.</string>
-    <string name="res_asof_marker">Forecast starts</string>
 
     <!-- Step 4: errors -->
     <string name="error_file_not_utf8">This file isn\'t UTF-8 text. In your spreadsheet app, save it as "CSV UTF-8" and try again.</string>

@@ -54,11 +54,10 @@ class ResearchFragment : ShellFragment() {
 
         LaunchedEffect(Unit) {
             viewModel.events.collect { event ->
-                val text = when (event) {
-                    ResearchEvent.Exported -> context.getString(R.string.res_export_done)
-                    is ResearchEvent.ExportFailed -> event.message.asString(context)
+                when (event) {
+                    ResearchEvent.Exported -> Toast.makeText(context, R.string.res_export_done, Toast.LENGTH_LONG).show()
+                    is ResearchEvent.ExportFailed -> Toast.makeText(context, event.message.asString(context), Toast.LENGTH_LONG).show()
                 }
-                Toast.makeText(context, text, Toast.LENGTH_LONG).show()
             }
         }
 
