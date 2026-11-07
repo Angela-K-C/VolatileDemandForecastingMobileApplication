@@ -21,6 +21,17 @@
         android:name="com.example.volatiledemandforecasting.feature.forecasts.ForecastsFragment"
         android:label="@string/nav_forecasts" />
 
+    <!-- Authentication (signed out; bottom navigation hidden) -->
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.volatiledemandforecasting.feature.auth.login.LoginFragment" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="com.example.volatiledemandforecasting.feature.auth.register.RegisterFragment" />
+    <fragment
+        android:id="@+id/forgotPasswordFragment"
+        android:name="com.example.volatiledemandforecasting.feature.auth.forgot.ForgotPasswordFragment" />
+
     <!-- Supporting destinations (bottom navigation hidden) -->
     <fragment
         android:id="@+id/placeholderFragment"

@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.navigation.NavController
 import com.example.volatiledemandforecasting.R
 
+/** Screens shown while signed out (spec §5.2). They have no bottom bar, workspace chip or Options menu. */
+val AUTH_DESTINATIONS = setOf(R.id.loginFragment, R.id.registerFragment, R.id.forgotPasswordFragment)
+
 const val ARG_PLACEHOLDER_TITLE = "placeholderTitle"
 const val ARG_PLACEHOLDER_STEP = "placeholderStep"
 

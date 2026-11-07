@@ -24,7 +24,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.volatiledemandforecasting.R
@@ -32,6 +31,7 @@ import com.example.volatiledemandforecasting.app.navigation.MainTab
 import com.example.volatiledemandforecasting.app.navigation.navigateToPlaceholder
 import com.example.volatiledemandforecasting.app.navigation.navigateToTab
 import com.example.volatiledemandforecasting.core.ui.components.AppScaffold
+import com.example.volatiledemandforecasting.core.ui.components.ConfirmationDialog
 import com.example.volatiledemandforecasting.core.ui.components.MenuEntry
 
 /**
@@ -40,7 +40,9 @@ import com.example.volatiledemandforecasting.core.ui.components.MenuEntry
  */
 abstract class ShellFragment : ComposeFragment() {
 
-    private val shell: ShellViewModel by activityViewModels()
+    protected val shell: ShellViewModel by appActivityViewModels {
+        ShellViewModel(it.session, it.userRepository, it.authRepository)
+    }
 
     @get:StringRes
     protected abstract val titleRes: Int
@@ -63,6 +65,7 @@ abstract class ShellFragment : ComposeFragment() {
         val navController = findNavController()
         val state by shell.state.collectAsStateWithLifecycle()
         var showAbout by rememberSaveable { mutableStateOf(false) }
+        var showSignOutConfirm by rememberSaveable { mutableStateOf(false) }
 
         // Screens that are not built yet open a placeholder that names their build step.
         val openPlaceholder = { title: Int, step: Int -> navController.navigateToPlaceholder(title, step) }
@@ -78,8 +81,7 @@ abstract class ShellFragment : ComposeFragment() {
             add(MenuEntry(stringResource(R.string.menu_settings), { openPlaceholder(R.string.screen_settings, 5) }, Icons.Outlined.Settings))
             add(MenuEntry(stringResource(R.string.menu_help), { openPlaceholder(R.string.screen_help, 5) }, Icons.AutoMirrored.Outlined.HelpOutline))
             add(MenuEntry(stringResource(R.string.menu_about), { showAbout = true }, Icons.Outlined.Info))
-            // Enabled in build step 2, when there is a session to end.
-            add(MenuEntry(stringResource(R.string.menu_sign_out), {}, Icons.AutoMirrored.Outlined.Logout, enabled = false))
+            add(MenuEntry(stringResource(R.string.menu_sign_out), { showSignOutConfirm = true }, Icons.AutoMirrored.Outlined.Logout))
             if (isDebuggable) {
                 add(MenuEntry(stringResource(R.string.menu_dev_gallery), { navController.navigate(R.id.devGalleryFragment) }, Icons.Outlined.Widgets))
             }
@@ -98,6 +100,18 @@ abstract class ShellFragment : ComposeFragment() {
         )
 
         if (showAbout) AboutDialog(onDismiss = { showAbout = false })
+        if (showSignOutConfirm) {
+            ConfirmationDialog(
+                title = stringResource(R.string.sign_out_title),
+                body = stringResource(R.string.sign_out_body),
+                confirmLabel = stringResource(R.string.menu_sign_out),
+                onConfirm = {
+                    showSignOutConfirm = false
+                    shell.signOut()
+                },
+                onDismiss = { showSignOutConfirm = false },
+            )
+        }
     }
 }
 
