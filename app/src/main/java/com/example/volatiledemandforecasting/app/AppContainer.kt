@@ -14,8 +14,12 @@ import com.example.volatiledemandforecasting.data.catalog.ProductApi
 import com.example.volatiledemandforecasting.data.catalog.ProductRepository
 import com.example.volatiledemandforecasting.data.forecast.ForecastApi
 import com.example.volatiledemandforecasting.data.forecast.ForecastRepository
+import com.example.volatiledemandforecasting.data.imports.ImportApi
+import com.example.volatiledemandforecasting.data.imports.ImportRepository
 import com.example.volatiledemandforecasting.data.store.StoreApi
 import com.example.volatiledemandforecasting.data.store.StoreRepository
+import com.example.volatiledemandforecasting.data.training.TrainingApi
+import com.example.volatiledemandforecasting.data.training.TrainingRepository
 import com.example.volatiledemandforecasting.data.user.MeApi
 import com.example.volatiledemandforecasting.data.user.UserRepository
 import com.example.volatiledemandforecasting.data.workspace.ActiveStore
@@ -53,6 +57,8 @@ class AppContainer(context: Context) {
     val productRepository = ProductRepository(authedRetrofit.create<ProductApi>(), json)
     val storeRepository = StoreRepository(authedRetrofit.create<StoreApi>(), json)
     val forecastRepository = ForecastRepository(authedRetrofit.create<ForecastApi>(), json)
+    val importRepository = ImportRepository(authedRetrofit.create<ImportApi>(), json)
+    val trainingRepository = TrainingRepository(authedRetrofit.create<TrainingApi>(), json)
 
     init {
         // Sign-out clears what belongs to the user (spec §14): the chosen workspace and store.

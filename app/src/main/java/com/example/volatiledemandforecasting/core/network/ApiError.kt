@@ -61,6 +61,12 @@ object ApiErrorCodes {
     const val NO_MODEL_FOR_AS_OF = "NO_MODEL_FOR_AS_OF"
     const val HORIZON_NOT_SUPPORTED = "HORIZON_NOT_SUPPORTED"
     const val ML_SERVICE_UNAVAILABLE = "ML_SERVICE_UNAVAILABLE"
+    const val FILE_NOT_UTF8 = "FILE_NOT_UTF8"
+    const val FILE_TOO_LARGE = "FILE_TOO_LARGE"
+    const val EMPTY_FILE = "EMPTY_FILE"
+    const val IMPORT_NOT_READY = "IMPORT_NOT_READY"
+    const val REFERENCE_MODEL_FIXED = "REFERENCE_MODEL_FIXED"
+    const val NOT_ELIGIBLE = "NOT_ELIGIBLE"
 }
 
 internal fun parseErrorBody(json: Json, body: String?): ErrorBody? =

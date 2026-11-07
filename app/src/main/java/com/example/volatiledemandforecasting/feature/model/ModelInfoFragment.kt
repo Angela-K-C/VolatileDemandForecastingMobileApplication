@@ -21,7 +21,6 @@ import com.example.volatiledemandforecasting.core.ui.Formatting
 import com.example.volatiledemandforecasting.core.ui.charts.ChartSeries
 import com.example.volatiledemandforecasting.core.ui.charts.LineChart
 import com.example.volatiledemandforecasting.core.ui.charts.LineStyle
-import com.example.volatiledemandforecasting.core.ui.components.EmptyState
 import com.example.volatiledemandforecasting.core.ui.components.InlineMessage
 import com.example.volatiledemandforecasting.core.ui.components.StatusKind
 import com.example.volatiledemandforecasting.core.ui.components.UiStateHost
@@ -30,6 +29,7 @@ import com.example.volatiledemandforecasting.data.forecast.windowDates
 import com.example.volatiledemandforecasting.data.store.ActiveModelDto
 import com.example.volatiledemandforecasting.feature.forecasts.MetricColumn
 import com.example.volatiledemandforecasting.feature.forecasts.MetricsBlock
+import com.example.volatiledemandforecasting.data.workspace.canManageData
 import com.example.volatiledemandforecasting.feature.workspace.StoreGate
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.contentOrNull
@@ -39,29 +39,32 @@ class ModelInfoFragment : ShellFragment() {
     override val titleRes = R.string.screen_model_info
 
     private val viewModel: ModelInfoViewModel by appViewModels { ModelInfoViewModel(it.storeRepository, it.activeStore) }
+    private val training: TrainingViewModel by appViewModels { TrainingViewModel(it.trainingRepository, it.activeStore) }
 
     @Composable
     override fun ScreenContent(padding: PaddingValues) {
         val selection by collectSelection()
         val state by viewModel.state.collectAsStateWithLifecycle()
         StoreGate(selection, onChoose = {}, modifier = Modifier.padding(padding)) {
-            UiStateHost(
-                state, onRetry = viewModel::load, modifier = Modifier.padding(padding),
-                empty = { EmptyState(stringResource(R.string.screen_model_info), stringResource(R.string.model_none)) },
-            ) { model ->
-                ModelInfo(model, Modifier.padding(padding))
+            UiStateHost(state, onRetry = viewModel::load, modifier = Modifier.padding(padding), empty = {}) { screen ->
+                Column(
+                    Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(Spacing.lg),
+                    verticalArrangement = Arrangement.spacedBy(Spacing.lg),
+                ) {
+                    // A business store trains its own model; the demo's model is fixed.
+                    if (!screen.store.isReference) TrainingSection(training, screen.store.canManageData)
+                    val model = screen.model
+                    if (model != null) ModelInfo(model) else Text(stringResource(R.string.model_none), style = MaterialTheme.typography.bodyMedium)
+                }
             }
         }
     }
 }
 
 @Composable
-private fun ModelInfo(model: ActiveModelDto, modifier: Modifier) {
+private fun ModelInfo(model: ActiveModelDto) {
     val card = model.card
-    Column(
-        modifier.verticalScroll(rememberScrollState()).padding(Spacing.lg),
-        verticalArrangement = Arrangement.spacedBy(Spacing.lg),
-    ) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.lg)) {
         Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
             Text(card.title ?: model.model.id, style = MaterialTheme.typography.titleLarge)
             Text(

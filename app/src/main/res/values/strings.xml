@@ -148,7 +148,7 @@
     <!-- Step 3: errors -->
     <string name="error_forbidden">You don\'t have permission to do that in this workspace.</string>
     <string name="error_not_found">That item no longer exists.</string>
-    <string name="error_insufficient_history">This product needs at least 21 days of sales history for an AI forecast.</string>
+    <string name="error_insufficient_history">This product doesn\'t have enough days of sales history for an AI forecast.</string>
     <string name="error_too_many_gaps">Several recent days have no sales recorded, so only the simple forecast is shown.</string>
     <string name="error_stale_history">Your latest sales are too old to forecast tomorrow. Upload sales up to yesterday.</string>
     <string name="error_ai_not_available">AI forecasts aren\'t available for this store yet. \'Same as last day\' forecasts are available now.</string>
@@ -159,7 +159,7 @@
     <!-- Workspace picker -->
     <string name="picker_reference_blurb">Real historical sales from a US grocery store, used to demonstrate and evaluate the forecasting model</string>
     <string name="picker_your_workspaces">Your workspaces</string>
-    <string name="picker_no_own">You don\'t have a workspace of your own yet. Creating one arrives in the next build step.</string>
+    <string name="picker_no_own">You don\'t have a workspace of your own yet. Create one to upload your own sales.</string>
     <string name="picker_create_workspace">Create workspace</string>
     <string name="picker_no_stores">No store in this workspace yet</string>
     <string name="picker_role">Role: %1$s</string>
@@ -334,4 +334,185 @@
     <string name="action_ok">OK</string>
     <string name="product_no_history">No sales were recorded for this product in this period.</string>
     <string name="res_asof_marker">Forecast starts</string>
+
+    <!-- Step 4: errors -->
+    <string name="error_file_not_utf8">This file isn\'t UTF-8 text. In your spreadsheet app, save it as "CSV UTF-8" and try again.</string>
+    <string name="error_file_too_large">This file is too large to upload. Split it into smaller files.</string>
+    <string name="error_empty_file">This file is empty.</string>
+    <string name="error_import_not_ready">This import can\'t be confirmed yet. Check the mapping and validation first.</string>
+    <string name="error_reference_model_fixed">The demo store uses a fixed model, so it can\'t be trained.</string>
+    <string name="error_not_eligible">AI forecasting becomes available once your store has enough history.</string>
+
+    <!-- Create workspace -->
+    <string name="screen_create_workspace">Create workspace</string>
+    <string name="create_required">Required</string>
+    <string name="create_country_invalid">Use a 2-letter country code, for example KE.</string>
+    <string name="create_currency_invalid">Use a 3-letter currency code, for example KES.</string>
+    <string name="create_timezone_invalid">Use a time zone name such as Africa/Nairobi.</string>
+    <string name="create_rejected">The server didn\'t accept this value.</string>
+    <string name="create_workspace_section">Workspace</string>
+    <string name="create_workspace_name">Workspace name</string>
+    <string name="create_workspace_made">Workspace "%1$s" is created. Finish adding its first store.</string>
+    <string name="create_store_section">First store</string>
+    <string name="create_store_name">Store name</string>
+    <string name="create_store_code">Store code</string>
+    <string name="create_store_code_hint">A short code you use for this store, for example NBO-1.</string>
+    <string name="create_country">Country</string>
+    <string name="create_country_hint">Used for public holidays.</string>
+    <string name="create_subdivision">Region or state (optional)</string>
+    <string name="create_subdivision_hint">Helps with regional holidays, for example TX.</string>
+    <string name="create_timezone">Time zone</string>
+    <string name="create_timezone_hint">For example Africa/Nairobi.</string>
+    <string name="create_currency">Currency</string>
+    <string name="create_submit">Create workspace and store</string>
+
+    <!-- Data screen -->
+    <string name="data_delete_title">Delete this import?</string>
+    <string name="data_delete_body">The sales from %1$s are removed from the history. Days that this import replaced do not come back.</string>
+    <string name="data_delete">Delete import</string>
+    <string name="data_reference_note">The demo store\'s sales are fixed and can\'t be changed. Try a replay from Products instead.</string>
+    <string name="data_viewer_note">Viewers can see the sales history but can\'t upload data.</string>
+    <string name="data_upload">Upload sales data</string>
+    <string name="data_readiness_link">Data readiness</string>
+    <string name="data_imports">Imports</string>
+    <string name="data_no_imports">No imports yet.</string>
+    <string name="data_history_title">Sales history</string>
+    <string name="data_history_empty">No sales have been imported yet.</string>
+    <string name="data_history_counts">%1$d products · %2$d days with data</string>
+    <string name="data_last_updated">Last updated %1$s</string>
+    <string name="data_rows">%1$d rows</string>
+    <string name="import_status_uploaded">Uploaded</string>
+    <string name="import_status_needs_attention">Needs attention</string>
+    <string name="import_status_ready">Ready to import</string>
+    <string name="import_status_imported">Imported</string>
+    <string name="import_status_failed">Failed</string>
+    <string name="screen_import_wizard">Upload sales data</string>
+    <string name="screen_readiness">Data readiness</string>
+
+    <!-- Import wizard -->
+    <string name="w_file_unreadable">That file couldn\'t be read. Pick it again.</string>
+    <string name="w_step_of">Step %1$d of %2$d</string>
+    <string name="w_choose_title">Choose a file</string>
+    <string name="w_choose_body">Pick a CSV file of daily sales. Each row is one product on one day, with the date and the units sold.</string>
+    <string name="w_choose_button">Choose CSV file</string>
+    <string name="w_details_title">Check the file</string>
+    <string name="w_details_body">Nothing is uploaded until you tap Upload.</string>
+    <string name="w_details_size">Size: %1$s</string>
+    <string name="w_details_preview">First rows</string>
+    <string name="w_details_upload">Upload</string>
+    <string name="w_details_choose_other">Choose a different file</string>
+    <string name="w_map_title">Match the columns</string>
+    <string name="w_map_body">Tell the app which column holds which information. Required fields are marked with *.</string>
+    <string name="w_field_sales_date">Sales date</string>
+    <string name="w_field_units_sold">Units sold</string>
+    <string name="w_field_product_id">Product ID or SKU</string>
+    <string name="w_field_product_name">Product name</string>
+    <string name="w_field_unit_price">Unit price</string>
+    <string name="w_field_category">Category</string>
+    <string name="w_field_unit_of_measure">Unit of measure</string>
+    <string name="w_field_store_code">Store code (for files with several stores)</string>
+    <string name="w_field_store_closed">Store closed</string>
+    <string name="w_map_not_mapped">Not mapped</string>
+    <string name="w_map_check">Please check</string>
+    <string name="w_map_unused">Saved, not used for forecasting yet: %1$s</string>
+    <string name="w_map_date_format">Date format</string>
+    <string name="w_map_date_format_help">The dates in this file could be read in more than one way. Choose the one that matches.</string>
+    <string name="w_zero_question">If a product has no row for a day, does that mean it sold zero that day?</string>
+    <string name="w_zero_yes">Yes, a missing day means zero sales</string>
+    <string name="w_zero_no">No, those days were not recorded</string>
+    <string name="w_problem_duplicate">The same column is used for two fields.</string>
+    <string name="w_problem_date_format">Choose the date format.</string>
+    <string name="w_problem_zero">Answer this question to continue.</string>
+    <string name="w_problem_required">Choose a column for this field.</string>
+    <string name="w_map_validate">Check the data</string>
+    <string name="w_val_title">What the check found</string>
+    <string name="w_val_rows_read">Rows read</string>
+    <string name="w_val_rows_accepted">Rows accepted</string>
+    <string name="w_val_rows_rejected">Rows rejected</string>
+    <string name="w_val_rows_warnings">Rows with warnings</string>
+    <string name="w_val_duplicates">Duplicate rows added together</string>
+    <string name="w_val_zero_filled">Missing days filled with zero</string>
+    <string name="w_val_dates">Dates</string>
+    <string name="w_val_products">Products</string>
+    <string name="w_val_new_products">New products</string>
+    <string name="w_val_rejected_title">Rejected rows</string>
+    <string name="w_val_warnings_title">Warnings</string>
+    <string name="w_val_issues_title">Details</string>
+    <string name="w_val_line">Line %1$d</string>
+    <string name="w_val_more_issues">Only the first problems are listed. The counts above are complete.</string>
+    <string name="w_val_preview_title">How the first days will be stored</string>
+    <string name="w_val_filled">(filled with zero)</string>
+    <string name="w_val_attention_note">Some rows were rejected or flagged. The rest can still be imported. Unusual spikes are kept as they are.</string>
+    <string name="w_continue">Continue</string>
+    <string name="w_val_failed">Nothing in this file can be imported. Change the mapping or choose a different file.</string>
+    <string name="w_val_change_mapping">Change the mapping</string>
+    <string name="w_overlap_title">Days you already have</string>
+    <string name="w_overlap_body">%1$d days in this file are already in your sales history. Choose what to do with them.</string>
+    <string name="w_overlap_skip">Keep my existing days</string>
+    <string name="w_overlap_skip_help">The file\'s values for those days are ignored.</string>
+    <string name="w_overlap_replace">Replace them with this file</string>
+    <string name="w_overlap_replace_help">The file\'s values overwrite the existing ones.</string>
+    <string name="w_back">Back</string>
+    <string name="w_confirm_title">Confirm import</string>
+    <string name="w_confirm_body">Review the summary. Nothing is added to your sales history until you confirm.</string>
+    <string name="w_confirm_overlap">Overlapping days</string>
+    <string name="w_overlap_replace_short">%1$d replaced</string>
+    <string name="w_overlap_skip_short">%1$d kept</string>
+    <string name="w_confirm_next">After the import you can see which products are ready to forecast.</string>
+    <string name="w_confirm_import">Confirm and import</string>
+    <string name="w_result_title">Import finished</string>
+    <string name="w_result_inserted">Daily records added</string>
+    <string name="w_result_replaced">Daily records replaced</string>
+    <string name="w_result_skipped">Overlapping days kept</string>
+    <string name="w_result_products">New products</string>
+    <string name="w_result_warnings">%1$d rows were rejected and %2$d had warnings.</string>
+    <string name="w_result_readiness">%1$d of %2$d products are ready to forecast.</string>
+    <string name="w_result_stale">Your latest sales are older than yesterday, so next-day forecasts start from old data.</string>
+    <string name="w_result_forecasts">Go to forecasting</string>
+    <string name="w_result_view_readiness">See data readiness</string>
+    <string name="w_result_done">Done</string>
+
+    <!-- Readiness -->
+    <string name="ready_empty_title">Nothing to check yet</string>
+    <string name="ready_empty_body">Upload sales data to see which products are ready to forecast.</string>
+    <string name="ready_summary">%1$d of %2$d products are ready</string>
+    <string name="ready_rules">For AI forecasts a product needs at least %1$d days of sales and no more than %2$d unrecorded days recently.</string>
+    <string name="ready_stale">Your latest sales are older than yesterday. Upload sales up to yesterday to forecast tomorrow.</string>
+    <string name="ready_baselines_note">Simple "same as last day" forecasts work for every product.</string>
+    <string name="ready_ok">Ready</string>
+    <string name="ready_not_ok">Not ready</string>
+    <string name="ready_reason_history">Needs at least %1$d days of sales history.</string>
+    <string name="ready_reason_gaps">Too many unrecorded days recently (more than %2$d).</string>
+    <string name="ready_reason_stale">Its latest sales are older than yesterday.</string>
+    <string name="ready_reason_other">Not ready for AI forecasts.</string>
+    <string name="ready_days">%1$d days recorded, %2$d missing recently</string>
+    <string name="ready_latest">latest %1$s</string>
+
+    <!-- Training -->
+    <string name="train_title">AI for your store</string>
+    <string name="train_timeout">This is taking longer than expected. It keeps running on the server; open this screen again in a moment.</string>
+    <string name="train_running">Training the AI model. This usually takes under a minute.</string>
+    <string name="train_again">Train again</string>
+    <string name="train_start">Train AI model</string>
+    <string name="train_not_eligible_help">Training unlocks once all the checks above are passed.</string>
+    <string name="train_owners_only">Only owners and managers can train the model.</string>
+    <string name="train_eligible">Eligible for AI forecasts</string>
+    <string name="train_not_eligible">Not yet eligible</string>
+    <string name="train_check_progress">%1$s of %2$s</string>
+    <string name="train_check_passed">Done</string>
+    <string name="train_check_pending">Not yet</string>
+    <string name="train_check_products">Products with enough history</string>
+    <string name="train_check_days">Days of sales history</string>
+    <string name="train_check_observed">Recorded product-days</string>
+    <string name="train_failed">Training didn\'t finish: %1$s</string>
+    <string name="train_trained">AI forecasts are now available for this store.</string>
+    <string name="train_horizons">Forecast lengths available: %1$s days</string>
+    <string name="train_gate_failed">The AI model didn\'t beat the simple forecast on your recent sales, so the simple forecast stays in use. Try again after adding more sales.</string>
+    <string name="train_outcome_not_eligible">Not enough history yet. See the checks above.</string>
+    <string name="train_backtest_title">How the AI did on your recent sales</string>
+    <string name="train_backtest_body">Next-day predictions over %1$d store-product days (%2$s).</string>
+
+    <!-- Dashboard additions -->
+    <string name="dash_eligibility_days">%1$d of %2$d days of history</string>
+    <string name="dash_onboarding">Upload your sales history to start forecasting. Simple forecasts work straight away.</string>
 </resources>

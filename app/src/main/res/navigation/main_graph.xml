@@ -37,6 +37,15 @@
         android:id="@+id/workspacePickerFragment"
         android:name="com.example.volatiledemandforecasting.feature.workspace.WorkspacePickerFragment" />
     <fragment
+        android:id="@+id/createWorkspaceFragment"
+        android:name="com.example.volatiledemandforecasting.feature.workspace.create.CreateWorkspaceFragment" />
+    <fragment
+        android:id="@+id/importWizardFragment"
+        android:name="com.example.volatiledemandforecasting.feature.data.wizard.ImportWizardFragment" />
+    <fragment
+        android:id="@+id/readinessFragment"
+        android:name="com.example.volatiledemandforecasting.feature.data.readiness.ReadinessFragment" />
+    <fragment
         android:id="@+id/productDetailFragment"
         android:name="com.example.volatiledemandforecasting.feature.products.detail.ProductDetailFragment" />
     <fragment

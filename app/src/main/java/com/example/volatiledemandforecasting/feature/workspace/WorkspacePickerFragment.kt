@@ -85,8 +85,7 @@ class WorkspacePickerFragment : ShellFragment() {
                     item { Text(stringResource(R.string.picker_no_own), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
                 }
                 item {
-                    // Creating a workspace is part of the business journey (build step 4).
-                    OutlinedButton(onClick = {}, enabled = false, modifier = Modifier.fillMaxWidth()) {
+                    OutlinedButton(onClick = { navController.navigate(R.id.createWorkspaceFragment) }, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(R.string.picker_create_workspace))
                     }
                 }

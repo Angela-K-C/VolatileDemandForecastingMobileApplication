@@ -55,7 +55,7 @@ class ProductsViewModel(
 
     init {
         viewModelScope.launch {
-            combine(activeStore.selected, _query.debounce(300).distinctUntilChanged(), _demandClass) { s, q, c -> Triple(s, q, c) }
+            combine(activeStore.selected, _query.debounce(300).distinctUntilChanged(), _demandClass, activeStore.dataRevision) { s, q, c, _ -> Triple(s, q, c) }
                 .collectLatest { (s, _, _) ->
                     store = s
                     loadFirstPage()

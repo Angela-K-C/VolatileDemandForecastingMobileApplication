@@ -27,6 +27,30 @@ data class ReadinessDto(
 )
 
 @Serializable
+data class ProductReadinessDto(
+    val productId: String,
+    val sku: String,
+    val ready: Boolean = false,
+    /** `INSUFFICIENT_HISTORY`, `TOO_MANY_GAPS` or `STALE_HISTORY`. */
+    val reasons: List<String> = emptyList(),
+    val recordedDaysInLookback: Int = 0,
+    val missingDaysInLookback: Int = 0,
+    val latestDate: String? = null,
+)
+
+/** The full readiness report. Products that aren't ready come first. Thresholds are the API's, never the app's. */
+@Serializable
+data class ReadinessDetailDto(
+    val asOfDate: String? = null,
+    val minHistoryDays: Int = 0,
+    val maxMissingDaysInLookback: Int = 0,
+    val stale: Boolean = false,
+    val productsReady: Int = 0,
+    val productsTotal: Int = 0,
+    val products: List<ProductReadinessDto> = emptyList(),
+)
+
+@Serializable
 data class AsOfRangeDto(
     val default: String? = null,
     val editable: Boolean = false,
@@ -77,6 +101,9 @@ interface StoreApi {
     @GET("v1/stores/{storeId}/readiness")
     suspend fun readiness(@Path("storeId") storeId: String): ReadinessDto
 
+    @GET("v1/stores/{storeId}/readiness")
+    suspend fun readinessDetail(@Path("storeId") storeId: String): ReadinessDetailDto
+
     @GET("v1/stores/{storeId}/models/capabilities")
     suspend fun capabilities(@Path("storeId") storeId: String): CapabilitiesDto
 
@@ -87,6 +114,7 @@ interface StoreApi {
 class StoreRepository(private val api: StoreApi, private val json: Json) {
     suspend fun historySummary(storeId: String): HistorySummaryDto = apiCall(json) { api.historySummary(storeId) }
     suspend fun readiness(storeId: String): ReadinessDto = apiCall(json) { api.readiness(storeId) }
+    suspend fun readinessDetail(storeId: String): ReadinessDetailDto = apiCall(json) { api.readinessDetail(storeId) }
     suspend fun capabilities(storeId: String): CapabilitiesDto = apiCall(json) { api.capabilities(storeId) }
     suspend fun activeModel(storeId: String): ActiveModelDto = apiCall(json) { api.activeModel(storeId) }
 }

@@ -13,6 +13,8 @@ import com.example.volatiledemandforecasting.data.store.CapabilitiesDto
 import com.example.volatiledemandforecasting.data.store.HistorySummaryDto
 import com.example.volatiledemandforecasting.data.store.ReadinessDto
 import com.example.volatiledemandforecasting.data.store.StoreRepository
+import com.example.volatiledemandforecasting.data.training.EligibilityCheckDto
+import com.example.volatiledemandforecasting.data.training.TrainingRepository
 import com.example.volatiledemandforecasting.data.workspace.ActiveStore
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
@@ -20,6 +22,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
 /** How the dashboard describes AI availability (spec §8.4). */
@@ -32,6 +35,8 @@ data class DashboardData(
     val aiStatus: AiStatus,
     val readiness: ReadinessDto?,
     val recent: List<ForecastSummaryDto>,
+    /** "60 of 120 days" toward AI eligibility, from the API's own check. Null when not applicable. */
+    val eligibilityProgress: EligibilityCheckDto? = null,
 ) {
     val latestForecast: ForecastSummaryDto? get() = recent.firstOrNull()
 
@@ -50,6 +55,7 @@ class DashboardViewModel(
     private val stores: StoreRepository,
     private val products: ProductRepository,
     private val forecasts: ForecastRepository,
+    private val training: TrainingRepository,
     private val activeStore: ActiveStore,
 ) : ViewModel() {
 
@@ -62,7 +68,7 @@ class DashboardViewModel(
     init {
         viewModelScope.launch {
             // Reloads by itself when the user switches workspace.
-            activeStore.selected.collect {
+            combine(activeStore.selected, activeStore.dataRevision) { store, _ -> store }.collect {
                 current = it
                 load()
             }
@@ -81,13 +87,19 @@ class DashboardViewModel(
                     val productCount = async { products.products(store.storeId, "", null, page = 1, pageSize = 1).total }
                     val readiness = async { runCatching { stores.readiness(store.storeId) }.getOrNull() }
                     val recent = async { forecasts.list(store.storeId, replay = null, status = null, page = 1, pageSize = 3).items }
+                    val ai = aiStatusOf(capabilities.await())
+                    // Only a business store that isn't eligible yet needs the progress line.
+                    val progress = if (!store.isReference && ai == AiStatus.NotEligible) {
+                        runCatching { training.eligibility(store.storeId).checks["storeHistoryDays"] }.getOrNull()
+                    } else null
                     DashboardData(
                         store = store,
                         activeProducts = productCount.await(),
                         summary = summary.await(),
-                        aiStatus = aiStatusOf(capabilities.await()),
+                        aiStatus = ai,
                         readiness = readiness.await(),
                         recent = recent.await(),
+                        eligibilityProgress = progress,
                     )
                 }
             }

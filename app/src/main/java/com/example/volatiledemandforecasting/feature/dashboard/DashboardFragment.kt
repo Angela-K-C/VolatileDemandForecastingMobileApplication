@@ -27,9 +27,11 @@ import com.example.volatiledemandforecasting.core.ui.Formatting
 import com.example.volatiledemandforecasting.core.ui.components.InlineMessage
 import com.example.volatiledemandforecasting.core.ui.components.MetricCard
 import com.example.volatiledemandforecasting.core.ui.components.PrimaryButton
+import com.example.volatiledemandforecasting.core.ui.components.SecondaryButton
 import com.example.volatiledemandforecasting.core.ui.components.StatusKind
 import com.example.volatiledemandforecasting.core.ui.components.UiStateHost
 import com.example.volatiledemandforecasting.core.ui.theme.Spacing
+import com.example.volatiledemandforecasting.data.workspace.canManageData
 import com.example.volatiledemandforecasting.feature.forecasts.ForecastRow
 import com.example.volatiledemandforecasting.feature.workspace.StoreGate
 
@@ -38,7 +40,7 @@ class DashboardFragment : ShellFragment() {
     override val tab = MainTab.Dashboard
 
     private val viewModel: DashboardViewModel by appViewModels {
-        DashboardViewModel(it.storeRepository, it.productRepository, it.forecastRepository, it.activeStore)
+        DashboardViewModel(it.storeRepository, it.productRepository, it.forecastRepository, it.trainingRepository, it.activeStore)
     }
 
     @Composable
@@ -70,6 +72,12 @@ class DashboardFragment : ShellFragment() {
                         onClick = { navController.navigateToTab(MainTab.Products) },
                         modifier = Modifier.fillMaxWidth(),
                     )
+                    if (data.store.canManageData) {
+                        SecondaryButton(stringResource(R.string.data_upload), { navController.navigate(R.id.importWizardFragment) }, Modifier.fillMaxWidth())
+                    }
+                    if (data.summary.historyEnd == null && !data.store.isReference) {
+                        InlineMessage(stringResource(R.string.dash_onboarding), StatusKind.Neutral)
+                    }
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Text(stringResource(R.string.dash_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
                         TextButton(onClick = { navController.navigateToTab(MainTab.Forecasts) }) { Text(stringResource(R.string.dash_see_all)) }
@@ -99,7 +107,12 @@ private fun SummaryCards(data: DashboardData) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.md)) {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.md)) {
             MetricCard(stringResource(R.string.dash_active_products), data.activeProducts.toString(), Modifier.weight(1f))
-            MetricCard(stringResource(R.string.dash_ai_status), aiLabel, Modifier.weight(1f))
+            MetricCard(
+                stringResource(R.string.dash_ai_status), aiLabel, Modifier.weight(1f),
+                supporting = data.eligibilityProgress?.let {
+                    stringResource(R.string.dash_eligibility_days, it.value?.toInt() ?: 0, it.required?.toInt() ?: 0)
+                },
+            )
         }
         MetricCard(
             label = stringResource(R.string.dash_latest_sales),
