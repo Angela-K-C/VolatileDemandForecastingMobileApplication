@@ -41,4 +41,14 @@ class ErrorMessagesTest {
     fun `transport failures say the server can't be reached`() {
         assertEquals(UiText.Res(R.string.error_network), IOException("timeout").toUiText())
     }
+
+    @Test
+    fun `forecast problems get plain-language resources`() {
+        assertEquals(UiText.Res(R.string.error_insufficient_history), api(ApiErrorCodes.INSUFFICIENT_HISTORY).toUiText())
+        assertEquals(UiText.Res(R.string.error_too_many_gaps), api(ApiErrorCodes.TOO_MANY_GAPS).toUiText())
+        assertEquals(UiText.Res(R.string.error_ai_not_available), api(ApiErrorCodes.AI_NOT_AVAILABLE).toUiText())
+        assertEquals(UiText.Res(R.string.error_as_of_out_of_range), api(ApiErrorCodes.AS_OF_OUT_OF_RANGE).toUiText())
+        assertEquals(UiText.Res(R.string.error_no_model_for_as_of), api(ApiErrorCodes.NO_MODEL_FOR_AS_OF).toUiText())
+        assertEquals(UiText.Res(R.string.error_stale_history), api(ApiErrorCodes.STALE_HISTORY).toUiText())
+    }
 }

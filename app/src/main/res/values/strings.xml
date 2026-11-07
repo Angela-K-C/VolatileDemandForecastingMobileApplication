@@ -144,4 +144,194 @@
     <string name="gallery_status_failed">Failed</string>
     <string name="gallery_metric_label">Sample metric</string>
     <string name="gallery_metric_value">12.3</string>
+
+    <!-- Step 3: errors -->
+    <string name="error_forbidden">You don\'t have permission to do that in this workspace.</string>
+    <string name="error_not_found">That item no longer exists.</string>
+    <string name="error_insufficient_history">This product needs at least 21 days of sales history for an AI forecast.</string>
+    <string name="error_too_many_gaps">Several recent days have no sales recorded, so only the simple forecast is shown.</string>
+    <string name="error_stale_history">Your latest sales are too old to forecast tomorrow. Upload sales up to yesterday.</string>
+    <string name="error_ai_not_available">AI forecasts aren\'t available for this store yet. \'Same as last day\' forecasts are available now.</string>
+    <string name="error_as_of_out_of_range">That date isn\'t available. Choose a date inside the allowed range.</string>
+    <string name="error_no_model_for_as_of">No model is available for that date without using information from the future.</string>
+    <string name="error_horizon_not_supported">That forecast length isn\'t supported.</string>
+
+    <!-- Workspace picker -->
+    <string name="picker_reference_blurb">Real historical sales from a US grocery store, used to demonstrate and evaluate the forecasting model</string>
+    <string name="picker_your_workspaces">Your workspaces</string>
+    <string name="picker_no_own">You don\'t have a workspace of your own yet. Creating one arrives in the next build step.</string>
+    <string name="picker_create_workspace">Create workspace</string>
+    <string name="picker_no_stores">No store in this workspace yet</string>
+    <string name="picker_role">Role: %1$s</string>
+    <string name="picker_current">Current</string>
+    <string name="picker_history_range">Sales %1$s to %2$s</string>
+    <string name="picker_none_title">Choose a workspace</string>
+    <string name="picker_none_body">Pick a workspace and store to see products and forecasts.</string>
+    <string name="picker_choose_action">Choose workspace</string>
+    <string name="role_owner">Owner</string>
+    <string name="role_manager">Manager</string>
+    <string name="role_viewer">Viewer</string>
+    <string name="role_reference">Read-only demo</string>
+
+    <!-- Dashboard -->
+    <string name="dash_active_products">Active products</string>
+    <string name="dash_latest_sales">Latest sales date</string>
+    <string name="dash_sales_up_to">Sales recorded up to %1$s</string>
+    <string name="dash_latest_forecast">Latest forecast</string>
+    <string name="dash_no_forecast">No forecasts yet</string>
+    <string name="dash_ai_status">AI forecasts</string>
+    <string name="dash_ai_available">Available</string>
+    <string name="dash_ai_training">Training</string>
+    <string name="dash_ai_not_eligible">Not yet eligible</string>
+    <string name="dash_ai_baselines_only">Baselines only</string>
+    <string name="dash_generate">Generate forecast</string>
+    <string name="dash_try_replay">Try replay</string>
+    <string name="dash_recent">Recent forecasts</string>
+    <string name="dash_see_all">See all</string>
+    <string name="dash_stale_notice">Your latest sales are from %1$s. Upload sales up to yesterday to forecast tomorrow.</string>
+    <string name="dash_demo_notice">This workspace is read-only. Try a replay to compare the model with what really sold.</string>
+
+    <!-- Products -->
+    <string name="products_search">Search products</string>
+    <string name="products_filter">Filter</string>
+    <string name="products_filter_all">All kinds</string>
+    <string name="products_empty_title">No products found</string>
+    <string name="products_empty_body">Try a different search or filter.</string>
+    <string name="products_count">%1$d products</string>
+    <string name="products_load_more">Load more</string>
+    <string name="product_view_details">View details</string>
+    <string name="product_forecast_next_day">Forecast next day</string>
+    <string name="product_forecast">Forecast</string>
+    <string name="product_history_title">Last 90 days of sales</string>
+    <string name="product_history_note">Gaps mean no sales were recorded that day.</string>
+    <string name="product_sku">SKU %1$s</string>
+    <string name="product_category">Category: %1$s</string>
+    <string name="product_first_sale">First sale: %1$s</string>
+    <string name="screen_product">Product</string>
+    <string name="class_smooth">Steady seller</string>
+    <string name="class_erratic">Varies a lot</string>
+    <string name="class_intermittent">Sells on some days only</string>
+    <string name="class_lumpy">Irregular, in bursts</string>
+    <string name="class_insufficient">Not enough data</string>
+
+    <!-- Forecast configuration -->
+    <string name="screen_forecast_config">New forecast</string>
+    <string name="screen_forecast_progress">Forecast</string>
+    <string name="screen_forecast_result">Forecast result</string>
+    <string name="cfg_as_of">Forecast from</string>
+    <string name="cfg_as_of_help_replay">This date is in the past. The result will be compared with what really sold (a replay).</string>
+    <string name="cfg_as_of_help_forecast">A true forecast from the latest recorded day. Real sales for these days are not known yet.</string>
+    <string name="cfg_as_of_fixed">Forecasts start after the latest recorded sales day, %1$s.</string>
+    <string name="cfg_as_of_range">Choose a date from %1$s to %2$s.</string>
+    <string name="cfg_horizon">How far ahead</string>
+    <string name="cfg_horizon_days">%1$d days</string>
+    <string name="cfg_horizon_next_day">Next day</string>
+    <string name="cfg_method">Method</string>
+    <string name="cfg_method_ai">AI model</string>
+    <string name="cfg_method_baseline">Simple forecast</string>
+    <string name="cfg_method_compare">Compare both</string>
+    <string name="cfg_generate">Generate forecast</string>
+    <string name="cfg_read_only">This workspace is read-only. You can run replays on past dates but not change data.</string>
+    <string name="cfg_viewer">Viewers can\'t generate forecasts.</string>
+    <string name="cfg_pick_date">Pick date</string>
+    <string name="cfg_date_invalid">Choose a date from %1$s to %2$s.</string>
+    <string name="ai_reason_not_trained">The AI model has not been trained for this store yet.</string>
+    <string name="ai_reason_training">The AI model is training.</string>
+    <string name="ai_reason_not_eligible">This store doesn\'t have enough history yet.</string>
+    <string name="ai_reason_gate_failed">The AI model didn\'t beat the simple forecast on this store\'s recent sales, so the simple forecast is used.</string>
+    <string name="ai_reason_no_history">This store has no sales history yet.</string>
+    <string name="ai_reason_model_missing">The AI model is missing for this store.</string>
+    <string name="ai_reason_other">The AI model is not available.</string>
+
+    <!-- Progress -->
+    <string name="job_queued">Waiting to start</string>
+    <string name="job_preparing">Preparing the sales data</string>
+    <string name="job_running">Running the model</string>
+    <string name="job_finalizing">Saving the result</string>
+    <string name="job_failed_title">The forecast didn\'t finish</string>
+    <string name="job_retry">Retry</string>
+    <string name="job_leave_hint">You can leave this screen. The forecast keeps running and will appear under Forecasts.</string>
+    <string name="job_timeout">This is taking longer than expected. It is still running on the server; check Forecasts in a moment.</string>
+    <string name="job_open_forecasts">Open Forecasts</string>
+
+    <!-- Results -->
+    <string name="res_replay_tag">Replay</string>
+    <string name="res_forecast_tag">True forecast</string>
+    <string name="res_experimental">Experimental</string>
+    <string name="res_experimental_note">This forecast length hasn\'t been validated against past sales.</string>
+    <string name="res_price_assumed">Price assumed unchanged from the last known price.</string>
+    <string name="res_from_date">Forecast from %1$s</string>
+    <string name="res_ai_unavailable_note">AI wasn\'t used here: %1$s</string>
+    <string name="res_series_history">Recent sales</string>
+    <string name="res_series_ai">AI forecast</string>
+    <string name="res_series_baseline">Same as last day</string>
+    <string name="res_series_actual">What really sold</string>
+    <string name="res_table_title">Day by day</string>
+    <string name="res_col_date">Date</string>
+    <string name="res_col_ai">AI</string>
+    <string name="res_col_last_day">Last day</string>
+    <string name="res_col_last_week">Last week</string>
+    <string name="res_col_actual">Actual</string>
+    <string name="res_total_title">Total over the period</string>
+    <string name="res_display_decimals">One decimal</string>
+    <string name="res_display_whole">Whole units</string>
+    <string name="res_display_menu">Number display</string>
+    <string name="res_not_known">–</string>
+    <string name="res_export_csv">Export CSV</string>
+    <string name="res_export_done">Saved</string>
+    <string name="res_export_failed">Couldn\'t save the file.</string>
+    <string name="res_delete">Delete forecast</string>
+    <string name="res_delete_confirm_title">Delete this forecast?</string>
+    <string name="res_delete_confirm_body">It will be removed from your history.</string>
+    <string name="res_four_percent">Days 2 to 7 are forecast from the model\'s own earlier predictions and run about 4% high on average.</string>
+    <string name="res_ev_run_title">Error on these days (actual sales known)</string>
+    <string name="res_ev_run_body">Average miss per day, over %1$d days compared with real sales (%2$s).</string>
+    <string name="res_ev_product_title">This product in the past</string>
+    <string name="res_ev_product_body">How each method did on this product over %1$d days, one day ahead (%2$s).</string>
+    <string name="res_ev_product_small">A small sample, so treat it as a hint rather than a verdict.</string>
+    <string name="res_ev_model_title">The model overall</string>
+    <string name="res_ev_model_body">All products in the store, next day, over %1$d predictions (%2$s).</string>
+    <string name="res_metric_mae">Average miss (MAE)</string>
+    <string name="res_metric_rmse">Typical miss (RMSE)</string>
+    <string name="res_metric_wape">Miss as a share of sales (WAPE)</string>
+    <string name="res_verdict_ai_better">On this measure the AI did better than the simple forecast.</string>
+    <string name="res_verdict_baseline_better">On this measure the simple forecast did better than the AI.</string>
+    <string name="res_verdict_tie">On this measure the AI and the simple forecast did equally well.</string>
+    <string name="metrics_caveat">Lower error means it did better on that sample, not that it will do better tomorrow.</string>
+    <string name="metrics_ai">AI</string>
+    <string name="metrics_baseline">Same as last day</string>
+    <string name="metrics_last_week">Same day last week</string>
+    <string name="res_failed">This forecast failed: %1$s</string>
+    <string name="res_not_ready">This forecast isn\'t finished yet.</string>
+    <string name="res_see_progress">See progress</string>
+
+    <!-- Forecast history -->
+    <string name="hist_empty_title">No forecasts yet</string>
+    <string name="hist_empty_body">Generate a forecast from the Products tab or the Dashboard.</string>
+    <string name="hist_filter_all">All</string>
+    <string name="hist_filter_replay">Replays</string>
+    <string name="hist_filter_forecast">True forecasts</string>
+    <string name="hist_actuals_now">Actuals now available</string>
+    <string name="hist_method_ai">AI</string>
+    <string name="hist_method_baseline">Simple</string>
+    <string name="hist_method_compare">Compare</string>
+    <string name="hist_summary">%1$s · %2$s · from %3$s</string>
+    <string name="hist_status_failed">Failed</string>
+    <string name="hist_status_running">In progress</string>
+
+    <!-- Model info -->
+    <string name="model_what_it_predicts">What it predicts</string>
+    <string name="model_trained_on">Trained on</string>
+    <string name="model_inputs">What it looks at</string>
+    <string name="model_backtest_title">How it did on past sales</string>
+    <string name="model_backtest_body">%1$s, next day, over %2$d predictions (%3$s).</string>
+    <string name="model_by_day_title">Accuracy by days ahead</string>
+    <string name="model_by_day_note">Typical miss (RMSE) for each day of a 7-day forecast. Lower is better.</string>
+    <string name="model_limitations">Limitations</string>
+    <string name="model_version">Version %1$s</string>
+    <string name="model_none">No AI model is active for this store yet. Simple forecasts are still available.</string>
+    <string name="chart_description">Chart of daily units: %1$s</string>
+    <string name="action_ok">OK</string>
+    <string name="product_no_history">No sales were recorded for this product in this period.</string>
+    <string name="res_asof_marker">Forecast starts</string>
 </resources>

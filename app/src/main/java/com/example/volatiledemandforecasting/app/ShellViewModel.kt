@@ -8,6 +8,9 @@ import com.example.volatiledemandforecasting.core.ui.components.WorkspaceChipUi
 import com.example.volatiledemandforecasting.data.auth.AuthRepository
 import com.example.volatiledemandforecasting.data.user.MeDto
 import com.example.volatiledemandforecasting.data.user.UserRepository
+import com.example.volatiledemandforecasting.data.workspace.ActiveStore
+import com.example.volatiledemandforecasting.data.workspace.Roles
+import com.example.volatiledemandforecasting.data.workspace.Selection
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,14 +28,12 @@ data class ShellUiState(
     val canManageTeam: Boolean = false,
 )
 
-/**
- * Activity-scoped, so every destination shows the same user and workspace chip.
- * Nothing sets the workspace until the workspace picker exists (build step 3).
- */
+/** Activity-scoped, so every destination shows the same user and workspace chip. */
 class ShellViewModel(
     private val session: SessionManager,
     private val users: UserRepository,
     private val auth: AuthRepository,
+    private val activeStore: ActiveStore,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ShellUiState())
@@ -47,10 +48,20 @@ class ShellViewModel(
                 }
             }
         }
+        viewModelScope.launch {
+            activeStore.state.collect { selection ->
+                val chosen = (selection as? Selection.Selected)?.store
+                _state.update {
+                    it.copy(
+                        workspace = chosen?.let { s -> WorkspaceChipUi(label = s.storeName.ifBlank { s.workspaceName }, isDemo = s.isReference) },
+                        canManageTeam = chosen != null && !chosen.isReference && chosen.role == Roles.OWNER,
+                    )
+                }
+            }
+        }
     }
 
-    // A failed load leaves `user` null. Step 3's workspace picker is the first screen that depends
-    // on /v1/me, so it owns the loading and error states for it.
+    // A failed load leaves `user` null; the screens that need it fetch their own data and show errors.
     private suspend fun loadProfile() {
         try {
             val me = users.me()

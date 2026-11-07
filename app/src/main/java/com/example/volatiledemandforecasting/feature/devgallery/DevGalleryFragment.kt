@@ -40,6 +40,7 @@ import com.example.volatiledemandforecasting.core.ui.components.SecondaryButton
 import com.example.volatiledemandforecasting.core.ui.components.StatusChip
 import com.example.volatiledemandforecasting.core.ui.components.StatusKind
 import com.example.volatiledemandforecasting.core.ui.components.UiState
+import com.example.volatiledemandforecasting.core.ui.UiText
 import com.example.volatiledemandforecasting.core.ui.components.UiStateHost
 import com.example.volatiledemandforecasting.core.ui.theme.Spacing
 
@@ -110,7 +111,7 @@ private fun StatesSection() = Section(R.string.gallery_section_states) {
         DemoState.Content -> UiState.Content(stringResource(R.string.gallery_content_text))
         DemoState.Loading -> UiState.Loading
         DemoState.Empty -> UiState.Empty
-        DemoState.Error -> UiState.Error(stringResource(R.string.gallery_error_message))
+        DemoState.Error -> UiState.Error(UiText.Res(R.string.gallery_error_message))
         DemoState.Offline -> UiState.Offline
     }
     val cardModifier = Modifier.fillMaxWidth().height(260.dp)

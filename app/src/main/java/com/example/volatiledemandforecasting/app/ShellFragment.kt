@@ -17,6 +17,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -33,6 +34,7 @@ import com.example.volatiledemandforecasting.app.navigation.navigateToTab
 import com.example.volatiledemandforecasting.core.ui.components.AppScaffold
 import com.example.volatiledemandforecasting.core.ui.components.ConfirmationDialog
 import com.example.volatiledemandforecasting.core.ui.components.MenuEntry
+import com.example.volatiledemandforecasting.data.workspace.Selection
 
 /**
  * A [ComposeFragment] that sits inside the app shell: top bar with the workspace chip and
@@ -41,7 +43,7 @@ import com.example.volatiledemandforecasting.core.ui.components.MenuEntry
 abstract class ShellFragment : ComposeFragment() {
 
     protected val shell: ShellViewModel by appActivityViewModels {
-        ShellViewModel(it.session, it.userRepository, it.authRepository)
+        ShellViewModel(it.session, it.userRepository, it.authRepository, it.activeStore)
     }
 
     @get:StringRes
@@ -60,6 +62,10 @@ abstract class ShellFragment : ComposeFragment() {
     @Composable
     protected abstract fun ScreenContent(padding: PaddingValues)
 
+    /** The workspace and store the user is working in. Store-scoped screens pass this to [StoreGate]. */
+    @Composable
+    protected fun collectSelection(): State<Selection> = appContainer.activeStore.state.collectAsStateWithLifecycle()
+
     @Composable
     final override fun Content() {
         val navController = findNavController()
@@ -73,8 +79,8 @@ abstract class ShellFragment : ComposeFragment() {
         val isDebuggable = (LocalContext.current.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
 
         val optionsMenu = buildList {
-            add(MenuEntry(stringResource(R.string.menu_switch_workspace), { openPlaceholder(R.string.screen_workspace_picker, 3) }, Icons.Outlined.SwapHoriz))
-            add(MenuEntry(stringResource(R.string.menu_model_info), { openPlaceholder(R.string.screen_model_info, 3) }, Icons.Outlined.AccountTree))
+            add(MenuEntry(stringResource(R.string.menu_switch_workspace), { navController.navigate(R.id.workspacePickerFragment) }, Icons.Outlined.SwapHoriz))
+            add(MenuEntry(stringResource(R.string.menu_model_info), { navController.navigate(R.id.modelInfoFragment) }, Icons.Outlined.AccountTree))
             if (state.canManageTeam) {
                 add(MenuEntry(stringResource(R.string.menu_manage_team), { openPlaceholder(R.string.screen_team, 5) }, Icons.Outlined.Groups))
             }
@@ -90,7 +96,7 @@ abstract class ShellFragment : ComposeFragment() {
         AppScaffold(
             title = stringResource(titleRes),
             workspace = state.workspace,
-            onWorkspaceClick = { openPlaceholder(R.string.screen_workspace_picker, 3) },
+            onWorkspaceClick = { navController.navigate(R.id.workspacePickerFragment) },
             optionsMenu = optionsMenu,
             selectedTab = tab,
             onTabSelected = navController::navigateToTab,

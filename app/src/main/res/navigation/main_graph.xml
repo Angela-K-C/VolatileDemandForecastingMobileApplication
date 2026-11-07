@@ -34,6 +34,24 @@
 
     <!-- Supporting destinations (bottom navigation hidden) -->
     <fragment
+        android:id="@+id/workspacePickerFragment"
+        android:name="com.example.volatiledemandforecasting.feature.workspace.WorkspacePickerFragment" />
+    <fragment
+        android:id="@+id/productDetailFragment"
+        android:name="com.example.volatiledemandforecasting.feature.products.detail.ProductDetailFragment" />
+    <fragment
+        android:id="@+id/forecastConfigFragment"
+        android:name="com.example.volatiledemandforecasting.feature.forecasts.config.ForecastConfigFragment" />
+    <fragment
+        android:id="@+id/forecastProgressFragment"
+        android:name="com.example.volatiledemandforecasting.feature.forecasts.progress.ForecastProgressFragment" />
+    <fragment
+        android:id="@+id/forecastResultFragment"
+        android:name="com.example.volatiledemandforecasting.feature.forecasts.result.ForecastResultFragment" />
+    <fragment
+        android:id="@+id/modelInfoFragment"
+        android:name="com.example.volatiledemandforecasting.feature.model.ModelInfoFragment" />
+    <fragment
         android:id="@+id/placeholderFragment"
         android:name="com.example.volatiledemandforecasting.feature.placeholder.PlaceholderFragment" />
     <fragment

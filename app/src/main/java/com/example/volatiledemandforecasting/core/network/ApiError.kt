@@ -51,6 +51,16 @@ object ApiErrorCodes {
     const val REGISTRATION_CLOSED = "REGISTRATION_CLOSED"
     const val INVALID_RESET_CODE = "INVALID_RESET_CODE"
     const val RATE_LIMITED = "RATE_LIMITED"
+    const val FORBIDDEN = "FORBIDDEN"
+    const val NOT_FOUND = "NOT_FOUND"
+    const val INSUFFICIENT_HISTORY = "INSUFFICIENT_HISTORY"
+    const val TOO_MANY_GAPS = "TOO_MANY_GAPS"
+    const val STALE_HISTORY = "STALE_HISTORY"
+    const val AI_NOT_AVAILABLE = "AI_NOT_AVAILABLE"
+    const val AS_OF_OUT_OF_RANGE = "AS_OF_OUT_OF_RANGE"
+    const val NO_MODEL_FOR_AS_OF = "NO_MODEL_FOR_AS_OF"
+    const val HORIZON_NOT_SUPPORTED = "HORIZON_NOT_SUPPORTED"
+    const val ML_SERVICE_UNAVAILABLE = "ML_SERVICE_UNAVAILABLE"
 }
 
 internal fun parseErrorBody(json: Json, body: String?): ErrorBody? =

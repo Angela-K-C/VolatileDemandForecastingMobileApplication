@@ -19,7 +19,16 @@ fun Throwable.toUiText(): UiText = when (this) {
         ApiErrorCodes.RATE_LIMITED ->
             if (retryAfterSeconds != null) UiText.Res(R.string.error_rate_limited, listOf(retryAfterSeconds))
             else UiText.Res(R.string.error_rate_limited_unknown)
-        "ML_SERVICE_UNAVAILABLE" -> UiText.Res(R.string.error_ml_unavailable)
+        ApiErrorCodes.ML_SERVICE_UNAVAILABLE -> UiText.Res(R.string.error_ml_unavailable)
+        ApiErrorCodes.FORBIDDEN -> UiText.Res(R.string.error_forbidden)
+        ApiErrorCodes.NOT_FOUND -> UiText.Res(R.string.error_not_found)
+        ApiErrorCodes.INSUFFICIENT_HISTORY -> UiText.Res(R.string.error_insufficient_history)
+        ApiErrorCodes.TOO_MANY_GAPS -> UiText.Res(R.string.error_too_many_gaps)
+        ApiErrorCodes.STALE_HISTORY -> UiText.Res(R.string.error_stale_history)
+        ApiErrorCodes.AI_NOT_AVAILABLE -> UiText.Res(R.string.error_ai_not_available)
+        ApiErrorCodes.AS_OF_OUT_OF_RANGE -> UiText.Res(R.string.error_as_of_out_of_range)
+        ApiErrorCodes.NO_MODEL_FOR_AS_OF -> UiText.Res(R.string.error_no_model_for_as_of)
+        ApiErrorCodes.HORIZON_NOT_SUPPORTED -> UiText.Res(R.string.error_horizon_not_supported)
         else -> if (message.isNotBlank()) UiText.Raw(message) else UiText.Res(R.string.error_unknown)
     }
     is IOException -> UiText.Res(R.string.error_network)
