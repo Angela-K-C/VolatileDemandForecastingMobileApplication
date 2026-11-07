@@ -21,6 +21,9 @@ data class StoreSelection(
     val storeName: String,
 )
 
+/** Light, dark or follow the phone (spec §8.12). */
+enum class ThemeMode { System, Light, Dark }
+
 /** How numbers in forecast tables are shown (spec §8.10). Totals always use the raw values. */
 enum class TableDisplay { Decimals, WholeUnits }
 
@@ -56,6 +59,14 @@ class AppPreferences(context: Context) {
         store.edit { it[TABLE_DISPLAY] = display.name }
     }
 
+    val themeMode: Flow<ThemeMode> = store.data.map { prefs ->
+        prefs[THEME_MODE]?.let { runCatching { ThemeMode.valueOf(it) }.getOrNull() } ?: ThemeMode.System
+    }
+
+    suspend fun setThemeMode(mode: ThemeMode) {
+        store.edit { it[THEME_MODE] = mode.name }
+    }
+
     private fun Preferences.toSelection(): StoreSelection? {
         val workspaceId = this[WORKSPACE_ID] ?: return null
         val storeId = this[STORE_ID] ?: return null
@@ -77,5 +88,6 @@ class AppPreferences(context: Context) {
         val STORE_ID = stringPreferencesKey("store_id")
         val STORE_NAME = stringPreferencesKey("store_name")
         val TABLE_DISPLAY = stringPreferencesKey("table_display")
+        val THEME_MODE = stringPreferencesKey("theme_mode")
     }
 }

@@ -6,6 +6,7 @@ import com.example.volatiledemandforecasting.core.security.SessionManager
 import com.example.volatiledemandforecasting.core.security.SessionState
 import com.example.volatiledemandforecasting.core.ui.components.WorkspaceChipUi
 import com.example.volatiledemandforecasting.data.auth.AuthRepository
+import com.example.volatiledemandforecasting.data.team.TeamRepository
 import com.example.volatiledemandforecasting.data.user.MeDto
 import com.example.volatiledemandforecasting.data.user.UserRepository
 import com.example.volatiledemandforecasting.data.workspace.ActiveStore
@@ -26,6 +27,8 @@ data class ShellUiState(
     val workspace: WorkspaceChipUi? = null,
     /** Owners only (spec §8.12). The backend still enforces it. */
     val canManageTeam: Boolean = false,
+    /** Pending invitations to this user's email. Shown as a badge on Settings (api.md, Team). */
+    val pendingInvitations: Int = 0,
 )
 
 /** Activity-scoped, so every destination shows the same user and workspace chip. */
@@ -34,6 +37,7 @@ class ShellViewModel(
     private val users: UserRepository,
     private val auth: AuthRepository,
     private val activeStore: ActiveStore,
+    private val team: TeamRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ShellUiState())
@@ -66,10 +70,29 @@ class ShellViewModel(
         try {
             val me = users.me()
             _state.update { it.copy(user = me) }
+            refreshInvitations()
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
             _state.update { it.copy(user = null) }
+        }
+    }
+
+    /** Called after accepting an invitation or leaving a workspace, so access and the badge are current. */
+    fun refreshProfile() {
+        viewModelScope.launch { loadProfile() }
+    }
+
+    fun refreshInvitations() {
+        viewModelScope.launch {
+            try {
+                val pending = team.myInvitations().count { it.status == "PENDING" }
+                _state.update { it.copy(pendingInvitations = pending) }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // The badge is a convenience; the invitations screen shows its own errors.
+            }
         }
     }
 

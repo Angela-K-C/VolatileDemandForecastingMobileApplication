@@ -29,7 +29,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.volatiledemandforecasting.R
 import com.example.volatiledemandforecasting.app.navigation.MainTab
-import com.example.volatiledemandforecasting.app.navigation.navigateToPlaceholder
 import com.example.volatiledemandforecasting.app.navigation.navigateToTab
 import com.example.volatiledemandforecasting.core.ui.components.AppScaffold
 import com.example.volatiledemandforecasting.core.ui.components.ConfirmationDialog
@@ -43,7 +42,7 @@ import com.example.volatiledemandforecasting.data.workspace.Selection
 abstract class ShellFragment : ComposeFragment() {
 
     protected val shell: ShellViewModel by appActivityViewModels {
-        ShellViewModel(it.session, it.userRepository, it.authRepository, it.activeStore)
+        ShellViewModel(it.session, it.userRepository, it.authRepository, it.activeStore, it.teamRepository)
     }
 
     @get:StringRes
@@ -73,19 +72,20 @@ abstract class ShellFragment : ComposeFragment() {
         var showAbout by rememberSaveable { mutableStateOf(false) }
         var showSignOutConfirm by rememberSaveable { mutableStateOf(false) }
 
-        // Screens that are not built yet open a placeholder that names their build step.
-        val openPlaceholder = { title: Int, step: Int -> navController.navigateToPlaceholder(title, step) }
-
         val isDebuggable = (LocalContext.current.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
 
         val optionsMenu = buildList {
             add(MenuEntry(stringResource(R.string.menu_switch_workspace), { navController.navigate(R.id.workspacePickerFragment) }, Icons.Outlined.SwapHoriz))
             add(MenuEntry(stringResource(R.string.menu_model_info), { navController.navigate(R.id.modelInfoFragment) }, Icons.Outlined.AccountTree))
             if (state.canManageTeam) {
-                add(MenuEntry(stringResource(R.string.menu_manage_team), { openPlaceholder(R.string.screen_team, 5) }, Icons.Outlined.Groups))
+                add(MenuEntry(stringResource(R.string.menu_manage_team), { navController.navigate(R.id.teamFragment) }, Icons.Outlined.Groups))
             }
-            add(MenuEntry(stringResource(R.string.menu_settings), { openPlaceholder(R.string.screen_settings, 5) }, Icons.Outlined.Settings))
-            add(MenuEntry(stringResource(R.string.menu_help), { openPlaceholder(R.string.screen_help, 5) }, Icons.AutoMirrored.Outlined.HelpOutline))
+            add(MenuEntry(
+                if (state.pendingInvitations > 0) stringResource(R.string.menu_settings_badge, state.pendingInvitations) else stringResource(R.string.menu_settings),
+                { navController.navigate(R.id.settingsFragment) },
+                Icons.Outlined.Settings,
+            ))
+            add(MenuEntry(stringResource(R.string.menu_help), { navController.navigate(R.id.helpFragment) }, Icons.AutoMirrored.Outlined.HelpOutline))
             add(MenuEntry(stringResource(R.string.menu_about), { showAbout = true }, Icons.Outlined.Info))
             add(MenuEntry(stringResource(R.string.menu_sign_out), { showSignOutConfirm = true }, Icons.AutoMirrored.Outlined.Logout))
             if (isDebuggable) {

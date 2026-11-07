@@ -37,6 +37,21 @@
         android:id="@+id/workspacePickerFragment"
         android:name="com.example.volatiledemandforecasting.feature.workspace.WorkspacePickerFragment" />
     <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.volatiledemandforecasting.feature.settings.SettingsFragment" />
+    <fragment
+        android:id="@+id/teamFragment"
+        android:name="com.example.volatiledemandforecasting.feature.team.TeamFragment" />
+    <fragment
+        android:id="@+id/myInvitationsFragment"
+        android:name="com.example.volatiledemandforecasting.feature.team.MyInvitationsFragment" />
+    <fragment
+        android:id="@+id/changePasswordFragment"
+        android:name="com.example.volatiledemandforecasting.feature.settings.ChangePasswordFragment" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.volatiledemandforecasting.feature.settings.HelpFragment" />
+    <fragment
         android:id="@+id/createWorkspaceFragment"
         android:name="com.example.volatiledemandforecasting.feature.workspace.create.CreateWorkspaceFragment" />
     <fragment
