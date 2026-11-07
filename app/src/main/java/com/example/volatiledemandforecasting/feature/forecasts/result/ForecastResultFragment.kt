@@ -69,6 +69,7 @@ import com.example.volatiledemandforecasting.feature.forecasts.horizonLabel
 import com.example.volatiledemandforecasting.feature.forecasts.methodLabel
 
 class ForecastResultFragment : ShellFragment() {
+    override val showsCachedData = true
     override val titleRes = R.string.screen_forecast_result
 
     private val viewModel: ForecastResultViewModel by appViewModels {

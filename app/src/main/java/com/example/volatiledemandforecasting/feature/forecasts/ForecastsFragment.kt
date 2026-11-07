@@ -41,6 +41,7 @@ import com.example.volatiledemandforecasting.data.forecast.ForecastSummaryDto
 import com.example.volatiledemandforecasting.feature.workspace.StoreGate
 
 class ForecastsFragment : ShellFragment() {
+    override val showsCachedData = true
     override val titleRes = R.string.nav_forecasts
     override val tab = MainTab.Forecasts
 

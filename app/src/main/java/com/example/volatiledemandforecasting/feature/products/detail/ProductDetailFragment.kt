@@ -31,6 +31,7 @@ import com.example.volatiledemandforecasting.core.ui.theme.Spacing
 import com.example.volatiledemandforecasting.data.workspace.canGenerateForecasts
 
 class ProductDetailFragment : ShellFragment() {
+    override val showsCachedData = true
     override val titleRes = R.string.screen_product
 
     private val viewModel: ProductDetailViewModel by appViewModels {

@@ -609,4 +609,5 @@
     <string name="research_naive">Same as last day</string>
     <string name="research_seasonal">Same weekday last week</string>
     <string name="research_export">Export CSV</string>
+    <string name="offline_copy">You are offline. This is a saved copy from %1$s. Uploading and forecasting need a connection.</string>
 </resources>

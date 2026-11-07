@@ -50,6 +50,7 @@ import com.example.volatiledemandforecasting.data.workspace.canGenerateForecasts
 import com.example.volatiledemandforecasting.feature.workspace.StoreGate
 
 class ProductsFragment : ShellFragment() {
+    override val showsCachedData = true
     override val titleRes = R.string.nav_products
     override val tab = MainTab.Products
 

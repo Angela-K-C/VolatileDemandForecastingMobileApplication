@@ -1,6 +1,9 @@
 package com.example.volatiledemandforecasting.app
 
 import android.content.Context
+import androidx.room.Room
+import com.example.volatiledemandforecasting.data.cache.CacheDatabase
+import com.example.volatiledemandforecasting.data.cache.ResponseCache
 import com.example.volatiledemandforecasting.BuildConfig
 import com.example.volatiledemandforecasting.core.datastore.AppPreferences
 import com.example.volatiledemandforecasting.core.network.Network
@@ -36,12 +39,20 @@ import kotlinx.coroutines.launch
 import retrofit2.create
 
 /** Hand-wired dependencies, created once by [VolatileApp]. Screens never build their own clients. */
+private const val THIRTY_DAYS = 30L * 24 * 60 * 60 * 1000
+
 class AppContainer(context: Context) {
 
     private val json = Network.json
     val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     val session = SessionManager(KeystoreTokenStore(context))
+
+    private val cacheDatabase = Room.databaseBuilder(context, CacheDatabase::class.java, "response-cache.db")
+        // It only holds copies of server data, so a schema change can start over.
+        .fallbackToDestructiveMigration(dropAllTables = true)
+        .build()
+    val responseCache = ResponseCache(cacheDatabase.dao(), json)
 
     // Public client: no token attached, so it can also do the refresh itself.
     private val publicRetrofit = Network.retrofit(BuildConfig.API_BASE_URL, Network.publicClient())
@@ -58,18 +69,19 @@ class AppContainer(context: Context) {
     val authRepository = AuthRepository(authApi, session, json, applicationScope)
     val userRepository = UserRepository(authedRetrofit.create<MeApi>(), json)
     val workspaceRepository = WorkspaceRepository(authedRetrofit.create<WorkspaceApi>(), json)
-    val productRepository = ProductRepository(authedRetrofit.create<ProductApi>(), json)
+    val productRepository = ProductRepository(authedRetrofit.create<ProductApi>(), json, responseCache)
     val storeRepository = StoreRepository(authedRetrofit.create<StoreApi>(), json)
-    val forecastRepository = ForecastRepository(authedRetrofit.create<ForecastApi>(), json)
+    val forecastRepository = ForecastRepository(authedRetrofit.create<ForecastApi>(), json, responseCache)
     val teamRepository = TeamRepository(authedRetrofit.create<TeamApi>(), session, json)
     val researchRepository = ResearchRepository(authedRetrofit.create<ResearchApi>(), json)
-    val importRepository = ImportRepository(authedRetrofit.create<ImportApi>(), json)
+    val importRepository = ImportRepository(authedRetrofit.create<ImportApi>(), json, responseCache)
     val trainingRepository = TrainingRepository(authedRetrofit.create<TrainingApi>(), json)
 
     init {
+        applicationScope.launch { runCatching { responseCache.pruneOlderThan(THIRTY_DAYS) } }
         // Sign-out clears what belongs to the user (spec §14): the chosen workspace and store.
         applicationScope.launch {
-            session.state.collect { if (it is SessionState.SignedOut) activeStore.clear() }
+            session.state.collect { if (it is SessionState.SignedOut) { activeStore.clear(); responseCache.clear() } }
         }
     }
 }

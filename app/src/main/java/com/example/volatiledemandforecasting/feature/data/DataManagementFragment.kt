@@ -52,6 +52,7 @@ import com.example.volatiledemandforecasting.data.workspace.canManageData
 import com.example.volatiledemandforecasting.feature.workspace.StoreGate
 
 class DataManagementFragment : ShellFragment() {
+    override val showsCachedData = true
     override val titleRes = R.string.nav_data
     override val tab = MainTab.Data
 

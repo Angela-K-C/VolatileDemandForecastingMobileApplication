@@ -2,7 +2,10 @@ package com.example.volatiledemandforecasting.app
 
 import android.content.pm.ApplicationInfo
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Column
+import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
@@ -50,6 +53,9 @@ abstract class ShellFragment : ComposeFragment() {
 
     /** The bottom-navigation tab this screen belongs to, or null for a supporting screen. */
     protected open val tab: MainTab? = null
+
+    /** True for screens whose data can come from the offline cache, so they show the "saved copy" notice. */
+    protected open val showsCachedData: Boolean get() = false
 
     /** Supporting screens (no bottom bar) get a back arrow. */
     protected open val showBackButton: Boolean get() = tab == null
@@ -105,7 +111,13 @@ abstract class ShellFragment : ComposeFragment() {
             onTabSelected = navController::navigateToTab,
             onBack = if (showBackButton) ({ navController.navigateUp() }) else null,
             actions = { ContextualAction() },
-            content = { padding -> ScreenContent(padding) },
+            content = { padding ->
+                val savedAt by appContainer.responseCache.servedFromCache.collectAsStateWithLifecycle()
+                Column(Modifier.padding(top = padding.calculateTopPadding())) {
+                    if (showsCachedData) savedAt?.let { OfflineCopyNotice(it) }
+                    ScreenContent(PaddingValues(bottom = padding.calculateBottomPadding()))
+                }
+            },
         )
 
         if (showAbout) AboutDialog(onDismiss = { showAbout = false })

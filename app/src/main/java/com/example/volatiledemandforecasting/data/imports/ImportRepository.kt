@@ -1,6 +1,7 @@
 package com.example.volatiledemandforecasting.data.imports
 
 import com.example.volatiledemandforecasting.core.network.apiCall
+import com.example.volatiledemandforecasting.data.cache.ResponseCache
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -207,7 +208,7 @@ interface ImportApi {
     ): ImportPageDto
 }
 
-class ImportRepository(private val api: ImportApi, private val json: Json) {
+class ImportRepository(private val api: ImportApi, private val json: Json, private val cache: ResponseCache? = null) {
 
     /** [idempotencyKey] is one per user action and is reused when that same action is retried. */
     suspend fun upload(storeId: String, idempotencyKey: String, filename: String, bytes: ByteArray): ImportDto {
@@ -227,5 +228,6 @@ class ImportRepository(private val api: ImportApi, private val json: Json) {
     suspend fun delete(importId: String): ImportDto = apiCall(json) { api.delete(importId) }
 
     suspend fun list(storeId: String, status: String?, page: Int, pageSize: Int): ImportPageDto =
-        apiCall(json) { api.list(storeId, status, page, pageSize) }
+        cache?.load("imports:$storeId:$status:$page:$pageSize", ImportPageDto.serializer()) { apiCall(json) { api.list(storeId, status, page, pageSize) } }
+            ?: apiCall(json) { api.list(storeId, status, page, pageSize) }
 }

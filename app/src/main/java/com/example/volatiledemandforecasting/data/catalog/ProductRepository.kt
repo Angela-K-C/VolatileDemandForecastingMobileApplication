@@ -2,6 +2,8 @@ package com.example.volatiledemandforecasting.data.catalog
 
 import com.example.volatiledemandforecasting.core.network.apiCall
 import kotlinx.serialization.SerialName
+import com.example.volatiledemandforecasting.data.cache.ResponseCache
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import retrofit2.http.GET
@@ -68,12 +70,18 @@ interface ProductApi {
     ): HistoryDto
 }
 
-class ProductRepository(private val api: ProductApi, private val json: Json) {
+class ProductRepository(private val api: ProductApi, private val json: Json, private val cache: ResponseCache? = null) {
 
     suspend fun products(storeId: String, query: String, demandClass: String?, page: Int, pageSize: Int): ProductPageDto =
-        apiCall(json) { api.products(storeId, query.trim().ifEmpty { null }, demandClass, page, pageSize) }
+        offline("products:$storeId:${query.trim()}:$demandClass:$page:$pageSize", ProductPageDto.serializer()) {
+            apiCall(json) { api.products(storeId, query.trim().ifEmpty { null }, demandClass, page, pageSize) }
+        }
 
-    suspend fun product(storeId: String, productId: String): ProductDto = apiCall(json) { api.product(storeId, productId) }
+    suspend fun product(storeId: String, productId: String): ProductDto =
+        offline("product:$storeId:$productId", ProductDto.serializer()) { apiCall(json) { api.product(storeId, productId) } }
+
+    private suspend fun <T> offline(key: String, serializer: KSerializer<T>, fetch: suspend () -> T): T =
+        cache?.load(key, serializer, fetch = fetch) ?: fetch()
 
     suspend fun history(storeId: String, productId: String, from: String, to: String): HistoryDto =
         apiCall(json) { api.history(storeId, productId, from, to) }

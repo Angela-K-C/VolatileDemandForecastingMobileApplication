@@ -5,6 +5,7 @@ import com.example.volatiledemandforecasting.data.catalog.DemandClassDto
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.SerialName
+import com.example.volatiledemandforecasting.data.cache.ResponseCache
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -233,7 +234,7 @@ interface ForecastApi {
     suspend fun export(@Path("forecastId") forecastId: String, @Query("format") format: String): ResponseBody
 }
 
-class ForecastRepository(private val api: ForecastApi, private val json: Json) {
+class ForecastRepository(private val api: ForecastApi, private val json: Json, private val cache: ResponseCache? = null) {
 
     suspend fun create(request: ForecastRequest): JobDto = apiCall(json) { api.create(request) }
 
@@ -241,7 +242,11 @@ class ForecastRepository(private val api: ForecastApi, private val json: Json) {
 
     suspend fun retry(jobId: String): JobDto = apiCall(json) { api.retry(jobId) }
 
-    suspend fun forecast(forecastId: String): ForecastDto = apiCall(json) { api.forecast(forecastId) }
+    /** A completed forecast never changes, so only completed ones are saved for offline viewing. */
+    suspend fun forecast(forecastId: String): ForecastDto {
+        val fetch = suspend { apiCall(json) { api.forecast(forecastId) } }
+        return cache?.load("forecast:$forecastId", ForecastDto.serializer(), cacheable = { it.status == "COMPLETED" }, fetch = fetch) ?: fetch()
+    }
 
     suspend fun list(
         storeId: String,
@@ -250,7 +255,10 @@ class ForecastRepository(private val api: ForecastApi, private val json: Json) {
         page: Int,
         pageSize: Int,
         productId: String? = null,
-    ): ForecastPageDto = apiCall(json) { api.list(storeId, productId, replay, status, page, pageSize) }
+    ): ForecastPageDto {
+        val fetch = suspend { apiCall(json) { api.list(storeId, productId, replay, status, page, pageSize) } }
+        return cache?.load("forecasts:$storeId:$productId:$replay:$status:$page:$pageSize", ForecastPageDto.serializer(), fetch = fetch) ?: fetch()
+    }
 
     suspend fun delete(forecastId: String) = apiCall(json) { api.delete(forecastId) }
 
