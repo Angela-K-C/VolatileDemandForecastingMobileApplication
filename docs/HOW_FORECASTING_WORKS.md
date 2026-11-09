@@ -128,7 +128,7 @@ The project has three repositories:
 | `SemProject_Backend` | The API the app talks to: accounts, workspaces and stores, sales imports, forecast jobs, training jobs and team management. Stores all business data in Postgres and calls the ML service |
 | `VolatileDemandForecastingMobileApplication` | This Android app |
 
-Below, each step of section 2 is mapped to what the project does.
+Below, each step of section 2 is mapped to what the project does. How the backend itself works (accounts, imports, background jobs, training jobs) is explained in the backend repository's `docs/how-the-backend-works.md`.
 
 ### 3.1 The data and the problem (section 2.1)
 
@@ -213,9 +213,9 @@ This is the central design decision (decision 7 in the ML engine's `docs/noteboo
 
 ### 3.8 Monitoring and retraining (section 2.9)
 
-- A nightly backend job fills in actual sales on past forecasts once a shop has uploaded sales for those days ("Actuals now available").
+- An hourly backend maintenance pass fills in actual sales on past forecasts once a shop has uploaded sales for those days ("Actuals now available").
 - A forecast made before newer sales were imported is flagged as outdated, and the app offers to forecast again.
-- Training is started by an owner or manager from the app's **AI model** screen. It is not retrained automatically after each upload.
+- The first training is started by an owner or manager from the app's **AI model** screen. After that, the backend retrains the shop's model weekly if new sales have been uploaded since the last training, and the gate applies again each time.
 
 ### 3.9 Showing the forecast (section 2.10)
 
@@ -288,7 +288,7 @@ The design above is sound and common. Larger commercial systems often add the fo
 | Use statistical methods (exponential smoothing, Croston) for cold start | Uses naive and seasonal-naive baselines | They need no fitting and are the standard comparison in the research |
 | Give **ranges** ("between 60 and 100 units") | Single numbers only (`predictionIntervals: false`) | Not built in the model yet |
 | Model **promotions**, stock-outs and planned price changes | Prices only; promotions and stock-outs are not inputs. A day with zero sales because the shelf was empty looks like a day with no demand | No such data in the upload format |
-| **Retrain automatically** and monitor accuracy continuously | Training is started by the owner; actual sales are attached to past forecasts but not summarised for business users | Kept manual for transparency |
+| Monitor accuracy continuously, with alerts when a model gets worse | Weekly retraining with the gate each time; actual sales are attached to past forecasts but not summarised for business users | Out of scope for this project |
 | Forecast weeks or months ahead | 1 or 7 days | Longer lengths were not validated |
 
 ---
