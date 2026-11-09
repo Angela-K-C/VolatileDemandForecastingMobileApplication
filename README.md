@@ -15,7 +15,7 @@ New to the project or to forecasting? Start with [`docs/HOW_FORECASTING_WORKS.md
 | Repository | Role |
 |------------|------|
 | `SemProject_MLEngine` | Model research and the ML service. Holds the app handoff (`MOBILE_APP_HANDOFF.md`), the design spec (`retail_demand_forecasting_mobile_design.md`) and sample CSVs. Not modified by this app's work. |
-| `SemProject_Backend` | FastAPI backend (Docker). Contract: `docs/api.md`. The business version needs its `forecast-batches` branch (store-wide forecasts, migration `0005`); that change was approved by the project owner. |
+| `SemProject_Backend` | FastAPI backend (Docker). Contract: `docs/api.md`. The business version needs its store-wide forecast endpoints (migration `0005`), merged into its `main`; that change was approved by the project owner. |
 | `VolatileDemandForecastingMobileApplication` | This repository: the Android app. |
 
 ## Status
