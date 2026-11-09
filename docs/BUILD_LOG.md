@@ -95,6 +95,18 @@ Problem: the first launch check used the monkey launcher, which did not open the
 
 Built: lint run and fixes (two real errors: a resource lookup through `LocalContext`, and a `%` in the 4% limitation text read as a format string; plus locale-aware date formatters and five unused strings removed); `AcceptanceGuardTest` (no XML layouts, valid nav graph, manifest rules, no URLs in source); `docs/ACCEPTANCE.md`. 64 tests; lint 0 errors, 42 warnings (mostly plural candidates and newer-library notices).
 
+## Business version (after step 8)
+
+The project owner asked for the app on `main` to serve retail business owners: upload sales, get forecasts for every product. The research version was kept on the `research` branch (pushed).
+
+Decisions (owner's answers): add a batch endpoint to the backend; offer a "Try a sample shop" instead of listing the demo workspace; show one number with the comparison tucked away; remove the research summary and export, model-card details, model-version choice and replays. Training stays.
+
+Backend (`SemProject_Backend`, branch `forecast-batches`, commit `c53b860`, not pushed): `forecast_batches` table and `forecast_runs.batch_id` (migration `0005`); `POST /v1/stores/{sid}/forecast-batches`, `GET /v1/forecast-batches/{id}`, `…/items`, `…/retry`, `GET /v1/stores/{sid}/forecast-batches/latest`; single forecasts are claimed before batch runs; batch runs skip the demo store's per-product backtest; `GET /v1/forecasts?batch=false`. 11 new tests, 67 in total, passing against Postgres. `docs/api.md` and `docs/openapi.json` updated.
+
+App: `BatchRepository`; `ShownForecast.kt` (which number to show); the Forecasts tab became the store-wide forecast; the result screen leads with expected units and moves the comparison under "How accurate is this?"; the form lost the date picker and method choice; the workspace picker became "Your shops" with a welcome screen (Set up my shop / Try a sample shop) when the user has no shop; a "Sample shop" banner on the main tabs; the model screen became "AI model" (verdict, training period, past accuracy, training). Research screens and their strings deleted. 66 tests; lint 0 errors.
+
+Note: running the business version needs the backend's `forecast-batches` branch. Rebuilding the stack applies migration `0005` to the local database; a dump taken before that is in the session scratchpad.
+
 ## Environment notes
 
 - The phone is connected by USB. After every re-plug run `adb reverse tcp:8000 tcp:8000`. `local.properties` has `api.baseUrl=http://localhost:8000`.

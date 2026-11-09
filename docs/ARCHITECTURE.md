@@ -32,10 +32,10 @@ core/
                 menus, state views), charts/ (custom Canvas LineChart)
 data/           One package per backend area, each with DTOs + Retrofit API + repository:
                 auth, user, workspace (+ ActiveStore), store (+ ModelCard), catalog (products),
-                forecast, imports, training, team, research, cache (Room)
+                forecast (incl. batches), imports, training, team, cache (Room)
 feature/        One package per screen group: auth, workspace (+ create), dashboard, products
                 (+ detail), forecasts (config, progress, result, history), model, data
-                (+ wizard, readiness), team, settings, research, devgallery (debug only)
+                (+ wizard, readiness), team, settings, devgallery (debug only)
 ```
 
 ## Layering
@@ -84,7 +84,9 @@ Permissions derive from the selection: `canGenerateForecasts` (reference store, 
 2. `POST` creates a job; the progress screen polls it (`PollingSchedule`: every 1 s for the first 10 s, then every 3 s, up to 2 minutes). States are honest: queued, running, completed, failed (with retry only when allowed).
 3. The result screen builds the chart, table, totals and verdicts from the API response (`buildChartModel`, `totalsOf`, `verdictOf`). Totals are summed from raw values; display rounding is separate (one decimal by default, whole units optional).
 4. Evidence is shown in three kinds and never mixed: the product's backtest, "error on these days" (replays only), and per-day forecast vs. actual. `MetricsBlock` always takes its AI and baseline columns from the same API object.
-5. Completed forecasts export to CSV via the Storage Access Framework (`CreateDocument`), streamed straight to the chosen file.
+5. Which number a shop owner sees is decided by `shownMethodOf` (`data/forecast/ShownForecast.kt`): AI only when the store's model card backtest shows the AI with a lower RMSE (or MAE) than "same as last day"; otherwise the simple forecast. `usedFor` falls back to the simple forecast for a product without AI values. Totals never treat a missing day as zero.
+6. The Forecasts tab uses store-wide batches (`BatchRepository`): one request queues a forecast per product; the screen polls the batch every 2.5 s, then pages through its items. Each item is an ordinary forecast and opens on the result screen.
+7. Completed forecasts export to CSV via the Storage Access Framework (`CreateDocument`), streamed straight to the chosen file.
 
 ## Import and training flow (business journey)
 
@@ -119,7 +121,7 @@ Seven wizard steps: choose file → check file → map columns → validation �
 
 ## Tests
 
-64 JVM unit tests under `app/src/test`:
+66 JVM unit tests under `app/src/test`:
 
 | Area | Tests |
 |------|-------|
@@ -130,7 +132,7 @@ Seven wizard steps: choose file → check file → map columns → validation �
 | Chart/totals/verdict/formatting | `ForecastPresentationTest` |
 | Import wizard rules, upload request shape, DTO decoding, training/eligibility, store form checks | `ImportWizardTest` |
 | Team DTOs, assignable roles, password confirm | `TeamSettingsTest` |
-| Research summary, date filter, export request | `ResearchTest` |
+| Shown method (AI vs simple), totals, batch DTOs, sample-shop flag | `StoreForecastTest` |
 | Offline cache rules (fake DAO) | `ResponseCacheTest` |
 | Source-tree guarantees (no XML layouts, valid nav graph, manifest, no URLs) | `AcceptanceGuardTest` |
 

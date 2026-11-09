@@ -18,11 +18,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 data class PickerData(
-    /** The read-only demo workspace, shown first (spec §8.3). */
-    val reference: List<WorkspaceWithStores>,
+    /** The read-only sample shop. Not listed: it is offered once, on the welcome screen. */
+    val sample: Pair<WorkspaceDto, StoreDto>?,
     val own: List<WorkspaceWithStores>,
     val currentStoreId: String?,
-)
+) {
+    val viewingSample: Boolean get() = sample != null && sample.second.id == currentStoreId
+}
 
 class WorkspacePickerViewModel(
     private val repository: WorkspaceRepository,
@@ -43,13 +45,18 @@ class WorkspacePickerViewModel(
                 .onSuccess { all ->
                     val current = ((activeStore.state.value) as? Selection.Selected)?.store?.storeId
                     _state.value = PickerData(
-                        reference = all.filter { it.workspace.isReference },
+                        sample = all.firstOrNull { it.workspace.isReference && it.stores.isNotEmpty() }?.let { it.workspace to it.stores.first() },
                         own = all.filterNot { it.workspace.isReference },
                         currentStoreId = current,
                     ).let { UiState.Content(it) }
                 }
                 .onFailure { _state.value = it.toUiState() }
         }
+    }
+
+    fun trySample(onDone: () -> Unit) {
+        val (workspace, store) = (_state.value as? UiState.Content)?.data?.sample ?: return
+        select(workspace, store, onDone)
     }
 
     /** Saves the choice. Every store-scoped screen reloads from it, and it is remembered for next launch. */

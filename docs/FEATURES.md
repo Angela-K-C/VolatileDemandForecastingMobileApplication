@@ -28,17 +28,17 @@ Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use th
 | Dashboard | Store summary: history range and counts, AI availability with the reason (or eligibility progress "60 of 120 days"), readiness, quick actions. For stores you manage: an Upload action and an onboarding message when there is no history | history summary, readiness, `models/eligibility`, capabilities |
 | Products | Paged list of 1,437 (demo) or your products with search, demand-class filter (popup) and long-press context menu. Tapping opens the product | `GET /v1/stores/{sid}/products` |
 | Data | History summary, Upload button (Owner/Manager of own workspaces), link to Readiness, import list with status filter and paging; long-press an import to delete (confirmed). The demo and Viewers see an explanatory note instead of Upload | `GET /v1/stores/{sid}/imports`, `DELETE /v1/imports/{id}` |
-| Forecasts | Forecast history: filter by replay and status, open a result, retry failed jobs, delete (confirmed), export. Completed runs reopen offline from cache | `GET /v1/forecasts`, `DELETE /v1/forecasts/{id}` |
+| Forecasts | **Store-wide forecast.** Pick how far ahead (from `capabilities.horizons`), tap **Forecast all products**, watch "Forecasting… 40 of 100 products", then see every product with its expected units for the period, searchable and paged. Says whether the numbers come from the AI or the simple forecast. Flags a forecast made before new sales were imported, and offers Try again for products that failed for a temporary reason. Tapping a product opens its result. Finished pages reopen offline | `POST /v1/stores/{sid}/forecast-batches`, `GET /v1/forecast-batches/{id}`, `…/items`, `GET …/forecast-batches/latest`, `POST …/retry` |
 
 ## Product and forecast flow
 
 | Screen | What it does | API |
 |--------|--------------|-----|
 | Product detail | Demand class, key facts and a sales-history chart with a range choice; days without a record are gaps, not zeros. Starts a forecast (not for Viewers in own workspaces) | product, history endpoints |
-| Forecast configuration | Built from `capabilities`: methods, horizons, as-of date rules (editable only for the demo store and research users), baseline labels. Replay dates limited to the API's range | `GET …/models/capabilities` |
+| Forecast configuration | One product: choose how far ahead (from `capabilities`). Forecasts always start after the latest recorded sales day; the method is chosen by the app (AI alongside the simple forecast when the store has a model) | `GET …/models/capabilities` |
 | Job progress | Honest states while polling (queued, running, done, failed); failed jobs offer Retry only when the API allows | `POST /v1/forecasts`, `GET /v1/forecast-jobs/{id}`, `POST …/retry` |
-| Forecast result | Chart (AI, baselines, actuals where known), day-by-day table (one decimal, optional whole units), totals from raw values, verdict stated plainly even when the baseline wins, three kinds of evidence with their windows and model version, the ~4% high note on 7-day days 2–7, CSV export | `GET /v1/forecasts/{id}`, `…/export?format=csv` |
-| Model info | Model card: training data, horizon, backtest results, limitations. Business stores also show the **AI for your store** section (below) | `GET …/models/active` |
+| Forecast result | **Expected sales** headline (whole units over the period) and where the number comes from, a chart of recent sales and expected sales, and a day-by-day list. **How accurate is this?** opens the comparison of every method day by day, this product's and the model's past accuracy, and the ~4% high note on AI days 2–7. CSV export and delete | `GET /v1/forecasts/{id}`, `…/export?format=csv` |
+| AI model | Whether forecasts use the AI or the simple forecast and why, the training period, and how both did on past sales. Business stores also show the **AI for your store** training section (below) | `GET …/models/active` |
 
 ## Business journey
 
@@ -58,7 +58,11 @@ Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use th
 | Change password | Current + new + confirm; wrong current password shown on that field; stays signed in on success (other sessions are ended by the backend) | `POST /v1/auth/change-password` |
 | Help | Plain explanations of how forecasts work, when AI is available, limits (including the "lower error" caveat and ~4% high note), and what happens to your data | – |
 
-## Research (research users only)
+## Removed from the business version (kept on the `research` branch)
+
+Research summary and export, model-card details (inputs, accuracy by day ahead, limitations list), model-version choice, and replays on past as-of dates. The table below describes the `research` branch.
+
+## Research (research branch only)
 
 | Screen | What it does | API |
 |--------|--------------|-----|

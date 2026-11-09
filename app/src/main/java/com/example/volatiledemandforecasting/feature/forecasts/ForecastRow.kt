@@ -47,12 +47,11 @@ fun ForecastRow(item: ForecastSummaryDto, onClick: (() -> Unit)?, modifier: Modi
         Column(Modifier.padding(Spacing.lg), verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
             Text(item.productName, style = MaterialTheme.typography.titleSmall)
             Text(
-                stringResource(R.string.hist_summary, horizonLabel(item.horizonDays), methodLabel(item.method), Formatting.date(item.asOfDate)),
+                stringResource(R.string.hist_summary, horizonLabel(item.horizonDays), Formatting.date(item.asOfDate)),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
             FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.sm), verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                if (item.isReplay) StatusChip(stringResource(R.string.res_replay_tag), StatusKind.Neutral)
                 if (item.actualsAvailable) StatusChip(stringResource(R.string.hist_actuals_now), StatusKind.Success)
                 when (item.status) {
                     JobStatus.FAILED -> StatusChip(stringResource(R.string.hist_status_failed), StatusKind.Error)

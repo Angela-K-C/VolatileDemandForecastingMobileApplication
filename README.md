@@ -1,6 +1,10 @@
 # Retail Demand Forecasting Mobile
 
-An Android app for next-day and 7-day demand forecasts for retail products. It is the mobile client of a research project on forecasting under volatile demand: every forecast shows the AI model next to two simple baselines, and the app reports plainly when the AI does **not** win.
+An Android app for retail business owners: upload your sales history, then get a forecast of how many units of every product you are likely to sell over the next day or week.
+
+Each product gets **one number**. It comes from the shop's own AI model only when that model beat the simple forecast ("same as the last day") on the shop's past sales; otherwise it comes from the simple forecast, and the screen says which. The full comparison of methods is one tap away under **How accurate is this?**
+
+> **Branches.** `main` is this business version. The earlier research version (AI vs. baselines side by side, replays on past dates, model-version choice and the research summary) is kept on the `research` branch.
 
 The app contains **no forecasting maths**. Every number on screen comes from the backend API.
 
@@ -9,7 +13,7 @@ The app contains **no forecasting maths**. Every number on screen comes from the
 | Repository | Role |
 |------------|------|
 | `SemProject_MLEngine` | Model research and the ML service. Holds the app handoff (`MOBILE_APP_HANDOFF.md`), the design spec (`retail_demand_forecasting_mobile_design.md`) and sample CSVs. Not modified by this app's work. |
-| `SemProject_Backend` | FastAPI backend (Docker). Contract: `docs/api.md`. Not modified by this app's work. |
+| `SemProject_Backend` | FastAPI backend (Docker). Contract: `docs/api.md`. The business version needs its `forecast-batches` branch (store-wide forecasts, migration `0005`); that change was approved by the project owner. |
 | `VolatileDemandForecastingMobileApplication` | This repository: the Android app. |
 
 ## Status
@@ -18,7 +22,7 @@ All eight steps of the handoff's build order are implemented and pushed to `main
 
 1. Foundation  2. Authentication  3. Demo journey  4. Business journey  5. Team and settings  6. Research  7. Offline cache  8. Tests and acceptance
 
-Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 64 unit tests, lint with 0 errors). The signed-in screens have **not** been exercised by automated tooling; they were checked by hand on a physical phone up to step 3, and steps 4–8 still need a manual pass. `docs/ACCEPTANCE.md` lists exactly what is proved automatically and what needs a person.
+After the eight steps, `main` was reworked for business owners (see "Business version" in `docs/BUILD_LOG.md`). Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 66 unit tests, lint with 0 errors). The signed-in screens have **not** been exercised by automated tooling; they were checked by hand on a physical phone up to step 3, and steps 4–8 still need a manual pass. `docs/ACCEPTANCE.md` lists exactly what is proved automatically and what needs a person.
 
 ## Documentation
 

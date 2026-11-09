@@ -66,10 +66,10 @@ class DashboardFragment : ShellFragment() {
                         )
                     }
                     SummaryCards(data)
-                    // The product is chosen on the Products tab, where its history is visible.
+                    // Every product at once, on the Forecasts tab.
                     PrimaryButton(
-                        text = stringResource(if (data.store.isReference) R.string.dash_try_replay else R.string.dash_generate),
-                        onClick = { navController.navigateToTab(MainTab.Products) },
+                        text = stringResource(R.string.dash_generate),
+                        onClick = { navController.navigateToTab(MainTab.Forecasts) },
                         modifier = Modifier.fillMaxWidth(),
                     )
                     if (data.store.canManageData) {
@@ -80,7 +80,6 @@ class DashboardFragment : ShellFragment() {
                     }
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Text(stringResource(R.string.dash_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
-                        TextButton(onClick = { navController.navigateToTab(MainTab.Forecasts) }) { Text(stringResource(R.string.dash_see_all)) }
                     }
                     if (data.recent.isEmpty()) {
                         Text(stringResource(R.string.dash_no_forecast), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)

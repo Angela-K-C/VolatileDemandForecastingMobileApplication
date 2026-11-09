@@ -27,6 +27,8 @@ import com.example.volatiledemandforecasting.core.ui.components.UiStateHost
 import com.example.volatiledemandforecasting.core.ui.theme.Spacing
 import com.example.volatiledemandforecasting.data.forecast.windowDates
 import com.example.volatiledemandforecasting.data.store.ActiveModelDto
+import com.example.volatiledemandforecasting.data.forecast.ShownMethod
+import com.example.volatiledemandforecasting.data.forecast.shownMethodOf
 import com.example.volatiledemandforecasting.feature.forecasts.MetricColumn
 import com.example.volatiledemandforecasting.feature.forecasts.MetricsBlock
 import com.example.volatiledemandforecasting.data.workspace.canManageData
@@ -61,28 +63,17 @@ class ModelInfoFragment : ShellFragment() {
     }
 }
 
+/** What a shop owner needs to know: is the AI used for my forecasts, and how did it do on my past sales. */
 @Composable
 private fun ModelInfo(model: ActiveModelDto) {
     val card = model.card
+    val shown = shownMethodOf(card.backtest)
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.lg)) {
-        Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-            Text(card.title ?: model.model.id, style = MaterialTheme.typography.titleLarge)
-            Text(
-                stringResource(R.string.model_version, model.model.version),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-
-        card.predicts?.let { LabelledText(stringResource(R.string.model_what_it_predicts), it) }
+        InlineMessage(
+            stringResource(if (shown == ShownMethod.Ai) R.string.model_uses_ai else R.string.model_uses_simple),
+            if (shown == ShownMethod.Ai) StatusKind.Success else StatusKind.Neutral,
+        )
         trainedOnText(card.trainedOn)?.let { LabelledText(stringResource(R.string.model_trained_on), it) }
-
-        if (card.inputsPlainLanguage.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(Spacing.xs)) {
-                Text(stringResource(R.string.model_inputs), style = MaterialTheme.typography.titleSmall)
-                card.inputsPlainLanguage.forEach { Text("• $it", style = MaterialTheme.typography.bodyMedium) }
-            }
-        }
 
         card.backtest?.takeIf { it.ai != null }?.let { backtest ->
             val dates = backtest.window.windowDates()
@@ -101,38 +92,6 @@ private fun ModelInfo(model: ActiveModelDto) {
                 ),
             )
         }
-
-        card.horizonAccuracy?.takeIf { it.byDay.isNotEmpty() }?.let { accuracy ->
-            Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                Text(stringResource(R.string.model_by_day_title), style = MaterialTheme.typography.titleSmall)
-                val primary = MaterialTheme.colorScheme.primary
-                val tertiary = MaterialTheme.colorScheme.tertiary
-                val ai = stringResource(R.string.metrics_ai)
-                val baseline = stringResource(R.string.metrics_baseline)
-                LineChart(
-                    series = listOf(
-                        ChartSeries(ai, accuracy.byDay.map { it.aiRmse }, primary, LineStyle.Solid),
-                        ChartSeries(baseline, accuracy.byDay.map { it.naiveRmse }, tertiary, LineStyle.Dotted),
-                    ),
-                    pointCount = accuracy.byDay.size,
-                    xLabels = accuracy.byDay.mapIndexed { i, d -> i to d.day.toString() },
-                    description = stringResource(R.string.chart_description, "$ai, $baseline"),
-                    height = 160.dp,
-                )
-                Text(stringResource(R.string.model_by_day_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                accuracy.description?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                Text(stringResource(R.string.metrics_caveat), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-
-        if (card.limitations.isNotEmpty()) {
-            Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                Text(stringResource(R.string.model_limitations), style = MaterialTheme.typography.titleSmall)
-                // Shown in full, including the known upward bias on days 2 to 7.
-                card.limitations.forEach { InlineMessage(it, StatusKind.Neutral) }
-            }
-        }
-        card.note?.let { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
     }
 }
 

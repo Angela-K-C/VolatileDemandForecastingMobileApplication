@@ -15,14 +15,14 @@ import com.example.volatiledemandforecasting.data.auth.AuthRepository
 import com.example.volatiledemandforecasting.data.auth.RetrofitTokenRefresher
 import com.example.volatiledemandforecasting.data.catalog.ProductApi
 import com.example.volatiledemandforecasting.data.catalog.ProductRepository
+import com.example.volatiledemandforecasting.data.forecast.BatchApi
+import com.example.volatiledemandforecasting.data.forecast.BatchRepository
 import com.example.volatiledemandforecasting.data.forecast.ForecastApi
 import com.example.volatiledemandforecasting.data.forecast.ForecastRepository
 import com.example.volatiledemandforecasting.data.imports.ImportApi
 import com.example.volatiledemandforecasting.data.imports.ImportRepository
 import com.example.volatiledemandforecasting.data.store.StoreApi
 import com.example.volatiledemandforecasting.data.store.StoreRepository
-import com.example.volatiledemandforecasting.data.research.ResearchApi
-import com.example.volatiledemandforecasting.data.research.ResearchRepository
 import com.example.volatiledemandforecasting.data.team.TeamApi
 import com.example.volatiledemandforecasting.data.team.TeamRepository
 import com.example.volatiledemandforecasting.data.training.TrainingApi
@@ -73,7 +73,7 @@ class AppContainer(context: Context) {
     val storeRepository = StoreRepository(authedRetrofit.create<StoreApi>(), json)
     val forecastRepository = ForecastRepository(authedRetrofit.create<ForecastApi>(), json, responseCache)
     val teamRepository = TeamRepository(authedRetrofit.create<TeamApi>(), session, json)
-    val researchRepository = ResearchRepository(authedRetrofit.create<ResearchApi>(), json)
+    val batchRepository = BatchRepository(authedRetrofit.create<BatchApi>(), json, responseCache)
     val importRepository = ImportRepository(authedRetrofit.create<ImportApi>(), json, responseCache)
     val trainingRepository = TrainingRepository(authedRetrofit.create<TrainingApi>(), json)
 

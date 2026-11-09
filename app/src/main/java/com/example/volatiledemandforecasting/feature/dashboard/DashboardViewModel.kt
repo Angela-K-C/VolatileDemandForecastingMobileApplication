@@ -86,7 +86,7 @@ class DashboardViewModel(
                     val capabilities = async { stores.capabilities(store.storeId) }
                     val productCount = async { products.products(store.storeId, "", null, page = 1, pageSize = 1).total }
                     val readiness = async { runCatching { stores.readiness(store.storeId) }.getOrNull() }
-                    val recent = async { forecasts.list(store.storeId, replay = null, status = null, page = 1, pageSize = 3).items }
+                    val recent = async { forecasts.list(store.storeId, replay = null, status = null, page = 1, pageSize = 3, batch = false).items }
                     val ai = aiStatusOf(capabilities.await())
                     // Only a business store that isn't eligible yet needs the progress line.
                     val progress = if (!store.isReference && ai == AiStatus.NotEligible) {

@@ -125,17 +125,15 @@ class ForecastConfigViewModel(
 
     fun submit() {
         val s = store ?: return
-        val data = (_state.value as? UiState.Content)?.data ?: return
+        if (_state.value !is UiState.Content) return
         val form = _form.value
         val horizon = form.horizon ?: return
         if (form.submitting) return
-        // Only send a date when the user may choose one; otherwise the backend uses the latest history day.
-        val asOf = form.asOf?.takeIf { data.canPickDate }
         _form.update { it.copy(submitting = true, error = null) }
         viewModelScope.launch {
             attempt {
                 forecasts.create(
-                    ForecastRequest(storeId = s.storeId, productId = productId, horizonDays = horizon, method = form.method, asOfDate = asOf?.toString())
+                    ForecastRequest(storeId = s.storeId, productId = productId, horizonDays = horizon, method = form.method)
                 )
             }
                 .onSuccess {

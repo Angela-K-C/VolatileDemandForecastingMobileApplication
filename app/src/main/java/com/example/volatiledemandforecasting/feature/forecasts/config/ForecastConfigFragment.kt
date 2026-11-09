@@ -93,11 +93,13 @@ class ForecastConfigFragment : ShellFragment() {
                 }
                 if (!data.store.canGenerateForecasts) {
                     InlineMessage(stringResource(R.string.cfg_viewer), StatusKind.Warning)
-                } else if (data.store.isReference) {
-                    InlineMessage(stringResource(R.string.cfg_read_only), StatusKind.Neutral)
                 }
 
-                AsOfSection(data, form.asOf, viewModel::setAsOf)
+                Text(
+                    stringResource(R.string.cfg_as_of_fixed, Formatting.date(data.capabilities.asOf.default)),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
 
                 Section(stringResource(R.string.cfg_horizon)) {
                     FlowRow(horizontalArrangement = Arrangement.spacedBy(Spacing.sm)) {
@@ -111,19 +113,9 @@ class ForecastConfigFragment : ShellFragment() {
                     }
                 }
 
-                Section(stringResource(R.string.cfg_method)) {
-                    data.capabilities.methods.forEach { method ->
-                        val enabled = method == ForecastMethod.BASELINE || data.capabilities.aiAvailable
-                        MethodOption(
-                            label = methodText(method),
-                            selected = form.method == method,
-                            enabled = enabled,
-                            onClick = { viewModel.setMethod(method) },
-                        )
-                    }
-                    if (!data.capabilities.aiAvailable) {
-                        InlineMessage(aiReasonText(data.capabilities.aiUnavailableReason), StatusKind.Neutral)
-                    }
+                // The app picks the method: AI alongside the simple forecast when the store has a model.
+                if (!data.capabilities.aiAvailable) {
+                    InlineMessage(aiReasonText(data.capabilities.aiUnavailableReason), StatusKind.Neutral)
                 }
 
                 form.error?.let { InlineMessage(it.asString(), StatusKind.Error) }
@@ -148,86 +140,6 @@ private fun Section(title: String, content: @Composable () -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AsOfSection(data: ConfigData, selected: LocalDate?, onPick: (LocalDate) -> Unit) {
-    var showPicker by rememberSaveable { mutableStateOf(false) }
-    Section(stringResource(R.string.cfg_as_of)) {
-        if (!data.canPickDate) {
-            Text(
-                stringResource(R.string.cfg_as_of_fixed, Formatting.date(data.capabilities.asOf.default)),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            return@Section
-        }
-        OutlinedButton(onClick = { showPicker = true }, modifier = Modifier.fillMaxWidth()) {
-            Text(selected?.let { Formatting.date(it.toString()) } ?: stringResource(R.string.cfg_pick_date))
-        }
-        Text(
-            stringResource(if (data.isReplay(selected)) R.string.cfg_as_of_help_replay else R.string.cfg_as_of_help_forecast),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        val min = data.replayMin
-        val max = data.replayMax
-        if (min != null && max != null) {
-            Text(
-                stringResource(R.string.cfg_date_invalid, Formatting.date(min.toString()), Formatting.date(max.toString())),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-        }
-    }
-    if (showPicker) {
-        val pickerState = rememberDatePickerState(
-            initialSelectedDateMillis = selected?.toUtcMillis(),
-            selectableDates = object : SelectableDates {
-                override fun isSelectableDate(utcTimeMillis: Long) = data.isSelectable(utcTimeMillis.toLocalDate())
-                override fun isSelectableYear(year: Int) = true
-            },
-        )
-        DatePickerDialog(
-            onDismissRequest = { showPicker = false },
-            confirmButton = {
-                TextButton(onClick = {
-                    pickerState.selectedDateMillis?.let { onPick(it.toLocalDate()) }
-                    showPicker = false
-                }) { Text(stringResource(R.string.action_ok)) }
-            },
-            dismissButton = { TextButton(onClick = { showPicker = false }) { Text(stringResource(R.string.action_cancel)) } },
-        ) { DatePicker(pickerState) }
-    }
-}
-
-@Composable
-private fun MethodOption(label: String, selected: Boolean, enabled: Boolean, onClick: () -> Unit) {
-    Row(
-        Modifier
-            .fillMaxWidth()
-            .selectable(selected = selected, enabled = enabled, role = Role.RadioButton, onClick = onClick)
-            .padding(vertical = Spacing.xs),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        RadioButton(selected = selected, onClick = null, enabled = enabled)
-        Text(
-            label,
-            modifier = Modifier.padding(start = Spacing.md),
-            style = MaterialTheme.typography.bodyLarge,
-            color = if (enabled) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-    }
-}
-
-@Composable
-private fun methodText(method: String): String = stringResource(
-    when (method) {
-        ForecastMethod.AI -> R.string.cfg_method_ai
-        ForecastMethod.BASELINE -> R.string.cfg_method_baseline
-        else -> R.string.cfg_method_compare
-    }
-)
-
 /** The API's `aiUnavailableReason` in plain language. */
 @Composable
 fun aiReasonText(reason: String?): String = stringResource(
@@ -241,6 +153,3 @@ fun aiReasonText(reason: String?): String = stringResource(
         else -> R.string.ai_reason_other
     }
 )
-
-private fun LocalDate.toUtcMillis(): Long = atStartOfDay(ZoneOffset.UTC).toInstant().toEpochMilli()
-private fun Long.toLocalDate(): LocalDate = Instant.ofEpochMilli(this).atZone(ZoneOffset.UTC).toLocalDate()

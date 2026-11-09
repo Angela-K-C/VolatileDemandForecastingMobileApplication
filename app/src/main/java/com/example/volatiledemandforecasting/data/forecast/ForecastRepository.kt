@@ -222,6 +222,7 @@ interface ForecastApi {
         @Query("productId") productId: String?,
         @Query("replay") replay: Boolean?,
         @Query("status") status: String?,
+        @Query("batch") batch: Boolean?,
         @Query("page") page: Int,
         @Query("pageSize") pageSize: Int,
     ): ForecastPageDto
@@ -255,9 +256,11 @@ class ForecastRepository(private val api: ForecastApi, private val json: Json, p
         page: Int,
         pageSize: Int,
         productId: String? = null,
+        /** false leaves out the runs that belong to store-wide batches. */
+        batch: Boolean? = null,
     ): ForecastPageDto {
-        val fetch = suspend { apiCall(json) { api.list(storeId, productId, replay, status, page, pageSize) } }
-        return cache?.load("forecasts:$storeId:$productId:$replay:$status:$page:$pageSize", ForecastPageDto.serializer(), fetch = fetch) ?: fetch()
+        val fetch = suspend { apiCall(json) { api.list(storeId, productId, replay, status, batch, page, pageSize) } }
+        return cache?.load("forecasts:$storeId:$productId:$replay:$status:$batch:$page:$pageSize", ForecastPageDto.serializer(), fetch = fetch) ?: fetch()
     }
 
     suspend fun delete(forecastId: String) = apiCall(json) { api.delete(forecastId) }

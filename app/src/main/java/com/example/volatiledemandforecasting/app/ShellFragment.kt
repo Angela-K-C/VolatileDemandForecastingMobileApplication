@@ -3,6 +3,12 @@ package com.example.volatiledemandforecasting.app
 import android.content.pm.ApplicationInfo
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.ui.Alignment
+import com.example.volatiledemandforecasting.core.ui.theme.Spacing
 import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -81,13 +87,10 @@ abstract class ShellFragment : ComposeFragment() {
         val isDebuggable = (LocalContext.current.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) != 0
 
         val optionsMenu = buildList {
-            add(MenuEntry(stringResource(R.string.menu_switch_workspace), { navController.navigate(R.id.workspacePickerFragment) }, Icons.Outlined.SwapHoriz))
+            add(MenuEntry(stringResource(R.string.menu_switch_shop), { navController.navigate(R.id.workspacePickerFragment) }, Icons.Outlined.SwapHoriz))
             add(MenuEntry(stringResource(R.string.menu_model_info), { navController.navigate(R.id.modelInfoFragment) }, Icons.Outlined.AccountTree))
             if (state.canManageTeam) {
                 add(MenuEntry(stringResource(R.string.menu_manage_team), { navController.navigate(R.id.teamFragment) }, Icons.Outlined.Groups))
-            }
-            if (state.user?.isResearch == true) {
-                add(MenuEntry(stringResource(R.string.menu_research), { navController.navigate(R.id.researchFragment) }, Icons.Outlined.Info))
             }
             add(MenuEntry(
                 if (state.pendingInvitations > 0) stringResource(R.string.menu_settings_badge, state.pendingInvitations) else stringResource(R.string.menu_settings),
@@ -115,6 +118,11 @@ abstract class ShellFragment : ComposeFragment() {
                 val savedAt by appContainer.responseCache.servedFromCache.collectAsStateWithLifecycle()
                 Column(Modifier.padding(top = padding.calculateTopPadding())) {
                     if (showsCachedData) savedAt?.let { OfflineCopyNotice(it) }
+                    // The sample shop is example data: say so on every main screen, with the way out.
+                    val selection by collectSelection()
+                    if (tab != null && (selection as? Selection.Selected)?.store?.isReference == true) {
+                        SampleShopBanner(onSetUp = { navController.navigate(R.id.createWorkspaceFragment) })
+                    }
                     ScreenContent(PaddingValues(bottom = padding.calculateBottomPadding()))
                 }
             },
@@ -132,6 +140,24 @@ abstract class ShellFragment : ComposeFragment() {
                 },
                 onDismiss = { showSignOutConfirm = false },
             )
+        }
+    }
+}
+
+@Composable
+private fun SampleShopBanner(onSetUp: () -> Unit) {
+    Surface(color = MaterialTheme.colorScheme.secondaryContainer, modifier = Modifier.fillMaxWidth()) {
+        Row(
+            Modifier.padding(start = Spacing.lg, end = Spacing.sm, top = Spacing.xs, bottom = Spacing.xs),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                stringResource(R.string.sample_banner),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                modifier = Modifier.weight(1f),
+            )
+            TextButton(onClick = onSetUp) { Text(stringResource(R.string.welcome_set_up)) }
         }
     }
 }

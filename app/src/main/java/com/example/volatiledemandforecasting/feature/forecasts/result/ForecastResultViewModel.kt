@@ -12,6 +12,8 @@ import com.example.volatiledemandforecasting.core.ui.components.toUiState
 import com.example.volatiledemandforecasting.data.forecast.ForecastDto
 import com.example.volatiledemandforecasting.data.forecast.ForecastRepository
 import com.example.volatiledemandforecasting.data.store.ModelCardDto
+import com.example.volatiledemandforecasting.data.forecast.ShownMethod
+import com.example.volatiledemandforecasting.data.forecast.shownMethodOf
 import com.example.volatiledemandforecasting.data.store.StoreRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -30,6 +32,8 @@ data class ResultData(
     val forecast: ForecastDto,
     /** The store's model card, the third kind of evidence. Null when AI wasn't used or the card couldn't be loaded. */
     val card: ModelCardDto?,
+    /** AI or simple for this store, from its model's testing. */
+    val shown: ShownMethod = shownMethodOf(card?.backtest),
 )
 
 sealed interface ResultEvent {

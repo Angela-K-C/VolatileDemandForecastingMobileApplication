@@ -29,6 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.volatiledemandforecasting.R
+import com.example.volatiledemandforecasting.core.ui.components.InlineMessage
+import com.example.volatiledemandforecasting.core.ui.components.PrimaryButton
+import com.example.volatiledemandforecasting.core.ui.components.SecondaryButton
+import com.example.volatiledemandforecasting.core.ui.components.StatusKind
 import com.example.volatiledemandforecasting.app.ShellFragment
 import com.example.volatiledemandforecasting.app.appViewModels
 import com.example.volatiledemandforecasting.core.ui.Formatting
@@ -63,33 +67,45 @@ class WorkspacePickerFragment : ShellFragment() {
                 contentPadding = PaddingValues(Spacing.lg),
                 verticalArrangement = Arrangement.spacedBy(Spacing.md),
             ) {
-                items(data.reference, key = { it.workspace.id }) { entry ->
-                    WorkspaceCard(entry, data.currentStoreId, blurb = stringResource(R.string.picker_reference_blurb)) { workspace, store ->
+                if (data.own.isEmpty()) {
+                    // First launch: set up a shop, or look around the sample shop first.
+                    item { Welcome(sample = data.sample, onSample = { viewModel.trySample { navController.popBackStack() } }, onSetUp = { navController.navigate(R.id.createWorkspaceFragment) }) }
+                    return@LazyColumn
+                }
+                if (data.viewingSample) {
+                    item { InlineMessage(stringResource(R.string.picker_viewing_sample), StatusKind.Neutral) }
+                }
+                item {
+                    Text(stringResource(R.string.picker_your_workspaces), style = MaterialTheme.typography.titleSmall)
+                }
+                items(data.own, key = { it.workspace.id }) { entry ->
+                    WorkspaceCard(entry, data.currentStoreId, blurb = null) { workspace, store ->
                         viewModel.select(workspace, store) { navController.popBackStack() }
                     }
                 }
-                if (data.own.isNotEmpty()) {
-                    item {
-                        Text(
-                            stringResource(R.string.picker_your_workspaces),
-                            style = MaterialTheme.typography.titleSmall,
-                            modifier = Modifier.padding(top = Spacing.sm),
-                        )
-                    }
-                    items(data.own, key = { it.workspace.id }) { entry ->
-                        WorkspaceCard(entry, data.currentStoreId, blurb = null) { workspace, store ->
-                            viewModel.select(workspace, store) { navController.popBackStack() }
-                        }
-                    }
-                } else {
-                    item { Text(stringResource(R.string.picker_no_own), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                }
                 item {
                     OutlinedButton(onClick = { navController.navigate(R.id.createWorkspaceFragment) }, modifier = Modifier.fillMaxWidth()) {
-                        Text(stringResource(R.string.picker_create_workspace))
+                        Text(stringResource(R.string.picker_create_another))
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun Welcome(sample: Pair<WorkspaceDto, StoreDto>?, onSample: () -> Unit, onSetUp: () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(Spacing.md)) {
+        Text(stringResource(R.string.welcome_title), style = MaterialTheme.typography.headlineSmall)
+        Text(stringResource(R.string.welcome_body), style = MaterialTheme.typography.bodyMedium)
+        PrimaryButton(stringResource(R.string.welcome_set_up), onSetUp, Modifier.fillMaxWidth())
+        if (sample != null) {
+            SecondaryButton(stringResource(R.string.welcome_try_sample), onSample, Modifier.fillMaxWidth())
+            Text(
+                stringResource(R.string.welcome_sample_note),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }

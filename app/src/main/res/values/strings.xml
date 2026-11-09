@@ -15,8 +15,7 @@
 
     <!-- Options menu (spec §6.1) -->
     <string name="options_menu_description">More options</string>
-    <string name="menu_switch_workspace">Switch workspace or store</string>
-    <string name="menu_model_info">About the forecasting model</string>
+    <string name="menu_model_info">AI model</string>
     <string name="menu_manage_team">Manage team</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_help">Help and support</string>
@@ -80,8 +79,8 @@
     <string name="error_unknown">Something went wrong. Please try again.</string>
 
     <!-- Screens that are not built yet -->
-    <string name="screen_workspace_picker">Workspaces</string>
-    <string name="screen_model_info">Forecasting model</string>
+    <string name="screen_workspace_picker">Your shops</string>
+    <string name="screen_model_info">AI model</string>
     <string name="screen_team">Team</string>
     <string name="screen_settings">Settings</string>
     <string name="screen_help">Help and support</string>
@@ -155,17 +154,14 @@
     <string name="error_horizon_not_supported">That forecast length isn\'t supported.</string>
 
     <!-- Workspace picker -->
-    <string name="picker_reference_blurb">Real historical sales from a US grocery store, used to demonstrate and evaluate the forecasting model</string>
-    <string name="picker_your_workspaces">Your workspaces</string>
-    <string name="picker_no_own">You don\'t have a workspace of your own yet. Create one to upload your own sales.</string>
-    <string name="picker_create_workspace">Create workspace</string>
+    <string name="picker_your_workspaces">Your shops</string>
     <string name="picker_no_stores">No store in this workspace yet</string>
     <string name="picker_role">Role: %1$s</string>
     <string name="picker_current">Current</string>
     <string name="picker_history_range">Sales %1$s to %2$s</string>
-    <string name="picker_none_title">Choose a workspace</string>
-    <string name="picker_none_body">Pick a workspace and store to see products and forecasts.</string>
-    <string name="picker_choose_action">Choose workspace</string>
+    <string name="picker_none_title">Set up your shop</string>
+    <string name="picker_none_body">Upload your sales and get a forecast for every product.</string>
+    <string name="picker_choose_action">Get started</string>
     <string name="role_owner">Owner</string>
     <string name="role_manager">Manager</string>
     <string name="role_viewer">Viewer</string>
@@ -182,12 +178,10 @@
     <string name="dash_ai_training">Training</string>
     <string name="dash_ai_not_eligible">Not yet eligible</string>
     <string name="dash_ai_baselines_only">Baselines only</string>
-    <string name="dash_generate">Generate forecast</string>
-    <string name="dash_try_replay">Try replay</string>
-    <string name="dash_recent">Recent forecasts</string>
-    <string name="dash_see_all">See all</string>
+    <string name="dash_generate">Forecast all products</string>
+    <string name="dash_recent">Recent product forecasts</string>
     <string name="dash_stale_notice">Your latest sales are from %1$s. Upload sales up to yesterday to forecast tomorrow.</string>
-    <string name="dash_demo_notice">This workspace is read-only. Try a replay to compare the model with what really sold.</string>
+    <string name="dash_demo_notice">This sample shop has real sales from a US grocery store. Look around, then set up your own shop.</string>
 
     <!-- Products -->
     <string name="products_search">Search products</string>
@@ -216,22 +210,15 @@
     <string name="screen_forecast_config">New forecast</string>
     <string name="screen_forecast_progress">Forecast</string>
     <string name="screen_forecast_result">Forecast result</string>
-    <string name="cfg_as_of">Forecast from</string>
-    <string name="cfg_as_of_help_replay">This date is in the past. The result will be compared with what really sold (a replay).</string>
-    <string name="cfg_as_of_help_forecast">A true forecast from the latest recorded day. Real sales for these days are not known yet.</string>
     <string name="cfg_as_of_fixed">Forecasts start after the latest recorded sales day, %1$s.</string>
     <string name="cfg_horizon">How far ahead</string>
     <string name="cfg_horizon_days">%1$d days</string>
     <string name="cfg_horizon_next_day">Next day</string>
-    <string name="cfg_method">Method</string>
     <string name="cfg_method_ai">AI model</string>
     <string name="cfg_method_baseline">Simple forecast</string>
     <string name="cfg_method_compare">Compare both</string>
     <string name="cfg_generate">Generate forecast</string>
-    <string name="cfg_read_only">This workspace is read-only. You can run replays on past dates but not change data.</string>
     <string name="cfg_viewer">Viewers can\'t generate forecasts.</string>
-    <string name="cfg_pick_date">Pick date</string>
-    <string name="cfg_date_invalid">Choose a date from %1$s to %2$s.</string>
     <string name="ai_reason_not_trained">The AI model has not been trained for this store yet.</string>
     <string name="ai_reason_training">The AI model is training.</string>
     <string name="ai_reason_not_eligible">This store doesn\'t have enough history yet.</string>
@@ -252,7 +239,6 @@
     <string name="job_open_forecasts">Open Forecasts</string>
 
     <!-- Results -->
-    <string name="res_replay_tag">Replay</string>
     <string name="res_forecast_tag">True forecast</string>
     <string name="res_experimental">Experimental</string>
     <string name="res_experimental_note">This forecast length hasn\'t been validated against past sales.</string>
@@ -303,15 +289,13 @@
 
     <!-- Forecast history -->
     <string name="hist_empty_title">No forecasts yet</string>
-    <string name="hist_empty_body">Generate a forecast from the Products tab or the Dashboard.</string>
+    <string name="hist_empty_body">Forecast a product from the Products tab.</string>
     <string name="hist_filter_all">All</string>
-    <string name="hist_filter_replay">Replays</string>
-    <string name="hist_filter_forecast">True forecasts</string>
     <string name="hist_actuals_now">Actuals now available</string>
     <string name="hist_method_ai">AI</string>
     <string name="hist_method_baseline">Simple</string>
     <string name="hist_method_compare">Compare</string>
-    <string name="hist_summary">%1$s · %2$s · from %3$s</string>
+    <string name="hist_summary">%1$s · from %2$s</string>
     <string name="hist_status_failed">Failed</string>
     <string name="hist_status_running">In progress</string>
 
@@ -365,7 +349,7 @@
     <string name="data_delete_title">Delete this import?</string>
     <string name="data_delete_body">The sales from %1$s are removed from the history. Days that this import replaced do not come back.</string>
     <string name="data_delete">Delete import</string>
-    <string name="data_reference_note">The demo store\'s sales are fixed and can\'t be changed. Try a replay from Products instead.</string>
+    <string name="data_reference_note">The sample shop\'s sales are fixed and can\'t be changed.</string>
     <string name="data_viewer_note">Viewers can see the sales history but can\'t upload data.</string>
     <string name="data_upload">Upload sales data</string>
     <string name="data_readiness_link">Data readiness</string>
@@ -583,26 +567,42 @@
     <string name="error_last_owner">A workspace must keep at least one owner. Make someone else an owner first.</string>
     <string name="error_already_member">That person is already in this workspace.</string>
     <string name="error_invitation_not_pending">This invitation is no longer open.</string>
-    <string name="menu_research">Research summary</string>
-    <string name="screen_research">Research summary</string>
-    <string name="research_empty_title">Nothing to compare yet</string>
-    <string name="research_empty_body">Run replays or import actual sales, then come back to compare the methods.</string>
-    <string name="research_filter">As-of date range</string>
-    <string name="research_from">From</string>
-    <string name="research_to">To</string>
-    <string name="research_filter_hint">Optional. Use YYYY-MM-DD. Leave blank for all dates.</string>
-    <string name="research_apply">Apply</string>
-    <string name="research_date_invalid">Use a date like 2016-05-20.</string>
-    <string name="research_none_in_range">No forecast days with known actual sales in this range.</string>
-    <string name="research_counts">%1$d runs, %2$d forecast days compared.</string>
-    <string name="research_overall">Overall</string>
-    <string name="research_by_class">By demand type</string>
-    <string name="research_by_day">By day ahead</string>
-    <string name="research_day_n">Day %1$s ahead</string>
-    <string name="research_block_body">%1$d forecast days. All three methods are measured on these same days.</string>
-    <string name="research_ai">AI</string>
-    <string name="research_naive">Same as last day</string>
-    <string name="research_seasonal">Same weekday last week</string>
-    <string name="research_export">Export CSV</string>
     <string name="offline_copy">You are offline. This is a saved copy from %1$s. Uploading and forecasting need a connection.</string>
+
+    <!-- Business version: store-wide forecasts and the sample shop -->
+    <string name="menu_switch_shop">Switch shop</string>
+    <string name="picker_create_another">Add another shop</string>
+    <string name="picker_viewing_sample">You\'re looking at the sample shop. Pick one of your shops to switch.</string>
+    <string name="welcome_title">Know what you\'ll sell</string>
+    <string name="welcome_body">Upload your sales history and get a forecast for every product in your shop.</string>
+    <string name="welcome_set_up">Set up my shop</string>
+    <string name="welcome_try_sample">Try a sample shop</string>
+    <string name="welcome_sample_note">Real sales from a US grocery store. You can look around and forecast, but not change its data.</string>
+    <string name="sample_banner">Sample shop: example data</string>
+    <string name="sf_intro">Forecast every product in one go and see how many units you\'re likely to sell.</string>
+    <string name="sf_forecast_all">Forecast all products</string>
+    <string name="sf_forecast_again">Forecast all products again</string>
+    <string name="sf_none_yet">You haven\'t forecast this shop yet. Pick how far ahead, then tap Forecast all products.</string>
+    <string name="sf_running">Forecasting… %1$d of %2$d products</string>
+    <string name="sf_running_note">This keeps going if you leave the screen.</string>
+    <string name="sf_title">Expected sales, %1$s after %2$s</string>
+    <string name="sf_using_ai">From your shop\'s AI model, which did better than the simple forecast on your past sales.</string>
+    <string name="sf_using_simple">From the simple forecast (each day the same as the last). It was at least as accurate as the AI on your past sales, or no AI model is ready yet.</string>
+    <string name="sf_outdated">New sales were added after this forecast. Forecast again to include them.</string>
+    <string name="sf_some_failed">Some products couldn\'t be forecast (%1$d). Open one to see why.</string>
+    <string name="sf_units_in">%1$s in %2$d days</string>
+    <string name="sf_no_match">No products match your search.</string>
+    <string name="res_series_expected">Expected sales</string>
+    <string name="res_expected_label">Expected sales, %1$s after %2$s</string>
+    <string name="res_expected_value">%1$s %2$s</string>
+    <string name="res_from_ai">From your shop\'s AI model</string>
+    <string name="res_from_simple">Simple forecast: each day the same as the last recorded day</string>
+    <string name="res_col_expected">Expected</string>
+    <string name="res_compare_title">Every method, day by day</string>
+    <string name="res_accuracy_show">How accurate is this?</string>
+    <string name="res_accuracy_hide">Hide accuracy details</string>
+    <string name="res_why_ai">This forecast uses the AI model because, tested on past sales, it missed by less than the simple forecast. Here is how the methods compare.</string>
+    <string name="res_why_simple">This forecast uses the simple forecast: each day is expected to sell what the last recorded day sold. Either no AI model is ready, or on past sales it didn\'t beat the simple forecast.</string>
+    <string name="model_uses_ai">Your forecasts use the AI model: on your past sales it missed by less than the simple forecast.</string>
+    <string name="model_uses_simple">Your forecasts use the simple forecast: on your past sales the AI model didn\'t beat it.</string>
 </resources>
