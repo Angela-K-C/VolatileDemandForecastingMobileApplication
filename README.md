@@ -10,6 +10,37 @@ The app contains **no forecasting maths**. Every number on screen comes from the
 
 New to the project or to forecasting? Start with [`docs/HOW_FORECASTING_WORKS.md`](docs/HOW_FORECASTING_WORKS.md): how demand forecasting is usually done, how this project does each part, and what role the trained Walmart model plays.
 
+## The project in one story
+
+**1. The question.** Can machine learning predict how many units a shop will sell better than simple rules of thumb, such as "tomorrow sells the same as today"? And does that still hold for products whose demand jumps around, the ones that sell 0, 0, 3, 0, 1 units over a few days?
+
+**2. The experiment.** We used Walmart's real sales for one store (the public M5 dataset: store CA_1, 1,437 food products, 2011–2016).
+- Each day of each product was turned into inputs the model can learn from: what sold yesterday, a week ago, two and three weeks ago, the recent average, the weekday, the month, the price.
+- A LightGBM model was trained on everything except the last four weeks.
+- It was then tested on those last four weeks, which it had never seen.
+
+It missed by about 26% less than "same as last day" (a typical miss of 2.38 units against 3.22). It won for every kind of product, including ones that sell only now and then. That is the research result.
+
+**3. The insight.** The trained model has learned *Walmart*: its product codes, its calendar, its US holidays and its dollar prices. It can't be pointed at another shop's products. But we also tested the *method* with every Walmart-specific input removed, keeping only recent sales, the calendar, local public holidays and the shop's own prices. Accuracy dropped by just 0.1%. So the valuable thing we built is the **recipe**: the inputs, the training method and the honest test against a simple forecast. The trained Walmart model is the evidence that the recipe works.
+
+**4. The product.** The app gives that recipe to any shop:
+
+| When | What the shop owner gets |
+|---|---|
+| **Day one** | Upload past sales (a CSV of date, product, units sold, optionally price). Every product with three weeks of history gets the **simple forecast** straight away. It is a fair start, because it is exactly what the AI has to beat. |
+| **About four months of history** | The shop can train **its own model** with the same recipe, tested on its own last four weeks. |
+| **If it wins** | The app switches to the shop's AI model for its forecasts and says so. |
+| **If it doesn't** | It keeps the simple forecast and explains why. No model is used just because it is "AI". |
+| **After that** | The model is retrained every week as new sales arrive, and has to win again each time. |
+
+Each product shows **one number**, the units expected tomorrow or over the next 7 days. The comparison with other methods is one tap away under **How accurate is this?**
+
+**5. Where the Walmart model lives now.** It is the proof behind the project, and it powers the **sample shop**: a ready-made shop with Walmart's real history that anyone can explore before uploading their own data.
+
+**In one sentence:** we didn't just build a forecast for Walmart; we built and proved a *way of making forecasts*, and the app hands that to each shop once it has enough of its own data.
+
+More detail: [`docs/HOW_FORECASTING_WORKS.md`](docs/HOW_FORECASTING_WORKS.md) for the whole project, and `docs/how-the-backend-works.md` in the backend repository for the server side.
+
 ## Project layout (three repositories)
 
 | Repository | Role |
