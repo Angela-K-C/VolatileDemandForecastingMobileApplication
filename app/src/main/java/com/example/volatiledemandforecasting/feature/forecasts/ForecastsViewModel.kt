@@ -38,6 +38,8 @@ data class StoreForecast(
     val shown: ShownMethod,
     /** Null until the store has been forecast once. */
     val batch: BatchDto?,
+    /** False until the shop has uploaded sales; there is nothing to forecast before that. */
+    val hasSales: Boolean = true,
     val items: List<BatchItemDto> = emptyList(),
     val total: Int = 0,
     val page: Int = 1,
@@ -92,10 +94,11 @@ class ForecastsViewModel(
                 coroutineScope {
                     val caps = async { stores.capabilities(s.storeId) }
                     val latest = async { batches.latest(s.storeId) }
+                    val history = async { runCatching { stores.historySummary(s.storeId).historyEnd != null }.getOrDefault(true) }
                     val capabilities = caps.await()
                     // The model's own testing decides AI or simple. No model, or no card: simple.
                     val card = if (capabilities.activeModel != null) attempt { stores.activeModel(s.storeId) }.getOrNull()?.card else null
-                    StoreForecast(s, capabilities, shownMethodOf(card?.backtest), latest.await())
+                    StoreForecast(s, capabilities, shownMethodOf(card?.backtest), latest.await(), hasSales = history.await())
                 }
             }
                 .onSuccess { data ->

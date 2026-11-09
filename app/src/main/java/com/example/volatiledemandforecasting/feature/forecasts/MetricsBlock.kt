@@ -1,5 +1,7 @@
 package com.example.volatiledemandforecasting.feature.forecasts
 
+import com.example.volatiledemandforecasting.core.ui.components.InfoHint
+import com.example.volatiledemandforecasting.core.ui.components.Term
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,7 +52,10 @@ fun MetricsBlock(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Column(Modifier.padding(Spacing.lg), verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-            Text(title, style = MaterialTheme.typography.titleSmall)
+            Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Text(title, style = MaterialTheme.typography.titleSmall, modifier = Modifier.weight(1f))
+                InfoHint(Term.Accuracy)
+            }
             Text(body, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (note != null) Text(note, style = MaterialTheme.typography.bodySmall)
 

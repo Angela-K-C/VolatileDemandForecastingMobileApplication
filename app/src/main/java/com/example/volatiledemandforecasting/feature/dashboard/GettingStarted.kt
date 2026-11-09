@@ -29,17 +29,31 @@ import com.example.volatiledemandforecasting.data.training.EligibilityCheckDto
 /** The steps from a new shop to AI forecasts, in order. */
 enum class SetupStep { CreateShop, UploadSales, FirstForecast, AiUnlocked }
 
+/**
+ * Where a shop is on the way to its own AI model. The backend never trains the first model by
+ * itself: once the shop is eligible, an owner or manager starts it. Later retraining is weekly.
+ */
+enum class AiStage { Waiting, CanTrain, Training, DidNotBeat, Ready }
+
+internal fun aiStageOf(status: AiStatus, eligible: Boolean): AiStage = when (status) {
+    AiStatus.Available -> AiStage.Ready
+    AiStatus.Training -> AiStage.Training
+    // For a business shop this means its last model didn't beat the simple forecast.
+    AiStatus.BaselinesOnly -> AiStage.DidNotBeat
+    AiStatus.NotEligible -> if (eligible) AiStage.CanTrain else AiStage.Waiting
+}
+
 /** Where a business shop is on the way to its first forecasts. The sample shop never shows this. */
 data class SetupProgress(
     val hasSales: Boolean,
     val hasForecast: Boolean,
-    val aiReady: Boolean,
+    val ai: AiStage,
 ) {
     fun isDone(step: SetupStep): Boolean = when (step) {
         SetupStep.CreateShop -> true
         SetupStep.UploadSales -> hasSales
         SetupStep.FirstForecast -> hasForecast
-        SetupStep.AiUnlocked -> aiReady
+        SetupStep.AiUnlocked -> ai == AiStage.Ready
     }
 
     /** The first unfinished step: the one the checklist offers a button for. */
@@ -48,23 +62,26 @@ data class SetupProgress(
     val doneCount: Int get() = SetupStep.entries.count(::isDone)
 
     /**
-     * Shown until the shop has sales and a forecast. AI unlocking takes months and needs nothing
-     * from the user, so it alone doesn't keep the checklist on screen; the AI card covers it.
+     * Shown until the shop has sales and a forecast, and again while its AI model can be trained or
+     * is training. Waiting months for enough sales needs nothing from the user, so that alone
+     * doesn't keep it on screen; the AI card on the dashboard covers it.
      */
-    val showChecklist: Boolean get() = !hasSales || !hasForecast
+    val showChecklist: Boolean
+        get() = !hasSales || !hasForecast || ai == AiStage.CanTrain || ai == AiStage.Training
 }
 
 /**
- * The "Getting started" card on the dashboard. [canUpload] is false for viewers, who are asked to
- * get an owner or manager to upload instead of being shown a button they can't use.
+ * The "Getting started" card on the dashboard. [canManage] is false for viewers, who are asked to
+ * get an owner or manager to act instead of being shown buttons they can't use.
  */
 @Composable
 fun GettingStartedCard(
     progress: SetupProgress,
-    canUpload: Boolean,
+    canManage: Boolean,
     aiDays: EligibilityCheckDto?,
     onUpload: () -> Unit,
     onForecast: () -> Unit,
+    onSetUpAi: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val total = SetupStep.entries.size
@@ -85,19 +102,21 @@ fun GettingStartedCard(
             )
             SetupStep.entries.forEach { step ->
                 val isNext = step == progress.next
+                val done = progress.isDone(step)
                 StepRow(
                     title = stringResource(stepTitle(step)),
-                    body = stepBody(step, canUpload, aiDays).takeIf { isNext || (step == SetupStep.AiUnlocked && !progress.isDone(step)) },
-                    done = progress.isDone(step),
+                    body = stepBody(step, progress.ai, canManage, aiDays).takeIf { isNext || (step == SetupStep.AiUnlocked && !done) },
+                    done = done,
                     highlighted = isNext,
                 )
-                if (isNext) {
+                if (isNext && canManage) {
                     when (step) {
-                        SetupStep.UploadSales -> if (canUpload) {
-                            PrimaryButton(stringResource(R.string.data_upload), onUpload, Modifier.fillMaxWidth())
-                        }
+                        SetupStep.UploadSales -> PrimaryButton(stringResource(R.string.data_upload), onUpload, Modifier.fillMaxWidth())
                         SetupStep.FirstForecast -> PrimaryButton(stringResource(R.string.dash_generate), onForecast, Modifier.fillMaxWidth())
-                        else -> Unit
+                        SetupStep.AiUnlocked -> if (progress.ai == AiStage.CanTrain || progress.ai == AiStage.DidNotBeat) {
+                            PrimaryButton(stringResource(R.string.gs_ai_button), onSetUpAi, Modifier.fillMaxWidth())
+                        }
+                        SetupStep.CreateShop -> Unit
                     }
                 }
             }
@@ -136,14 +155,20 @@ private fun stepTitle(step: SetupStep): Int = when (step) {
 }
 
 @Composable
-private fun stepBody(step: SetupStep, canUpload: Boolean, aiDays: EligibilityCheckDto?): String? = when (step) {
+private fun stepBody(step: SetupStep, ai: AiStage, canManage: Boolean, aiDays: EligibilityCheckDto?): String? = when (step) {
     SetupStep.CreateShop -> null
-    SetupStep.UploadSales -> stringResource(if (canUpload) R.string.gs_upload_body else R.string.gs_upload_body_viewer)
+    SetupStep.UploadSales -> stringResource(if (canManage) R.string.gs_upload_body else R.string.gs_upload_body_viewer)
     SetupStep.FirstForecast -> stringResource(R.string.gs_forecast_body)
-    SetupStep.AiUnlocked -> {
-        val have = aiDays?.value?.toInt()
-        val need = aiDays?.required?.toInt()
-        if (have != null && need != null) stringResource(R.string.gs_ai_body_days, have, need)
-        else stringResource(R.string.gs_ai_body)
+    SetupStep.AiUnlocked -> when (ai) {
+        AiStage.Waiting -> {
+            val have = aiDays?.value?.toInt()
+            val need = aiDays?.required?.toInt()
+            if (have != null && need != null) stringResource(R.string.gs_ai_body_days, have, need)
+            else stringResource(R.string.gs_ai_body)
+        }
+        AiStage.CanTrain -> stringResource(if (canManage) R.string.gs_ai_can_train else R.string.gs_ai_can_train_viewer)
+        AiStage.Training -> stringResource(R.string.gs_ai_training)
+        AiStage.DidNotBeat -> stringResource(R.string.gs_ai_did_not_beat)
+        AiStage.Ready -> null
     }
 }

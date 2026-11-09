@@ -556,7 +556,7 @@
     <string name="set_version">App version</string>
     <string name="set_notifications_later">Notifications are not available yet.</string>
     <string name="help_forecasts_title">How forecasts work</string>
-    <string name="help_forecasts_body">A forecast estimates how many units of a product will sell on each of the next days. The simple forecast repeats the last recorded day. The AI forecast learns from your store\'s sales history.</string>
+    <string name="help_forecasts_body">A forecast estimates how many units of a product will sell on each of the next days. The simple forecast expects every day to sell what the product sold on its most recent recorded day. The AI forecast learns from your store\'s sales history.</string>
     <string name="help_ai_title">When AI is available</string>
     <string name="help_ai_body">AI forecasts unlock once your store has enough sales history. Open Model info to see how far along you are. The AI is only used if it beats the simple forecast on your own recent sales.</string>
     <string name="help_limits_title">Good to know</string>
@@ -588,7 +588,7 @@
     <string name="sf_running_note">This keeps going if you leave the screen.</string>
     <string name="sf_title">Expected sales, %1$s after %2$s</string>
     <string name="sf_using_ai">From your shop\'s AI model, which did better than the simple forecast on your past sales.</string>
-    <string name="sf_using_simple">From the simple forecast (each day the same as the last). It was at least as accurate as the AI on your past sales, or no AI model is ready yet.</string>
+    <string name="sf_using_simple">From the simple forecast (every day the same as each product\'s most recent recorded day). It was at least as accurate as the AI on your past sales, or no AI model is ready yet.</string>
     <string name="sf_outdated">New sales were added after this forecast. Forecast again to include them.</string>
     <string name="sf_some_failed">Some products couldn\'t be forecast (%1$d). Open one to see why.</string>
     <string name="sf_units_in">%1$s in %2$d days</string>
@@ -614,7 +614,7 @@
     <string name="tour_3_title">2. Forecast every product</string>
     <string name="tour_3_body">One tap forecasts every product for tomorrow, the next week or longer. It works as soon as your sales are in.</string>
     <string name="tour_4_title">3. It gets smarter</string>
-    <string name="tour_4_body">After a few months of sales, the app trains an AI model on your shop. It\'s only used if it beats the simple forecast on your own sales.</string>
+    <string name="tour_4_body">Once your shop has a few months of sales, train an AI model on it with one tap. It\'s only used if it beats the simple forecast on your own sales, and it keeps learning as you add sales.</string>
     <string name="tour_skip">Skip</string>
     <string name="tour_next">Next</string>
     <string name="tour_get_started">Get started</string>
@@ -631,16 +631,21 @@
     <string name="gs_step_shop">Set up your shop</string>
     <string name="gs_step_upload">Upload your sales</string>
     <string name="gs_step_forecast">Get your first forecasts</string>
-    <string name="gs_step_ai">AI forecasts unlock</string>
+    <string name="gs_step_ai">Turn on AI forecasts</string>
     <string name="gs_upload_body">A CSV file of daily sales: a date, a product and how many sold. The more history, the better.</string>
     <string name="gs_upload_body_viewer">Ask the shop\'s owner or a manager to upload its sales.</string>
     <string name="gs_forecast_body">Forecast every product at once. It takes a minute or two.</string>
-    <string name="gs_ai_body">This happens by itself once your shop has a few months of sales.</string>
-    <string name="gs_ai_body_days">This happens by itself once your shop has enough sales: %1$d of %2$d days so far.</string>
+    <string name="gs_ai_body">Possible once your shop has a few months of sales.</string>
+    <string name="gs_ai_body_days">Possible once your shop has enough sales: %1$d of %2$d days so far.</string>
+    <string name="gs_ai_can_train">Your shop has enough sales. Train its AI model: it takes a few minutes.</string>
+    <string name="gs_ai_can_train_viewer">Your shop has enough sales. Ask the owner or a manager to train its AI model.</string>
+    <string name="gs_ai_training">Training your shop\'s AI model. This takes a few minutes; you can keep using the app.</string>
+    <string name="gs_ai_did_not_beat">The AI model didn\'t beat the simple forecast on your sales, so the simple forecast stays. Try again after adding more sales.</string>
+    <string name="gs_ai_button">Set up AI forecasts</string>
 
     <!-- Help: getting started -->
     <string name="help_start_title">Getting started</string>
-    <string name="help_start_body">1. Set up your shop.\n2. Upload your sales history (Data tab).\n3. Forecast every product (Forecasts tab).\nAI forecasts unlock by themselves once you have a few months of sales.</string>
+    <string name="help_start_body">1. Set up your shop.\n2. Upload your sales history (Data tab).\n3. Forecast every product (Forecasts tab).\n4. After a few months of sales, train your AI model (Options menu, AI model).</string>
     <string name="help_show_tour">Show the app tour</string>
     <string name="help_file_title">Your sales file</string>
     <string name="help_file_body">A CSV file with one row per product per day: the date, the product\'s name or code, and the units sold. Price and category are optional. From Excel or Google Sheets, use Save as or Download and choose CSV. Upload more sales any time; the app adds them to what it has.</string>
@@ -649,4 +654,32 @@
     <string name="w_choose_example_title">Example</string>
     <string name="w_choose_example">date,product,units_sold\n2026-10-01,Milk 1L,12\n2026-10-01,Bread,7\n2026-10-02,Milk 1L,9</string>
     <string name="w_choose_tips">Your columns can have other names; you match them on the next screens. Using a spreadsheet? Save it as CSV first.</string>
+    <!-- Upload wizard: sample file -->
+    <string name="w_sample_title">No file to hand?</string>
+    <string name="w_sample_body">Use the sample file: 300 days of sales for a small mini-market with 26 products, up to yesterday. It\'s enough to try everything, including AI forecasts. Its sales are added to this shop, so use a shop you set up for practice.</string>
+    <string name="w_sample_use">Use the sample sales file</string>
+    <string name="w_sample_save">Save a copy of the sample file</string>
+    <string name="w_sample_saved">Sample file saved</string>
+    <string name="w_sample_not_saved">Couldn\'t save the file. Try another place.</string>
+
+    <!-- Before any sales -->
+    <string name="empty_no_sales_title">No sales yet</string>
+    <string name="empty_forecasts_body">Upload your sales history first. Then you can forecast every product in one tap.</string>
+    <string name="empty_products_body">Your products appear here once you upload your sales history.</string>
+    <string name="empty_no_sales_body_viewer">This shop has no sales yet. Ask the owner or a manager to upload them.</string>
+
+    <!-- Explanations behind the "?" buttons, and in Help -->
+    <string name="term_what_is">What is %1$s?</string>
+    <string name="term_got_it">Got it</string>
+    <string name="help_terms_title">Words used in the app</string>
+    <string name="term_ai_title">AI forecast</string>
+    <string name="term_ai_body">A model trained on your own shop\'s sales. It learns patterns such as busier weekends, paydays and holidays. The app only uses it if it beat the simple forecast when tested on your recent sales; otherwise you get the simple forecast.</string>
+    <string name="term_simple_title">Simple forecast</string>
+    <string name="term_simple_body">Each coming day is expected to sell what the product sold on its most recent day with recorded sales. For example, if milk sold 12 that day, the 7-day simple forecast is 12 a day, 84 in total.\n\nIt needs no training, so it works from your first upload, and it\'s the forecast the AI has to beat. It doesn\'t know about busy weekends, paydays or holidays, and one unusual day is repeated for the whole period. Those are what the AI learns.</string>
+    <string name="term_accuracy_title">How accuracy is measured</string>
+    <string name="term_accuracy_body">The app hides your last 4 weeks of sales, forecasts them, and compares the forecast with what really sold. Once real sales come in for a forecast\'s days, it is checked against those too.\n\nAverage miss (MAE): units off on a typical day.\nTypical miss (RMSE): like the average miss, but big misses count more.\nMiss as a share of sales (WAPE): all units missed divided by all units sold.\n\nLower is better. Doing well on past weeks is a good sign, not a promise about tomorrow.</string>
+    <string name="term_ready_title">Ready for AI</string>
+    <string name="term_ready_body">A product is ready when it has enough recent days of sales recorded, without too many gaps. Products that aren\'t ready still get the simple forecast.</string>
+    <string name="term_training_title">Training the AI model</string>
+    <string name="term_training_body">Training builds an AI model from your shop\'s sales history and takes a few minutes. The new model is tested on your last 4 weeks of sales and only used if it beats the simple forecast. After that, it is retrained each week when new sales have been added.</string>
 </resources>

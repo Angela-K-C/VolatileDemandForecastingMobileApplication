@@ -58,6 +58,9 @@ import com.example.volatiledemandforecasting.data.imports.ImportSummaryDto
 import com.example.volatiledemandforecasting.data.imports.OverlapPolicy
 import com.example.volatiledemandforecasting.feature.data.statusKind
 import com.example.volatiledemandforecasting.feature.data.statusLabel
+import android.widget.Toast
+import com.example.volatiledemandforecasting.data.sample.SampleSalesFile
+import java.time.LocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -71,6 +74,29 @@ class ImportWizardFragment : ShellFragment() {
 
     // The Storage Access Framework lets the user pick a file without any storage permission.
     private val pickFile = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> if (uri != null) read(uri) }
+
+    // Saves the sample file wherever the user chooses (Downloads, Drive), also without a permission.
+    private val saveSample = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
+        if (uri == null) return@registerForActivityResult
+        val resolver = requireContext().contentResolver
+        val context = requireContext().applicationContext
+        viewLifecycleOwner.lifecycleScope.launch {
+            val saved = withContext(Dispatchers.IO) {
+                runCatching { resolver.openOutputStream(uri)?.use { it.write(sampleBytes()) } != null }.getOrDefault(false)
+            }
+            Toast.makeText(context, if (saved) R.string.w_sample_saved else R.string.w_sample_not_saved, Toast.LENGTH_LONG).show()
+        }
+    }
+
+    /** The sample shop's sales up to yesterday, so the app doesn't call the history out of date. */
+    private fun sampleBytes(): ByteArray = SampleSalesFile.csv(LocalDate.now().minusDays(1)).toByteArray()
+
+    private fun useSample() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val bytes = withContext(Dispatchers.Default) { sampleBytes() }
+            viewModel.onFilePicked(PickedFile(SampleSalesFile.FILE_NAME, bytes.size.toLong(), bytes))
+        }
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -131,7 +157,11 @@ class ImportWizardFragment : ShellFragment() {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 when (step) {
-                    WizardStep.ChooseFile -> ChooseFile(onPick = { pickFile.launch(arrayOf("text/*", "application/vnd.ms-excel", "application/octet-stream")) })
+                    WizardStep.ChooseFile -> ChooseFile(
+                        onPick = { pickFile.launch(arrayOf("text/*", "application/vnd.ms-excel", "application/octet-stream")) },
+                        onUseSample = ::useSample,
+                        onSaveSample = { saveSample.launch(SampleSalesFile.FILE_NAME) },
+                    )
                     WizardStep.FileDetails -> FileDetails(state, onUpload = viewModel::upload, onChoose = { pickFile.launch(arrayOf("text/*", "application/vnd.ms-excel", "application/octet-stream")) })
                     WizardStep.Mapping -> MappingStep(state, viewModel)
                     WizardStep.Validation -> ValidationStep(state, onBack = { viewModel.back() }, onContinue = viewModel::continueFromValidation)
@@ -157,7 +187,7 @@ private fun Heading(title: String, body: String? = null) {
 }
 
 @Composable
-private fun ChooseFile(onPick: () -> Unit) {
+private fun ChooseFile(onPick: () -> Unit, onUseSample: () -> Unit, onSaveSample: () -> Unit) {
     Heading(stringResource(R.string.w_choose_title), stringResource(R.string.w_choose_body))
     // A worked example does more than a description: most people export this from a till or a spreadsheet.
     Text(stringResource(R.string.w_choose_example_title), style = MaterialTheme.typography.titleSmall)
@@ -174,6 +204,15 @@ private fun ChooseFile(onPick: () -> Unit) {
     }
     Text(stringResource(R.string.w_choose_tips), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     PrimaryButton(stringResource(R.string.w_choose_button), onPick, Modifier.fillMaxWidth())
+
+    // For trying the app (and demos): a ready-made file for a small shop, with enough history for AI.
+    HorizontalDivider(Modifier.padding(vertical = Spacing.sm))
+    Text(stringResource(R.string.w_sample_title), style = MaterialTheme.typography.titleSmall)
+    Text(stringResource(R.string.w_sample_body), style = MaterialTheme.typography.bodyMedium)
+    SecondaryButton(stringResource(R.string.w_sample_use), onUseSample, Modifier.fillMaxWidth())
+    androidx.compose.material3.TextButton(onClick = onSaveSample, modifier = Modifier.fillMaxWidth()) {
+        Text(stringResource(R.string.w_sample_save))
+    }
 }
 
 @Composable

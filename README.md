@@ -55,7 +55,7 @@ All eight steps of the handoff's build order are implemented and pushed to `main
 
 1. Foundation  2. Authentication  3. Demo journey  4. Business journey  5. Team and settings  6. Research  7. Offline cache  8. Tests and acceptance
 
-After the eight steps, `main` was reworked for business owners (see "Business version" in `docs/BUILD_LOG.md`). Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 66 unit tests, lint with 0 errors). The signed-in screens have **not** been exercised by automated tooling; they were checked by hand on a physical phone up to step 3, and steps 4–8 still need a manual pass. `docs/ACCEPTANCE.md` lists exactly what is proved automatically and what needs a person.
+After the eight steps, `main` was reworked for business owners (see "Business version" in `docs/BUILD_LOG.md`). Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 79 unit tests, lint with 0 errors). The signed-in screens have **not** been exercised by automated tooling; they were checked by hand on a physical phone up to step 3, and steps 4–8 still need a manual pass. `docs/ACCEPTANCE.md` lists exactly what is proved automatically and what needs a person.
 
 ## Documentation
 
@@ -68,6 +68,7 @@ After the eight steps, `main` was reworked for business owners (see "Business ve
 | `docs/FEATURES.md` | Every screen: what it does, the API it uses, and the rules it follows |
 | `docs/BUILD_LOG.md` | What was built in each step, the decisions made, problems hit and how they were fixed |
 | `docs/ACCEPTANCE.md` | Spec §19 checklist: automatic evidence vs. manual checks, known gaps |
+| `docs/demo/DEMO_GUIDE.md` | The sample sales file and a step-by-step plan for demonstrating the app |
 | `CLAUDE.md` | Working rules for the AI assistant used on this project |
 
 ## Requirements
@@ -102,7 +103,9 @@ Plain HTTP is allowed in **debug builds only** (`app/src/debug/AndroidManifest.x
 
 ## Sample data for the business journey
 
-`../SemProject_MLEngine/data/processed/samples/` has three CSVs cut from a real Walmart store (M5 TX_1), with dates shifted so history ends yesterday:
+**For demos, use the built-in sample file:** Data → Upload sales data → **Use the sample sales file**. It is a made-up Kenyan mini-market (26 products, 300 days, ending yesterday) with enough history for the shop's own AI model. Set the shop up as Kenya / KES / Africa/Nairobi. [`docs/demo/DEMO_GUIDE.md`](docs/demo/DEMO_GUIDE.md) describes the file and gives a step-by-step demo plan.
+
+For testing particular cases, `../SemProject_MLEngine/data/processed/samples/` has three CSVs cut from a real Walmart store (M5 TX_1), with dates shifted so history ends yesterday:
 
 | File | Wizard answers | Expected |
 |------|----------------|----------|

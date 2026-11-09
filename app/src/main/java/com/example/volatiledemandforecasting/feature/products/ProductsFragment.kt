@@ -1,5 +1,7 @@
 package com.example.volatiledemandforecasting.feature.products
 
+import com.example.volatiledemandforecasting.feature.forecasts.NoSalesYet
+import com.example.volatiledemandforecasting.data.workspace.canManageData
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -96,10 +98,14 @@ class ProductsFragment : ShellFragment() {
                     state = state,
                     onRetry = viewModel::retry,
                     empty = {
-                        EmptyState(
-                            title = stringResource(R.string.products_empty_title),
-                            body = stringResource(R.string.products_empty_body),
-                        )
+                        if (query.isBlank() && demandClass == null) {
+                            NoSalesYet(store.canManageData, onUpload = { navController.navigate(R.id.importWizardFragment) }, products = true)
+                        } else {
+                            EmptyState(
+                                title = stringResource(R.string.products_empty_title),
+                                body = stringResource(R.string.products_empty_body),
+                            )
+                        }
                     },
                 ) { list ->
                     val listState = rememberLazyListState()

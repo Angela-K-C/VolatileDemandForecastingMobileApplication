@@ -57,14 +57,17 @@ private fun Pill(text: String, container: Color, content: Color, modifier: Modif
 
 /** A labelled number from the API. The caller formats it; this never computes anything. */
 @Composable
-fun MetricCard(label: String, value: String, modifier: Modifier = Modifier, supporting: String? = null) {
+fun MetricCard(label: String, value: String, modifier: Modifier = Modifier, supporting: String? = null, info: Term? = null) {
     Card(
         modifier,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Column(Modifier.padding(Spacing.lg)) {
-            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            androidx.compose.foundation.layout.Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.weight(1f, fill = false))
+                if (info != null) InfoHint(info)
+            }
             Text(value, style = MaterialTheme.typography.headlineMedium, modifier = Modifier.padding(top = Spacing.xs))
             if (supporting != null) {
                 Text(

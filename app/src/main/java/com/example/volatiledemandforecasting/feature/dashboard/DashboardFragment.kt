@@ -26,6 +26,7 @@ import com.example.volatiledemandforecasting.app.navigation.navigateToTab
 import com.example.volatiledemandforecasting.core.ui.Formatting
 import com.example.volatiledemandforecasting.core.ui.components.InlineMessage
 import com.example.volatiledemandforecasting.core.ui.components.MetricCard
+import com.example.volatiledemandforecasting.core.ui.components.Term
 import com.example.volatiledemandforecasting.core.ui.components.PrimaryButton
 import com.example.volatiledemandforecasting.core.ui.components.SecondaryButton
 import com.example.volatiledemandforecasting.core.ui.components.StatusKind
@@ -70,10 +71,11 @@ class DashboardFragment : ShellFragment() {
                         // New shops: one clear next step instead of a dashboard of empty numbers.
                         GettingStartedCard(
                             progress = setup,
-                            canUpload = data.store.canManageData,
+                            canManage = data.store.canManageData,
                             aiDays = data.eligibilityProgress,
                             onUpload = { navController.navigate(R.id.importWizardFragment) },
                             onForecast = { navController.navigateToTab(MainTab.Forecasts) },
+                            onSetUpAi = { navController.navigate(R.id.modelInfoFragment) },
                         )
                     }
                     SummaryCards(data)
@@ -117,7 +119,7 @@ private fun SummaryCards(data: DashboardData) {
         Row(horizontalArrangement = Arrangement.spacedBy(Spacing.md)) {
             MetricCard(stringResource(R.string.dash_active_products), data.activeProducts.toString(), Modifier.weight(1f))
             MetricCard(
-                stringResource(R.string.dash_ai_status), aiLabel, Modifier.weight(1f),
+                stringResource(R.string.dash_ai_status), aiLabel, Modifier.weight(1f), info = Term.AiForecast,
                 supporting = data.eligibilityProgress?.let {
                     stringResource(R.string.dash_eligibility_days, it.value?.toInt() ?: 0, it.required?.toInt() ?: 0)
                 },

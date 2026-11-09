@@ -40,12 +40,14 @@ data class DashboardData(
     val eligibilityProgress: EligibilityCheckDto? = null,
     /** Whether the shop has had a store-wide forecast. */
     val hasStoreForecast: Boolean = false,
+    /** Whether the shop has enough sales to train its own AI model (only checked while it has none). */
+    val aiEligible: Boolean = false,
 ) {
     /** The getting-started checklist, for business shops only. */
     val setup: SetupProgress? get() = if (store.isReference) null else SetupProgress(
         hasSales = summary.historyEnd != null,
         hasForecast = hasStoreForecast || recent.isNotEmpty(),
-        aiReady = aiStatus == AiStatus.Available,
+        ai = aiStageOf(aiStatus, aiEligible),
     )
 
     val latestForecast: ForecastSummaryDto? get() = recent.firstOrNull()
@@ -103,8 +105,8 @@ class DashboardViewModel(
                     }
                     val ai = aiStatusOf(capabilities.await())
                     // Only a business store that isn't eligible yet needs the progress line.
-                    val progress = if (!store.isReference && ai == AiStatus.NotEligible) {
-                        runCatching { training.eligibility(store.storeId).checks["storeHistoryDays"] }.getOrNull()
+                    val eligibility = if (!store.isReference && ai == AiStatus.NotEligible) {
+                        runCatching { training.eligibility(store.storeId) }.getOrNull()
                     } else null
                     DashboardData(
                         store = store,
@@ -113,7 +115,8 @@ class DashboardViewModel(
                         aiStatus = ai,
                         readiness = readiness.await(),
                         recent = recent.await(),
-                        eligibilityProgress = progress,
+                        eligibilityProgress = eligibility?.checks?.get("storeHistoryDays"),
+                        aiEligible = eligibility?.eligible == true,
                         hasStoreForecast = storeForecast.await(),
                     )
                 }

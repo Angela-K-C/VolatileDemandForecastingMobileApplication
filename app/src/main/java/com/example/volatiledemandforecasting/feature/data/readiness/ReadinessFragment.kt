@@ -1,5 +1,7 @@
 package com.example.volatiledemandforecasting.feature.data.readiness
 
+import com.example.volatiledemandforecasting.core.ui.components.InfoHint
+import com.example.volatiledemandforecasting.core.ui.components.Term
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -95,10 +97,14 @@ class ReadinessFragment : ShellFragment() {
                 ) {
                     item {
                         Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
-                            Text(
-                                stringResource(R.string.ready_summary, report.productsReady, report.productsTotal),
-                                style = MaterialTheme.typography.titleLarge,
-                            )
+                            androidx.compose.foundation.layout.Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+                                Text(
+                                    stringResource(R.string.ready_summary, report.productsReady, report.productsTotal),
+                                    style = MaterialTheme.typography.titleLarge,
+                                    modifier = Modifier.weight(1f),
+                                )
+                                InfoHint(Term.Readiness)
+                            }
                             // The thresholds are the API's own, for the current model.
                             Text(
                                 stringResource(R.string.ready_rules, report.minHistoryDays, report.maxMissingDaysInLookback),

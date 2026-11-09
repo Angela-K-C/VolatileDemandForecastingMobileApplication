@@ -7,6 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material.icons.outlined.UploadFile
+import com.example.volatiledemandforecasting.core.ui.components.EmptyState
+import com.example.volatiledemandforecasting.data.workspace.canManageData
+import com.example.volatiledemandforecasting.core.ui.components.InfoHint
+import com.example.volatiledemandforecasting.core.ui.components.Term
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -81,6 +86,10 @@ class ForecastsFragment : ShellFragment() {
 
         StoreGate(selection, onChoose = { navController.navigate(R.id.workspacePickerFragment) }, modifier = Modifier.padding(padding)) {
             UiStateHost(state, onRetry = viewModel::load, modifier = Modifier.padding(padding), empty = {}) { data ->
+                if (!data.hasSales && data.batch == null) {
+                    NoSalesYet(data.store.canManageData, onUpload = { navController.navigate(R.id.importWizardFragment) }, Modifier.padding(padding))
+                    return@UiStateHost
+                }
                 val listState = rememberLazyListState()
                 LaunchedEffect(listState, data.items.size) {
                     snapshotFlow { listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index }
@@ -142,6 +151,24 @@ class ForecastsFragment : ShellFragment() {
     }
 }
 
+/** Before any sales there is nothing to forecast: say so, and point at the upload. */
+@Composable
+internal fun NoSalesYet(canUpload: Boolean, onUpload: () -> Unit, modifier: Modifier = Modifier, products: Boolean = false) {
+    EmptyState(
+        title = stringResource(R.string.empty_no_sales_title),
+        body = stringResource(
+            when {
+                !canUpload -> R.string.empty_no_sales_body_viewer
+                products -> R.string.empty_products_body
+                else -> R.string.empty_forecasts_body
+            }
+        ),
+        modifier = modifier,
+        icon = androidx.compose.material.icons.Icons.Outlined.UploadFile,
+        action = if (canUpload) ({ PrimaryButton(stringResource(R.string.data_upload), onUpload) }) else null,
+    )
+}
+
 @Composable
 private fun BatchStatus(batch: BatchDto, shown: ShownMethod, onRetry: () -> Unit, canRetry: Boolean) {
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.sm)) {
@@ -156,11 +183,15 @@ private fun BatchStatus(batch: BatchDto, shown: ShownMethod, onRetry: () -> Unit
             stringResource(R.string.sf_title, horizonLabel(batch.horizonDays).lowercase(), Formatting.date(batch.asOfDate)),
             style = MaterialTheme.typography.titleMedium,
         )
-        Text(
-            stringResource(if (shown == ShownMethod.Ai) R.string.sf_using_ai else R.string.sf_using_simple),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                stringResource(if (shown == ShownMethod.Ai) R.string.sf_using_ai else R.string.sf_using_simple),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f),
+            )
+            InfoHint(if (shown == ShownMethod.Ai) Term.AiForecast else Term.SimpleForecast)
+        }
         if (batch.outdated) InlineMessage(stringResource(R.string.sf_outdated), StatusKind.Warning)
         if (batch.failed > 0) {
             InlineMessage(stringResource(R.string.sf_some_failed, batch.failed), StatusKind.Error)

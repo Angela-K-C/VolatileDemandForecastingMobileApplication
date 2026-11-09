@@ -1,5 +1,7 @@
 package com.example.volatiledemandforecasting.feature.model
 
+import com.example.volatiledemandforecasting.core.ui.components.InfoHint
+import com.example.volatiledemandforecasting.core.ui.components.Term
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -40,7 +42,10 @@ import com.example.volatiledemandforecasting.feature.forecasts.MetricsBlock
 fun TrainingSection(viewModel: TrainingViewModel, canTrain: Boolean) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     Column(verticalArrangement = Arrangement.spacedBy(Spacing.md)) {
-        Text(stringResource(R.string.train_title), style = MaterialTheme.typography.titleLarge)
+        Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
+            Text(stringResource(R.string.train_title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.weight(1f))
+            InfoHint(Term.Training)
+        }
         when (val s = state) {
             UiState.Loading -> CircularProgressIndicator(Modifier.padding(Spacing.sm))
             is UiState.Error -> {

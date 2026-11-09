@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import com.example.volatiledemandforecasting.R
 import com.example.volatiledemandforecasting.app.ShellFragment
 import com.example.volatiledemandforecasting.core.ui.components.SecondaryButton
+import com.example.volatiledemandforecasting.core.ui.components.Term
 import com.example.volatiledemandforecasting.core.ui.theme.Spacing
 import com.example.volatiledemandforecasting.feature.onboarding.ARG_TOUR_REPLAY
 import androidx.core.os.bundleOf
@@ -47,6 +48,11 @@ class HelpFragment : ShellFragment() {
             ).forEach { (title, body) ->
                 Text(stringResource(title), style = MaterialTheme.typography.titleMedium)
                 Text(stringResource(body), style = MaterialTheme.typography.bodyMedium)
+            }
+            Text(stringResource(R.string.help_terms_title), style = MaterialTheme.typography.titleMedium)
+            Term.entries.forEach { term ->
+                Text(stringResource(term.title), style = MaterialTheme.typography.titleSmall)
+                Text(stringResource(term.body), style = MaterialTheme.typography.bodyMedium)
             }
         }
     }
