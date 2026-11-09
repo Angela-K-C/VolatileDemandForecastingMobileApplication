@@ -40,7 +40,7 @@ class DashboardFragment : ShellFragment() {
     override val tab = MainTab.Dashboard
 
     private val viewModel: DashboardViewModel by appViewModels {
-        DashboardViewModel(it.storeRepository, it.productRepository, it.forecastRepository, it.trainingRepository, it.activeStore)
+        DashboardViewModel(it.storeRepository, it.productRepository, it.forecastRepository, it.trainingRepository, it.batchRepository, it.activeStore)
     }
 
     @Composable
@@ -65,18 +65,28 @@ class DashboardFragment : ShellFragment() {
                             StatusKind.Warning,
                         )
                     }
-                    SummaryCards(data)
-                    // Every product at once, on the Forecasts tab.
-                    PrimaryButton(
-                        text = stringResource(R.string.dash_generate),
-                        onClick = { navController.navigateToTab(MainTab.Forecasts) },
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    if (data.store.canManageData) {
-                        SecondaryButton(stringResource(R.string.data_upload), { navController.navigate(R.id.importWizardFragment) }, Modifier.fillMaxWidth())
+                    val setup = data.setup
+                    if (setup != null && setup.showChecklist) {
+                        // New shops: one clear next step instead of a dashboard of empty numbers.
+                        GettingStartedCard(
+                            progress = setup,
+                            canUpload = data.store.canManageData,
+                            aiDays = data.eligibilityProgress,
+                            onUpload = { navController.navigate(R.id.importWizardFragment) },
+                            onForecast = { navController.navigateToTab(MainTab.Forecasts) },
+                        )
                     }
-                    if (data.summary.historyEnd == null && !data.store.isReference) {
-                        InlineMessage(stringResource(R.string.dash_onboarding), StatusKind.Neutral)
+                    SummaryCards(data)
+                    if (setup == null || !setup.showChecklist) {
+                        // Every product at once, on the Forecasts tab.
+                        PrimaryButton(
+                            text = stringResource(R.string.dash_generate),
+                            onClick = { navController.navigateToTab(MainTab.Forecasts) },
+                            modifier = Modifier.fillMaxWidth(),
+                        )
+                        if (data.store.canManageData) {
+                            SecondaryButton(stringResource(R.string.data_upload), { navController.navigate(R.id.importWizardFragment) }, Modifier.fillMaxWidth())
+                        }
                     }
                     Row(verticalAlignment = androidx.compose.ui.Alignment.CenterVertically) {
                         Text(stringResource(R.string.dash_recent), style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))

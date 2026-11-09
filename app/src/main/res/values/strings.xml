@@ -493,7 +493,6 @@
 
     <!-- Dashboard additions -->
     <string name="dash_eligibility_days">%1$d of %2$d days of history</string>
-    <string name="dash_onboarding">Upload your sales history to start forecasting. Simple forecasts work straight away.</string>
 
     <!-- Step 5: team, invitations, settings -->
     <string name="menu_settings_badge">Settings (%1$d)</string>
@@ -607,4 +606,47 @@
     <string name="res_why_simple">This forecast uses the simple forecast: each day is expected to sell what the last recorded day sold. Either no AI model is ready, or on past sales it didn\'t beat the simple forecast.</string>
     <string name="model_uses_ai">Your forecasts use the AI model: on your past sales it missed by less than the simple forecast.</string>
     <string name="model_uses_simple">Your forecasts use the simple forecast: on your past sales the AI model didn\'t beat it.</string>
+    <!-- Intro tour -->
+    <string name="tour_1_title">Know what you\'ll sell</string>
+    <string name="tour_1_body">See how many of each product you\'re likely to sell in the coming days, so you order the right amount and don\'t run out.</string>
+    <string name="tour_2_title">1. Upload your sales</string>
+    <string name="tour_2_body">Export your daily sales from your till or spreadsheet as a CSV file: a date, a product and how many sold. The app walks you through the rest.</string>
+    <string name="tour_3_title">2. Forecast every product</string>
+    <string name="tour_3_body">One tap forecasts every product for tomorrow, the next week or longer. It works as soon as your sales are in.</string>
+    <string name="tour_4_title">3. It gets smarter</string>
+    <string name="tour_4_body">After a few months of sales, the app trains an AI model on your shop. It\'s only used if it beats the simple forecast on your own sales.</string>
+    <string name="tour_skip">Skip</string>
+    <string name="tour_next">Next</string>
+    <string name="tour_get_started">Get started</string>
+    <string name="tour_done">Done</string>
+    <string name="tour_create_account">Create an account</string>
+    <string name="tour_have_account">I already have an account</string>
+    <string name="tour_page_of">Page %1$d of %2$d</string>
+
+    <!-- Getting started checklist (dashboard) -->
+    <string name="gs_title">Getting started</string>
+    <string name="gs_progress">%1$d of %2$d steps done</string>
+    <string name="gs_done">Done</string>
+    <string name="gs_to_do">Not done yet</string>
+    <string name="gs_step_shop">Set up your shop</string>
+    <string name="gs_step_upload">Upload your sales</string>
+    <string name="gs_step_forecast">Get your first forecasts</string>
+    <string name="gs_step_ai">AI forecasts unlock</string>
+    <string name="gs_upload_body">A CSV file of daily sales: a date, a product and how many sold. The more history, the better.</string>
+    <string name="gs_upload_body_viewer">Ask the shop\'s owner or a manager to upload its sales.</string>
+    <string name="gs_forecast_body">Forecast every product at once. It takes a minute or two.</string>
+    <string name="gs_ai_body">This happens by itself once your shop has a few months of sales.</string>
+    <string name="gs_ai_body_days">This happens by itself once your shop has enough sales: %1$d of %2$d days so far.</string>
+
+    <!-- Help: getting started -->
+    <string name="help_start_title">Getting started</string>
+    <string name="help_start_body">1. Set up your shop.\n2. Upload your sales history (Data tab).\n3. Forecast every product (Forecasts tab).\nAI forecasts unlock by themselves once you have a few months of sales.</string>
+    <string name="help_show_tour">Show the app tour</string>
+    <string name="help_file_title">Your sales file</string>
+    <string name="help_file_body">A CSV file with one row per product per day: the date, the product\'s name or code, and the units sold. Price and category are optional. From Excel or Google Sheets, use Save as or Download and choose CSV. Upload more sales any time; the app adds them to what it has.</string>
+
+    <!-- Import wizard: file example -->
+    <string name="w_choose_example_title">Example</string>
+    <string name="w_choose_example">date,product,units_sold\n2026-10-01,Milk 1L,12\n2026-10-01,Bread,7\n2026-10-02,Milk 1L,9</string>
+    <string name="w_choose_tips">Your columns can have other names; you match them on the next screens. Using a spreadsheet? Save it as CSV first.</string>
 </resources>

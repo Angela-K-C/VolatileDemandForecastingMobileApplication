@@ -15,12 +15,13 @@ import androidx.navigation.navOptions
 import com.example.volatiledemandforecasting.app.appContainer
 import com.example.volatiledemandforecasting.app.navigation.AUTH_DESTINATIONS
 import com.example.volatiledemandforecasting.core.security.SessionState
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
  * Owns only the Fragment host (spec §4.2) and the one rule about the session: signed-out users see
  * the sign-in screens, signed-in users don't. That covers start-up, signing out, and a refresh
- * token that stops working.
+ * token that stops working. On the very first launch the intro tour comes before either.
  */
 class MainActivity : FragmentActivity() {
 
@@ -50,16 +51,20 @@ class MainActivity : FragmentActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 appContainer.session.state.collect { state ->
-                    route(state, navController)
+                    route(state, navController, tourSeen = appContainer.preferences.tourSeen.first())
                     firstRouteDone = true
                 }
             }
         }
     }
 
-    private fun route(state: SessionState, navController: NavController) {
-        val onAuthScreen = navController.currentDestination?.id in AUTH_DESTINATIONS
+    private fun route(state: SessionState, navController: NavController, tourSeen: Boolean) {
+        val current = navController.currentDestination?.id
+        // The tour decides where to go when it ends (register, sign in, or the dashboard).
+        if (current == R.id.onboardingFragment) return
+        val onAuthScreen = current in AUTH_DESTINATIONS
         val target = when {
+            !tourSeen -> R.id.onboardingFragment
             state is SessionState.SignedOut && !onAuthScreen -> R.id.loginFragment
             state is SessionState.SignedIn && onAuthScreen -> R.id.dashboardFragment
             else -> return

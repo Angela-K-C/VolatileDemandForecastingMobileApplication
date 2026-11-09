@@ -7,6 +7,7 @@ import com.example.volatiledemandforecasting.core.network.attempt
 import com.example.volatiledemandforecasting.core.ui.components.UiState
 import com.example.volatiledemandforecasting.core.ui.components.toUiState
 import com.example.volatiledemandforecasting.data.catalog.ProductRepository
+import com.example.volatiledemandforecasting.data.forecast.BatchRepository
 import com.example.volatiledemandforecasting.data.forecast.ForecastRepository
 import com.example.volatiledemandforecasting.data.forecast.ForecastSummaryDto
 import com.example.volatiledemandforecasting.data.store.CapabilitiesDto
@@ -37,7 +38,16 @@ data class DashboardData(
     val recent: List<ForecastSummaryDto>,
     /** "60 of 120 days" toward AI eligibility, from the API's own check. Null when not applicable. */
     val eligibilityProgress: EligibilityCheckDto? = null,
+    /** Whether the shop has had a store-wide forecast. */
+    val hasStoreForecast: Boolean = false,
 ) {
+    /** The getting-started checklist, for business shops only. */
+    val setup: SetupProgress? get() = if (store.isReference) null else SetupProgress(
+        hasSales = summary.historyEnd != null,
+        hasForecast = hasStoreForecast || recent.isNotEmpty(),
+        aiReady = aiStatus == AiStatus.Available,
+    )
+
     val latestForecast: ForecastSummaryDto? get() = recent.firstOrNull()
 
     /** The demo store's history ends in 2016, so "stale" would always be true there and mean nothing. */
@@ -56,6 +66,7 @@ class DashboardViewModel(
     private val products: ProductRepository,
     private val forecasts: ForecastRepository,
     private val training: TrainingRepository,
+    private val batches: BatchRepository,
     private val activeStore: ActiveStore,
 ) : ViewModel() {
 
@@ -87,6 +98,9 @@ class DashboardViewModel(
                     val productCount = async { products.products(store.storeId, "", null, page = 1, pageSize = 1).total }
                     val readiness = async { runCatching { stores.readiness(store.storeId) }.getOrNull() }
                     val recent = async { forecasts.list(store.storeId, replay = null, status = null, page = 1, pageSize = 3, batch = false).items }
+                    val storeForecast = async {
+                        if (store.isReference) false else runCatching { batches.latest(store.storeId) != null }.getOrDefault(false)
+                    }
                     val ai = aiStatusOf(capabilities.await())
                     // Only a business store that isn't eligible yet needs the progress line.
                     val progress = if (!store.isReference && ai == AiStatus.NotEligible) {
@@ -100,6 +114,7 @@ class DashboardViewModel(
                         readiness = readiness.await(),
                         recent = recent.await(),
                         eligibilityProgress = progress,
+                        hasStoreForecast = storeForecast.await(),
                     )
                 }
             }

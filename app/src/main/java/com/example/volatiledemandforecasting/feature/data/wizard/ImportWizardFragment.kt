@@ -159,6 +159,20 @@ private fun Heading(title: String, body: String? = null) {
 @Composable
 private fun ChooseFile(onPick: () -> Unit) {
     Heading(stringResource(R.string.w_choose_title), stringResource(R.string.w_choose_body))
+    // A worked example does more than a description: most people export this from a till or a spreadsheet.
+    Text(stringResource(R.string.w_choose_example_title), style = MaterialTheme.typography.titleSmall)
+    androidx.compose.material3.Surface(
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        shape = MaterialTheme.shapes.small,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(
+            stringResource(R.string.w_choose_example),
+            style = MaterialTheme.typography.bodySmall.copy(fontFamily = FontFamily.Monospace),
+            modifier = Modifier.padding(Spacing.md),
+        )
+    }
+    Text(stringResource(R.string.w_choose_tips), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     PrimaryButton(stringResource(R.string.w_choose_button), onPick, Modifier.fillMaxWidth())
 }
 

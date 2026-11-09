@@ -32,6 +32,11 @@
         android:id="@+id/forgotPasswordFragment"
         android:name="com.example.volatiledemandforecasting.feature.auth.forgot.ForgotPasswordFragment" />
 
+    <!-- Intro tour (first launch, and from Help); no app shell -->
+    <fragment
+        android:id="@+id/onboardingFragment"
+        android:name="com.example.volatiledemandforecasting.feature.onboarding.OnboardingFragment" />
+
     <!-- Supporting destinations (bottom navigation hidden) -->
     <fragment
         android:id="@+id/workspacePickerFragment"

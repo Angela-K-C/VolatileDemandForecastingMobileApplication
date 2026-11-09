@@ -67,6 +67,13 @@ class AppPreferences(context: Context) {
         store.edit { it[THEME_MODE] = mode.name }
     }
 
+    /** Whether the intro tour has been shown on this phone. It isn't cleared on sign-out. */
+    val tourSeen: Flow<Boolean> = store.data.map { it[TOUR_SEEN] ?: false }
+
+    suspend fun setTourSeen() {
+        store.edit { it[TOUR_SEEN] = true }
+    }
+
     private fun Preferences.toSelection(): StoreSelection? {
         val workspaceId = this[WORKSPACE_ID] ?: return null
         val storeId = this[STORE_ID] ?: return null
@@ -89,5 +96,6 @@ class AppPreferences(context: Context) {
         val STORE_NAME = stringPreferencesKey("store_name")
         val TABLE_DISPLAY = stringPreferencesKey("table_display")
         val THEME_MODE = stringPreferencesKey("theme_mode")
+        val TOUR_SEEN = booleanPreferencesKey("tour_seen")
     }
 }

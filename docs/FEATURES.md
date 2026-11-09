@@ -6,7 +6,8 @@ Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use th
 
 | Screen | What it does | API |
 |--------|--------------|-----|
-| Splash / routing | Shows the system splash, then routes to Sign in or the Dashboard based on the stored session | – |
+| Splash / routing | Shows the system splash, then routes to the intro tour (first launch only), Sign in or the Dashboard based on the stored session | – |
+| Intro tour | Four swipeable pages: what the app does, then the three steps (upload sales, forecast every product, AI unlocks later). Skip and Next; signed out, it ends with "Create an account" or "I already have an account"; signed in, it goes to the shop setup if there is no shop yet. Shown once per phone, and again from Help | – |
 | Sign in | Email and password; inline checks; friendly messages for wrong credentials, rate limiting (shows the wait) and offline | `POST /v1/auth/login` |
 | Register | Name, email, password with the backend's length limits; handles `REGISTRATION_CLOSED` and an already-used email | `POST /v1/auth/register` |
 | Forgot password | Two stages: request a code (the backend never says whether the account exists), then enter code and new password; signs in on success | `POST /v1/auth/password-reset/request`, `…/confirm` |
@@ -44,7 +45,8 @@ Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use th
 
 | Screen | What it does | API |
 |--------|--------------|-----|
-| Import wizard | 1 Choose file (system picker, no storage permission) · 2 Check file and preview rows, then Upload · 3 Map columns · 4 Validation (counts, rejected rows with line numbers, warnings, first stored days) · 5 Overlap policy (only if days overlap: keep or replace) · 6 Confirm · 7 Result (rows added/replaced/kept, new products, readiness, next actions). System Back steps through the wizard | `POST /v1/stores/{sid}/imports`, `PUT /v1/imports/{id}/mapping`, `GET …/validation`, `GET …/errors`, `POST …/confirm`, `DELETE` |
+| Getting started (on the Dashboard) | For a business shop without sales or a first forecast: a checklist (set up shop, upload sales, first forecasts, AI unlocks) with one button for the next step. Viewers are told to ask an owner or manager to upload. Disappears once the shop has sales and a forecast | `GET /v1/stores/{sid}/forecast-batches/latest` and the dashboard calls |
+| Import wizard | 1 Choose file (system picker, no storage permission; shows an example file) · 2 Check file and preview rows, then Upload · 3 Map columns · 4 Validation (counts, rejected rows with line numbers, warnings, first stored days) · 5 Overlap policy (only if days overlap: keep or replace) · 6 Confirm · 7 Result (rows added/replaced/kept, new products, readiness, next actions). System Back steps through the wizard | `POST /v1/stores/{sid}/imports`, `PUT /v1/imports/{id}/mapping`, `GET …/validation`, `GET …/errors`, `POST …/confirm`, `DELETE` |
 | Readiness | "X of Y products ready", the thresholds from the API, a stale-history notice, per-product reasons (not enough history, too many gaps, stale). States that simple forecasts work for every product | `GET /v1/stores/{sid}/readiness` |
 | AI for your store (in Model info) | Eligibility checks as "value of required" with Passed / Not yet. Train button for Owner/Manager once eligible. Progress while training; outcomes `TRAINED`, `GATE_FAILED` (plain wording with metrics, baseline stays in use), `NOT_ELIGIBLE`, `FAILED` (Retry only if `retryable`) | `GET …/models/eligibility`, `POST …/models/train`, `GET /v1/training-runs/{id}`, `POST …/retry` |
 
