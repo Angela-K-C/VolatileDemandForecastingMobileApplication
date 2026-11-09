@@ -140,10 +140,36 @@ Below, each step of section 2 is mapped to what the project does. How the backen
 
 Two baselines are computed for every forecast, for every product, with no training:
 
-- **Same as last day** (`naive_last_value`): the main baseline, and the "simple forecast" the app shows.
-- **Same weekday last week** (`seasonal_naive_7`).
+- **Same as last day** (`naive_last_value`): the main baseline, and the **simple forecast** the app shows whenever it doesn't use the AI.
+- **Same weekday last week** (`seasonal_naive_7`): shown only for comparison.
 
-These need 21 days of history (with at most 3 missing days in the last 21), so a shop can forecast any product as soon as it has three weeks of sales.
+#### What exactly is the simple forecast?
+
+**The rule:** take the units the product sold on its **most recent recorded day**, up to the shop's latest day of sales, and expect that same number on **every** day of the forecast.
+
+| | Sun 8 Nov (latest recorded day) | Mon 9 | Tue 10 | Wed 11 | Thu 12 | Fri 13 | Sat 14 | Sun 15 | 7-day total |
+|---|---|---|---|---|---|---|---|---|---|
+| Fresh milk: sold | 12 | | | | | | | | |
+| Simple forecast | | 12 | 12 | 12 | 12 | 12 | 12 | 12 | 84 |
+
+The details:
+
+- **"Recorded" means the shop's data has a row for that product on that day**, including a recorded zero, or a zero filled in because the owner said missing days mean zero. Days without a row (for example, the shop was closed) are skipped. If the shop was closed yesterday, the forecast uses the last day it traded.
+- **A zero carries over.** If the product sold nothing on its latest recorded day, the simple forecast is 0 for every day.
+- **No minimum history.** One recorded day in the past year is enough. If a product has no recorded day in the 365 days the backend sends, its forecast fails with "no sales history". (The AI is stricter: 21 days, with at most 3 unrecorded in the last 21.)
+- **Lengths:** 1 or 7 days, the same as the AI.
+- **Where it is calculated:** in the ML service (`mlengine/models/baselines.py` in the ML engine), on every forecast request, including ones where the AI also runs, so the two can always be compared. The app does no forecasting maths itself; it reads the value from the API as `points[].baseline`.
+- **In accuracy tests and the gate**, "same as last day" means the previous calendar day (`sales_lag_1`), and days whose previous day wasn't recorded are left out of the scoring. For a shop with no gaps, this is the same thing.
+
+**When the app shows it** instead of the AI:
+
+1. The shop has no AI model yet: not enough sales, not trained yet, or its model didn't beat the simple forecast at the gate.
+2. The AI has no value for that product: fewer than 21 recorded days, or more than 3 unrecorded days in the last 21. The rest of the shop's products can still use the AI.
+3. The model's test results don't show the AI ahead. For business shops this can't happen, because the gate only keeps models that beat the simple forecast.
+
+**Why it is used:** it is the standard benchmark in forecasting, it needs no training, anyone can check it by hand, and for the next day it is surprisingly hard to beat. **What it misses:** weekly patterns, paydays, holidays, trends and promotions. One unusual day (a big order, a quiet holiday) is repeated across the whole period, and a 7-day total is simply seven times one day. These are exactly what the AI learns, and why it is used once it proves better.
+
+**Same weekday last week**, the second baseline: each forecast day gets the units sold on the same weekday in the 7 days before the forecast starts (for longer periods, that week repeats). If that day wasn't recorded, it has no value. The app shows it only in the "Every method, day by day" comparison, never as the main number.
 
 ### 3.3 Features (section 2.3)
 
@@ -302,6 +328,7 @@ The design above is sound and common. Larger commercial systems often add the fo
 | As-of date | The last day of known sales. A forecast starts the day after it |
 | Backtest | Testing a model on past days it never trained on, by forecasting as if standing on an earlier date |
 | Baseline | A simple forecast that needs no training, used as the bar a model must beat |
+| Simple forecast | The app's name for the "same as last day" baseline: every forecast day gets the units sold on the product's most recent recorded day (section 3.2) |
 | Batch | One request that forecasts every product of a store |
 | Cold start | A new customer with too little history for machine learning |
 | Demand class | Smooth, erratic, intermittent or lumpy, based on how often and how evenly a product sells |
