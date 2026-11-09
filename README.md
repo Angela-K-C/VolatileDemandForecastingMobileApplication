@@ -8,6 +8,8 @@ Each product gets **one number**. It comes from the shop's own AI model only whe
 
 The app contains **no forecasting maths**. Every number on screen comes from the backend API.
 
+New to the project or to forecasting? Start with [`docs/HOW_FORECASTING_WORKS.md`](docs/HOW_FORECASTING_WORKS.md): how demand forecasting is usually done, how this project does each part, and what role the trained Walmart model plays.
+
 ## Project layout (three repositories)
 
 | Repository | Role |
@@ -30,6 +32,7 @@ After the eight steps, `main` was reworked for business owners (see "Business ve
 |------|----------|
 | `SETUP.md` | **Start here as a new collaborator:** full setup of all three repositories, from cloning and the M5 data to the app running |
 | `README.md` | This overview, a short setup, how to run and test |
+| `docs/HOW_FORECASTING_WORKS.md` | How demand forecasting is usually done, how this project does each part, and the role of the trained model |
 | `docs/ARCHITECTURE.md` | Stack, layering, packages, patterns, networking, auth, caching, UI conventions |
 | `docs/FEATURES.md` | Every screen: what it does, the API it uses, and the rules it follows |
 | `docs/BUILD_LOG.md` | What was built in each step, the decisions made, problems hit and how they were fixed |
