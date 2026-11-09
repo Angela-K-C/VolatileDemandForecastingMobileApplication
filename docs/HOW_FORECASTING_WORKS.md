@@ -204,6 +204,8 @@ This is the central design decision (decision 7 in the ML engine's `docs/noteboo
    - at least 4,500 product-days of recorded sales.
 
    These numbers come from an experiment with 48 simulated shops (10–100 products, 90–365 days). Shops with 120+ days and 4,500+ product-days reliably passed the gate; smaller ones often didn't. With fewer than about 120 days there are too few days left to train on once the 56 days for validation and testing are set aside.
+
+   A later experiment repeated this on a shop unrelated to Walmart: a UK online gift and homeware retailer (UCI Online Retail II), whose products are mostly lumpy. The recipe beat "same as last day" by the same margin (26% lower RMSE on the whole shop), and simulated 20-product shops passed the gate in 36 of 40 runs, even with 90 days of history. So the thresholds look conservative, though two datasets are still a small sample. Absolute accuracy for lumpy products was low (the total miss was 94% of total sales), so beating the simple forecast doesn't make such forecasts precise. Details: the ML engine's `notebooks/PortableFeatures_OnlineRetail.ipynb` and §9.4 of `docs/notebook-to-production.md`.
 2. **Training** with `portable-v1` features and the same splits as above.
 3. **Gate** (section 2.9): the shop's model is used only if its backtest RMSE **and** MAE are both lower than "same as last day" on the same rows. Otherwise the outcome is `GATE_FAILED`, nothing is registered, and the shop keeps the simple forecast.
 4. **7-day check:** a recursive backtest decides whether the shop's model is allowed 7-day forecasts or only next-day forecasts.
