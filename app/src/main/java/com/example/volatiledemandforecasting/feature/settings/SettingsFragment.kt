@@ -78,7 +78,7 @@ class SettingsFragment : ShellFragment() {
                 if (selected == null) {
                     Text(stringResource(R.string.set_no_store), style = MaterialTheme.typography.bodyMedium)
                 } else {
-                    Value(stringResource(R.string.set_workspace), selected.workspaceName)
+                    Value(stringResource(R.string.set_workspace), if (selected.isReference) stringResource(R.string.sample_shop_name) else selected.workspaceName)
                     Value(stringResource(R.string.set_role), roleName(if (selected.isReference) "REFERENCE" else selected.role))
                     Value(stringResource(R.string.set_store), selected.storeName)
                     storeDetail?.let {

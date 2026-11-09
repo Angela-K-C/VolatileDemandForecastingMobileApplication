@@ -19,6 +19,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -81,6 +82,13 @@ class WorkspacePickerFragment : ShellFragment() {
                 items(data.own, key = { it.workspace.id }) { entry ->
                     WorkspaceCard(entry, data.currentStoreId, blurb = null) { workspace, store ->
                         viewModel.select(workspace, store) { navController.popBackStack() }
+                    }
+                }
+                if (data.sample != null && !data.viewingSample) {
+                    item {
+                        TextButton(onClick = { viewModel.trySample { navController.popBackStack() } }, modifier = Modifier.fillMaxWidth()) {
+                            Text(stringResource(R.string.picker_open_sample))
+                        }
                     }
                 }
                 item {

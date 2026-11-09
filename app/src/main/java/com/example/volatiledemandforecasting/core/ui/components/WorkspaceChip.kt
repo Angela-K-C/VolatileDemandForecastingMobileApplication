@@ -29,7 +29,12 @@ data class WorkspaceChipUi(val label: String, val isDemo: Boolean)
  */
 @Composable
 fun WorkspaceChip(workspace: WorkspaceChipUi?, onClick: () -> Unit, modifier: Modifier = Modifier) {
-    val label = workspace?.label ?: stringResource(R.string.workspace_none)
+    // The backend names it after the M5 store; the app calls it the sample shop everywhere.
+    val label = when {
+        workspace == null -> stringResource(R.string.workspace_none)
+        workspace.isDemo -> stringResource(R.string.sample_shop_name)
+        else -> workspace.label
+    }
     val description = stringResource(R.string.workspace_chip_description, label)
     Row(
         modifier

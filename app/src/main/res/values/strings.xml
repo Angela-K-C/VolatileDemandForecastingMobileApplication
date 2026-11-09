@@ -11,7 +11,7 @@
     <!-- Workspace chip -->
     <string name="workspace_none">No workspace selected</string>
     <string name="workspace_chip_description">Workspace: %1$s. Tap to switch.</string>
-    <string name="demo_data_badge">Demo data</string>
+    <string name="demo_data_badge">Example data</string>
 
     <!-- Options menu (spec §6.1) -->
     <string name="options_menu_description">More options</string>
@@ -165,7 +165,7 @@
     <string name="role_owner">Owner</string>
     <string name="role_manager">Manager</string>
     <string name="role_viewer">Viewer</string>
-    <string name="role_reference">Read-only demo</string>
+    <string name="role_reference">Read-only sample</string>
 
     <!-- Dashboard -->
     <string name="dash_active_products">Active products</string>
@@ -319,7 +319,7 @@
     <string name="error_file_too_large">This file is too large to upload. Split it into smaller files.</string>
     <string name="error_empty_file">This file is empty.</string>
     <string name="error_import_not_ready">This import can\'t be confirmed yet. Check the mapping and validation first.</string>
-    <string name="error_reference_model_fixed">The demo store uses a fixed model, so it can\'t be trained.</string>
+    <string name="error_reference_model_fixed">The sample shop uses a fixed model, so it can\'t be trained.</string>
     <string name="error_not_eligible">AI forecasting becomes available once your store has enough history.</string>
 
     <!-- Create workspace -->
@@ -499,7 +499,7 @@
     <string name="menu_settings_badge">Settings (%1$d)</string>
     <string name="screen_my_invitations">My invitations</string>
     <string name="screen_change_password">Change password</string>
-    <string name="team_reference">The demo workspace has no team.</string>
+    <string name="team_reference">The sample shop has no team.</string>
     <string name="team_invite_title">Invite someone</string>
     <string name="team_invite_send">Send invitation</string>
     <string name="team_invited">Invitation sent to %1$s.</string>
@@ -578,6 +578,8 @@
     <string name="welcome_set_up">Set up my shop</string>
     <string name="welcome_try_sample">Try a sample shop</string>
     <string name="welcome_sample_note">Real sales from a US grocery store. You can look around and forecast, but not change its data.</string>
+    <string name="sample_shop_name">Sample shop</string>
+    <string name="picker_open_sample">Open the sample shop</string>
     <string name="sample_banner">Sample shop: example data</string>
     <string name="sf_intro">Forecast every product in one go and see how many units you\'re likely to sell.</string>
     <string name="sf_forecast_all">Forecast all products</string>
