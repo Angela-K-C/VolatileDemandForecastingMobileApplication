@@ -294,7 +294,7 @@ What it does **not** do: forecast a business owner's own products. Its inputs in
    - confirm.
 
    The backend stores one row per product per day.
-4. **Check readiness.** The Readiness screen shows how many products have the 21 days needed to forecast, and why the others don't.
+4. **Check readiness.** The Readiness screen shows how many products have the 21 days an AI forecast needs, and why the others don't. (The simple forecast works for every product with any recorded sales.)
 5. **Forecast.** On the Forecasts tab, choose next day or 7 days and tap **Forecast all products**. The backend queues one forecast per product (a batch). The worker sends each product's recent history to the ML service, which returns:
    - the two baselines, always;
    - the AI forecast, if the shop has a model and the product has enough clean history.

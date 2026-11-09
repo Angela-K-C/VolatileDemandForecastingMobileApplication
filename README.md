@@ -27,7 +27,7 @@ It missed by about 26% less than "same as last day" (a typical miss of 2.38 unit
 
 | When | What the shop owner gets |
 |---|---|
-| **Day one** | Upload past sales (a CSV of date, product, units sold, optionally price). Every product with three weeks of history gets the **simple forecast** straight away. It is a fair start, because it is exactly what the AI has to beat. |
+| **Day one** | Upload past sales (a CSV of date, product, units sold, optionally price). Every product with sales history gets the **simple forecast** straight away (the units from its most recent recorded day, repeated for each day ahead). It is a fair start, because it is exactly what the AI has to beat. |
 | **About four months of history** | The shop can train **its own model** with the same recipe, tested on its own last four weeks. |
 | **If it wins** | The app switches to the shop's AI model for its forecasts and says so. |
 | **If it doesn't** | It keeps the simple forecast and explains why. No model is used just because it is "AI". |
@@ -74,14 +74,14 @@ After the eight steps, `main` was reworked for business owners (see "Business ve
 ## Requirements
 
 - Android Studio with JDK 17+ and the Android SDK. `minSdk 26`, `targetSdk 37`.
-- The backend running locally (Docker) and seeded with the demo store.
+- The backend running locally (Docker) and seeded with the sample shop (`SETUP.md` does both).
 - An Android phone or emulator.
 
 ## Setup
 
 New to the project? Follow **[SETUP.md](SETUP.md)**: it covers all three repositories, the M5 data download and the Windows setup script. The short version, for when the backend is already set up:
 
-1. Start the backend (in `../SemProject_Backend`): `docker compose up`. It serves `http://localhost:8000`.
+1. Start the backend (in `../SemProject_Backend`): `docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d`. It serves `http://localhost:8000`.
 2. Create `local.properties` in this repo's root (it is git-ignored) with the SDK path and the API address:
    ```
    sdk.dir=C\:\\Users\\<you>\\AppData\\Local\\Android\\Sdk
@@ -90,14 +90,14 @@ New to the project? Follow **[SETUP.md](SETUP.md)**: it covers all three reposit
    - **Physical phone over USB:** keep `localhost` and run `adb reverse tcp:8000 tcp:8000` (again after every re-plug).
    - **Emulator:** use `http://10.0.2.2:8000` (this is also the default if `api.baseUrl` is missing).
 3. Build and install: `./gradlew installDebug`.
-4. Sign in with an account that exists on your backend. Password-reset codes and other emails appear in `docker compose logs api` (run in `../SemProject_Backend`).
+4. Go through the intro tour, then create an account in the app (or sign in with one that exists on your backend). Password-reset codes and other emails appear in `docker compose logs api` (run in `../SemProject_Backend`).
 
 Plain HTTP is allowed in **debug builds only** (`app/src/debug/AndroidManifest.xml`). The release manifest is HTTPS-only.
 
 ## Run the checks
 
 ```
-./gradlew testDebugUnitTest     # 64 unit tests
+./gradlew testDebugUnitTest     # 79 unit tests
 ./gradlew lintDebug             # Android lint
 ```
 
@@ -123,6 +123,6 @@ Create the workspace and store as US / TX / USD / America/Chicago. Push the file
 - `units: null` means "not recorded" and is drawn as a gap, never as 0.
 - Every metrics block is paired (AI and baseline from the same API object) and carries: "Lower error means it did better on that sample, not that it will do better tomorrow."
 - The roughly 4% high bias on days 2–7 of the 7-day forecast is always stated.
-- The demo (Reference) workspace is read-only.
+- The sample shop (the backend's Reference workspace) is read-only.
 - No secrets in the repo. Tokens are stored encrypted with the Android Keystore.
 - Never commit attribution trailers (see `CLAUDE.md`).

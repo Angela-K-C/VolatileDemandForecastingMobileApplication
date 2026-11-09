@@ -1,6 +1,6 @@
 # Build log
 
-All work happened on 2026-11-07 on `main`, one commit per step. The brief: read `SemProject_MLEngine/MOBILE_APP_HANDOFF.md`, the design spec it links to and `SemProject_Backend/docs/api.md`, then build the app in the handoff's order and stop after each step for a manual check. Steps 1–3 were checked by hand on a physical phone (Infinix X669, Android 12) before the next began. Steps 4–8 were built and verified by automated checks; their signed-in behaviour is still to be checked by hand.
+Steps 1–8 happened on 2026-11-07 on `main`, one commit per step; the business version and the work after it followed on 8–9 November (sections near the end). The brief: read `SemProject_MLEngine/MOBILE_APP_HANDOFF.md`, the design spec it links to and `SemProject_Backend/docs/api.md`, then build the app in the handoff's order and stop after each step for a manual check. Steps 1–3 were checked by hand on a physical phone (Infinix X669, Android 12) before the next began. Steps 4–8 were built and verified by automated checks; their signed-in behaviour is still to be checked by hand.
 
 ## Commits
 
@@ -16,7 +16,16 @@ All work happened on 2026-11-07 on `main`, one commit per step. The brief: read 
 | `4724160` | 7 Offline | Room response cache |
 | `d2c2ee7` | 8 Acceptance | Lint fixes, guard tests, `docs/ACCEPTANCE.md` |
 
-Earlier history (`385522b`, `b938ba4`, `3527e64`, `bfc666f`) is the initial project, README and `CLAUDE.md`. Everything is pushed to `origin/main`.
+| `85256b7`, `74194b7` | Docs | README, architecture, features and build log; `SETUP.md` for collaborators |
+| `b7415ab` | Business version | Rework for retail business owners (below); research version kept on `research` |
+| `e44e442`, `4cde849`, `b7fd06c`, `5d3538f` | Docs | `HOW_FORECASTING_WORKS.md`, corrections, the project in one story |
+| `795c876` | Naming | "Sample shop" everywhere for the demo store, reachable from Your shops |
+| `6abdda3` | Docs | Online Retail experiment findings and its `CLAUDE.md` exception |
+| `700a20e` | Onboarding | Intro tour, getting-started checklist, clearer upload help |
+| `f6067f3` | Onboarding | Built-in sample sales file, "?" hints, empty states, real AI setup step |
+| `77406c2` | Docs | The simple forecast defined exactly |
+
+Earlier history (`385522b`, `b938ba4`, `3527e64`, `bfc666f`) is the initial project, README and `CLAUDE.md`.
 
 ## Standing rules (from the brief and `CLAUDE.md`)
 
@@ -106,6 +115,16 @@ Backend (`SemProject_Backend`, branch `forecast-batches`, commit `c53b860`; merg
 App: `BatchRepository`; `ShownForecast.kt` (which number to show); the Forecasts tab became the store-wide forecast; the result screen leads with expected units and moves the comparison under "How accurate is this?"; the form lost the date picker and method choice; the workspace picker became "Your shops" with a welcome screen (Set up my shop / Try a sample shop) when the user has no shop; a "Sample shop" banner on the main tabs; the model screen became "AI model" (verdict, training period, past accuracy, training). Research screens and their strings deleted. 66 tests; lint 0 errors.
 
 Note: running the business version needs the backend at or after that merge (its `main` now has it). Rebuilding the stack applies migration `0005` to the local database; a dump taken before that is in the session scratchpad.
+
+## After the business version
+
+- **Sample shop naming.** The demo store is called the sample shop in every screen and document, and Your shops has **Open the sample shop**.
+- **Explaining the project.** `docs/HOW_FORECASTING_WORKS.md` covers how forecasting is usually done, how each part is done here, and what the Walmart model proves. The README tells the project as one story.
+- **Second dataset.** With the owner's approval, the ML engine's `PortableFeatures_OnlineRetail` notebook tested the own-data recipe on UCI Online Retail II (a UK gift shop). It beat the simple forecast by 26% on RMSE, and 20-product shops passed the gate in 36 of 40 runs.
+- **Onboarding.** A four-page intro tour; the Dashboard's Getting started checklist; "?" hints for terms; empty states before any sales; and a real "Set up AI forecasts" step, because the backend never trains a shop's first model by itself (only weekly retraining after that is automatic).
+- **Built-in sample sales file** (`data/sample/SampleSalesFile.kt`): a made-up Kenyan mini-market, 26 products × 300 days, generated on the phone to end yesterday. It is deterministic for a given end date and has weekly and payday patterns, Kenyan holidays, a price rise, and two recently launched products. Trained through the ML engine's own-data path for three end dates: the gate passed every time with horizons 1 and 7 (RMSE 27–29% lower than the simple forecast). A copy is in `docs/demo/`, with `DEMO_GUIDE.md`.
+- **Simple forecast defined** exactly in the app's Help, `HOW_FORECASTING_WORKS.md`, and the backend and ML engine docs (approved docs-only change there).
+- **Docs refresh (9 November).** Every document in the three repositories was checked against the code and updated, with the setup script (owner's go-ahead). Running the ML engine's tests on Windows found a real bug: Git for Windows checked the committed LightGBM `model.txt` files out with CRLF line endings, which LightGBM can't parse, so the process died (and an `ml` image built from such a checkout can't serve). Fixed in the ML engine with a `.gitattributes`; the setup script now repairs older checkouts and the Docker `models` volume, and checks every model loads.
 
 ## Environment notes
 

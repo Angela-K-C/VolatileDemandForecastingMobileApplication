@@ -27,15 +27,17 @@ core/
   network/      Network (Retrofit/OkHttp/Json), ApiError + ApiErrorCodes, ErrorMessages
                 (error code → string), TokenAuthenticator, Interceptors
   security/     SessionManager, TokenStore, KeystoreTokenStore
-  datastore/    AppPreferences (StoreSelection, ThemeMode, TableDisplay)
+  datastore/    AppPreferences (StoreSelection, ThemeMode, TableDisplay, tourSeen)
   ui/           Formatting, UiText, theme/, components/ (scaffold, buttons, fields, chips,
-                menus, state views), charts/ (custom Canvas LineChart)
+                menus, state views, InfoHint "?" explanations), charts/ (custom Canvas LineChart)
 data/           One package per backend area, each with DTOs + Retrofit API + repository:
                 auth, user, workspace (+ ActiveStore), store (+ ModelCard), catalog (products),
-                forecast (incl. batches), imports, training, team, cache (Room)
-feature/        One package per screen group: auth, workspace (+ create), dashboard, products
-                (+ detail), forecasts (config, progress, result, history), model, data
-                (+ wizard, readiness), team, settings, devgallery (debug only)
+                forecast (incl. batches), imports, training, team, cache (Room),
+                sample (SampleSalesFile: the built-in demo CSV, generated on the phone)
+feature/        One package per screen group: onboarding (intro tour), auth, workspace (+ create,
+                welcome), dashboard (+ GettingStarted checklist), products (+ detail), forecasts
+                (store-wide, config, progress, result, history), model, data (+ wizard, readiness),
+                team, settings (+ help), devgallery (debug only)
 ```
 
 ## Layering
@@ -45,6 +47,8 @@ feature/        One package per screen group: auth, workspace (+ create), dashbo
 ## Application shell
 
 `ComposeFragment` is the base class for every destination: it creates the `ComposeView`, applies the theme (light/dark/system from preferences) and calls the subclass's `Content()`.
+
+`MainActivity.route` decides the start screen from the session and `AppPreferences.tourSeen`: the intro tour on first launch (signed in or not), then Sign in or the Dashboard. The tour sets `tourSeen` when it ends; Help can open it again as a replay, which simply pops back.
 
 `ShellFragment` extends it for screens inside the signed-in app. It provides:
 - a top bar with title, back arrow (supporting screens), the **workspace chip**, an optional contextual action, and the **Options menu**;
@@ -121,7 +125,7 @@ Seven wizard steps: choose file → check file → map columns → validation �
 
 ## Tests
 
-66 JVM unit tests under `app/src/test`:
+79 JVM unit tests under `app/src/test`:
 
 | Area | Tests |
 |------|-------|
@@ -133,6 +137,8 @@ Seven wizard steps: choose file → check file → map columns → validation �
 | Import wizard rules, upload request shape, DTO decoding, training/eligibility, store form checks | `ImportWizardTest` |
 | Team DTOs, assignable roles, password confirm | `TeamSettingsTest` |
 | Shown method (AI vs simple), totals, batch DTOs, sample-shop flag | `StoreForecastTest` |
+| Getting started checklist: steps, next step, AI stages, when it shows | `GettingStartedTest` |
+| Built-in sample sales file: header, products, days, determinism (writes a copy when `SAMPLE_SALES_OUT` is set; run with `--rerun`) | `SampleSalesFileTest` |
 | Offline cache rules (fake DAO) | `ResponseCacheTest` |
 | Source-tree guarantees (no XML layouts, valid nav graph, manifest, no URLs) | `AcceptanceGuardTest` |
 

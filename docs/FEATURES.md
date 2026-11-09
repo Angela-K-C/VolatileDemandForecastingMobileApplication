@@ -1,6 +1,6 @@
 # Features by screen
 
-Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use the action. The Reference workspace is the read-only demo store (1,437 products, M5 data).
+This describes `main`, the business version. Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use the action. The **sample shop** is the backend's read-only Reference workspace: one Walmart store (CA_1), 1,437 food products, M5 data.
 
 ## Entry and authentication
 
@@ -19,15 +19,17 @@ Endpoints are from `SemProject_Backend/docs/api.md`. "Role" shows who can use th
 
 | Screen | What it does | API |
 |--------|--------------|-----|
-| Workspace chip (top bar) | Shows the active workspace and store, with a "demo" mark for the Reference workspace; opens the picker | – |
-| Workspace picker | Lists every workspace the user can see with its stores; the demo is always present and marked. Choosing a store makes it active and remembers it | `GET /v1/workspaces`, `GET /v1/workspaces/{id}/stores` |
+| Workspace chip (top bar) | Shows the active shop and store; opens Your shops | – |
+| Welcome (no shop yet) | "Know what you'll sell" with **Set up my shop** and **Try a sample shop** (real sales from a US grocery store; you can look around and forecast, but not change its data) | – |
+| Your shops | Lists the user's shops with their stores, role and sales range. Choosing a store makes it active and remembers it. **Add another shop** and **Open the sample shop**; while the sample shop is open, a note explains how to switch back | `GET /v1/workspaces`, `GET /v1/workspaces/{id}/stores` |
+| Sample shop banner | "Sample shop: example data" on the main tabs, with a way to set up your own shop | – |
 | Create workspace | One form creating a workspace and its first store (code, name, country, optional region, time zone, currency). Defaults KE / Africa/Nairobi / KES. A failed store step does not create a second workspace on retry. Server field errors appear on the right field | `POST /v1/workspaces`, `POST /v1/workspaces/{id}/stores` |
 
 ## Main tabs
 
 | Tab | What it does | API |
 |-----|--------------|-----|
-| Dashboard | Store summary: history range and counts, AI availability with the reason (or eligibility progress "60 of 120 days"), readiness, quick actions. For stores you manage: an Upload action and an onboarding message when there is no history | history summary, readiness, `models/eligibility`, capabilities |
+| Dashboard | Store summary: history range and counts, AI availability with the reason and a "?" hint (or eligibility progress "60 of 120 days"), readiness, recent forecasts, and a notice when the latest sales are older than yesterday. Business shops show the **Getting started** checklist (below); once it is done, Forecast and Upload buttons take its place | history summary, readiness, `models/eligibility`, capabilities, `GET /v1/forecasts?batch=false`, latest batch |
 | Products | Paged list of 1,437 (demo) or your products with search, demand-class filter (popup) and long-press context menu. Tapping opens the product. Before any sales: "No sales yet" with an Upload button | `GET /v1/stores/{sid}/products` |
 | Data | History summary, Upload button (Owner/Manager of own workspaces), link to Readiness, import list with status filter and paging; long-press an import to delete (confirmed). The demo and Viewers see an explanatory note instead of Upload | `GET /v1/stores/{sid}/imports`, `DELETE /v1/imports/{id}` |
 | Forecasts | **Store-wide forecast.** Pick how far ahead (from `capabilities.horizons`), tap **Forecast all products**, watch "Forecasting… 40 of 100 products", then see every product with its expected units for the period, searchable and paged. Says whether the numbers come from the AI or the simple forecast. Flags a forecast made before new sales were imported, and offers Try again for products that failed for a temporary reason. Tapping a product opens its result. Finished pages reopen offline. Before any sales: "No sales yet" with an Upload button instead of a forecast button that can't work | `POST /v1/stores/{sid}/forecast-batches`, `GET /v1/forecast-batches/{id}`, `…/items`, `GET …/forecast-batches/latest`, `POST …/retry` |
