@@ -46,7 +46,7 @@ More detail: [`docs/HOW_FORECASTING_WORKS.md`](docs/HOW_FORECASTING_WORKS.md) fo
 | Repository | Role |
 |------------|------|
 | `SemProject_MLEngine` | Model research and the ML service. Holds the app handoff (`MOBILE_APP_HANDOFF.md`), the design spec (`retail_demand_forecasting_mobile_design.md`) and sample CSVs. Not modified by this app's work. |
-| `SemProject_Backend` | FastAPI backend (Docker). Contract: `docs/api.md`. The business version needs its store-wide forecast endpoints (migration `0005`), merged into its `main`; that change was approved by the project owner. |
+| `SemProject_Backend` | FastAPI backend (Docker). Contract: `docs/api.md`. The business version needs its store-wide forecast endpoints (migration `0005`), merged into its `main`; that change was approved by the project owner. At the owner's request, team management and invitations were later removed from it (migration `0006`). |
 | `VolatileDemandForecastingMobileApplication` | This repository: the Android app. |
 
 ## Status
@@ -55,7 +55,7 @@ All eight steps of the handoff's build order are implemented and pushed to `main
 
 1. Foundation  2. Authentication  3. Demo journey  4. Business journey  5. Team and settings  6. Research  7. Offline cache  8. Tests and acceptance
 
-After the eight steps, `main` was reworked for business owners (see "Business version" in `docs/BUILD_LOG.md`). Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 79 unit tests, lint with 0 errors). The signed-in screens have **not** been exercised by automated tooling; they were checked by hand on a physical phone up to step 3, and steps 4–8 still need a manual pass. `docs/ACCEPTANCE.md` lists exactly what is proved automatically and what needs a person.
+After the eight steps, `main` was reworked for business owners (see "Business version" in `docs/BUILD_LOG.md`). On 23 November 2026 the step 5 team features (Team screen, invitations) were removed at the owner's request, so each shop belongs to the account that created it. Automatic checks pass (`./gradlew lintDebug testDebugUnitTest`: 77 unit tests, lint with 0 errors). The signed-in screens have **not** been exercised by automated tooling; they were checked by hand on a physical phone up to step 3, and steps 4–8 still need a manual pass. `docs/ACCEPTANCE.md` lists exactly what is proved automatically and what needs a person.
 
 ## Documentation
 
@@ -90,14 +90,14 @@ New to the project? Follow **[SETUP.md](SETUP.md)**: it covers all three reposit
    - **Physical phone over USB:** keep `localhost` and run `adb reverse tcp:8000 tcp:8000` (again after every re-plug).
    - **Emulator:** use `http://10.0.2.2:8000` (this is also the default if `api.baseUrl` is missing).
 3. Build and install: `./gradlew installDebug`.
-4. Go through the intro tour, then create an account in the app (or sign in with one that exists on your backend). Password-reset codes and other emails appear in `docker compose logs api` (run in `../SemProject_Backend`).
+4. Go through the intro tour, then create an account in the app (or sign in with one that exists on your backend). Password-reset codes appear in `docker compose logs api` (run in `../SemProject_Backend`).
 
 Plain HTTP is allowed in **debug builds only** (`app/src/debug/AndroidManifest.xml`). The release manifest is HTTPS-only.
 
 ## Run the checks
 
 ```
-./gradlew testDebugUnitTest     # 79 unit tests
+./gradlew testDebugUnitTest     # 77 unit tests
 ./gradlew lintDebug             # Android lint
 ```
 
