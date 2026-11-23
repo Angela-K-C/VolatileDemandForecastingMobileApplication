@@ -126,6 +126,8 @@ Note: running the business version needs the backend at or after that merge (its
 - **Simple forecast defined** exactly in the app's Help, `HOW_FORECASTING_WORKS.md`, and the backend and ML engine docs (approved docs-only change there).
 - **Docs refresh (9 November).** Every document in the three repositories was checked against the code and updated, with the setup script (owner's go-ahead). Running the ML engine's tests on Windows found a real bug: Git for Windows checked the committed LightGBM `model.txt` files out with CRLF line endings, which LightGBM can't parse, so the process died (and an `ml` image built from such a checkout can't serve). Fixed in the ML engine with a `.gitattributes`; the setup script now repairs older checkouts and the Docker `models` volume, and checks every model loads.
 
+- **Team and invitations removed (23 November).** At the owner's request, the Team screen, My invitations, the "Manage team" menu entry and the Settings invitation badge were removed from the app, and the members and invitations endpoints from the backend (its `remove-team` branch, merged into its `main`; migration `0006` drops the `invitations` table). Change password moved to `UserRepository`. Each shop now belongs to the account that created it.
+
 ## Environment notes
 
 - The phone is connected by USB. After every re-plug run `adb reverse tcp:8000 tcp:8000`. `local.properties` has `api.baseUrl=http://localhost:8000`.
@@ -135,7 +137,7 @@ Note: running the business version needs the backend at or after that merge (its
 
 ## Open items
 
-1. Manual pass of steps 4–8 signed in (see `docs/ACCEPTANCE.md` and the README sample-file table). Demo scripts 6 (team) and 7 (password reset) need a second account and backend logs.
+1. Manual pass of steps 4–8 signed in (see `docs/ACCEPTANCE.md` and the README sample-file table). Demo script 7 (password reset) needs the backend logs.
 2. Convert the 28 `%d`-plus-unit strings to plurals.
 3. Add a seam for `ActiveStore` (an interface or a fake `Context`) so ViewModels can be unit tested; consider instrumented UI tests for sign-in and navigation.
 4. Extend the offline cache to the dashboard, product history and model screens if wanted; consider automatic upload retry.

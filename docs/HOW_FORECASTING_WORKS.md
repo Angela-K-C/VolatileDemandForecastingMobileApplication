@@ -125,7 +125,7 @@ The project has three repositories:
 | Repository | Role |
 |---|---|
 | `SemProject_MLEngine` | The research notebooks, the `mlengine` Python package (features, training, evaluation), the trained Walmart model files and an internal ML service that makes forecasts |
-| `SemProject_Backend` | The API the app talks to: accounts, workspaces and stores, sales imports, forecast jobs, training jobs and team management. Stores all business data in Postgres and calls the ML service |
+| `SemProject_Backend` | The API the app talks to: accounts, workspaces and stores, sales imports, forecast jobs and training jobs. Stores all business data in Postgres and calls the ML service |
 | `VolatileDemandForecastingMobileApplication` | This Android app |
 
 Below, each step of section 2 is mapped to what the project does. How the backend itself works (accounts, imports, background jobs, training jobs) is explained in the backend repository's `docs/how-the-backend-works.md`.

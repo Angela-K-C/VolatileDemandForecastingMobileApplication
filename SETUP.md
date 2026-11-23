@@ -180,8 +180,8 @@ On the `research` branch, sign in with a research user instead, choose the sampl
   ```
   Running it again for an existing email sets a new password.
 - **Research users** (add `--research` to the command above) matter only on the app's `research` branch, where they can choose model versions and past as-of dates and see the research summary and export. On `main` they behave like normal users.
-- **Roles** in a shop: Owner (everything, including the team), Manager (upload, forecast, train) and Viewer (read only). Invite people from Settings → Team.
-- **Email** (password-reset codes, invitations) is not sent locally. It is printed in the API log:
+- **Roles:** whoever creates a shop is its Owner. There are no invitations, so each shop belongs to one account.
+- **Email** (password-reset codes) is not sent locally. It is printed in the API log:
   ```powershell
   docker compose -f docker-compose.yml -f docker-compose.dev.yml logs api
   ```

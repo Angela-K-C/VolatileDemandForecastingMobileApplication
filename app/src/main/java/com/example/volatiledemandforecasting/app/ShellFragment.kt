@@ -17,7 +17,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.HelpOutline
 import androidx.compose.material.icons.automirrored.outlined.Logout
 import androidx.compose.material.icons.outlined.AccountTree
-import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.SwapHoriz
@@ -51,7 +50,7 @@ import com.example.volatiledemandforecasting.data.workspace.Selection
 abstract class ShellFragment : ComposeFragment() {
 
     protected val shell: ShellViewModel by appActivityViewModels {
-        ShellViewModel(it.session, it.userRepository, it.authRepository, it.activeStore, it.teamRepository)
+        ShellViewModel(it.session, it.userRepository, it.authRepository, it.activeStore)
     }
 
     @get:StringRes
@@ -89,14 +88,7 @@ abstract class ShellFragment : ComposeFragment() {
         val optionsMenu = buildList {
             add(MenuEntry(stringResource(R.string.menu_switch_shop), { navController.navigate(R.id.workspacePickerFragment) }, Icons.Outlined.SwapHoriz))
             add(MenuEntry(stringResource(R.string.menu_model_info), { navController.navigate(R.id.modelInfoFragment) }, Icons.Outlined.AccountTree))
-            if (state.canManageTeam) {
-                add(MenuEntry(stringResource(R.string.menu_manage_team), { navController.navigate(R.id.teamFragment) }, Icons.Outlined.Groups))
-            }
-            add(MenuEntry(
-                if (state.pendingInvitations > 0) stringResource(R.string.menu_settings_badge, state.pendingInvitations) else stringResource(R.string.menu_settings),
-                { navController.navigate(R.id.settingsFragment) },
-                Icons.Outlined.Settings,
-            ))
+            add(MenuEntry(stringResource(R.string.menu_settings), { navController.navigate(R.id.settingsFragment) }, Icons.Outlined.Settings))
             add(MenuEntry(stringResource(R.string.menu_help), { navController.navigate(R.id.helpFragment) }, Icons.AutoMirrored.Outlined.HelpOutline))
             add(MenuEntry(stringResource(R.string.menu_about), { showAbout = true }, Icons.Outlined.Info))
             add(MenuEntry(stringResource(R.string.menu_sign_out), { showSignOutConfirm = true }, Icons.AutoMirrored.Outlined.Logout))

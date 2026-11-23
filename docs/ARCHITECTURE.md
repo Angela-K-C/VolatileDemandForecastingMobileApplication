@@ -32,12 +32,12 @@ core/
                 menus, state views, InfoHint "?" explanations), charts/ (custom Canvas LineChart)
 data/           One package per backend area, each with DTOs + Retrofit API + repository:
                 auth, user, workspace (+ ActiveStore), store (+ ModelCard), catalog (products),
-                forecast (incl. batches), imports, training, team, cache (Room),
+                forecast (incl. batches), imports, training, cache (Room),
                 sample (SampleSalesFile: the built-in demo CSV, generated on the phone)
 feature/        One package per screen group: onboarding (intro tour), auth, workspace (+ create,
                 welcome), dashboard (+ GettingStarted checklist), products (+ detail), forecasts
                 (store-wide, config, progress, result, history), model, data (+ wizard, readiness),
-                team, settings (+ help), devgallery (debug only)
+                settings (+ help), devgallery (debug only)
 ```
 
 ## Layering
@@ -54,7 +54,7 @@ feature/        One package per screen group: onboarding (intro tour), auth, wor
 - a top bar with title, back arrow (supporting screens), the **workspace chip**, an optional contextual action, and the **Options menu**;
 - a bottom navigation bar when `tab` is set (Dashboard, Products, Data, Forecasts);
 - the sign-out confirmation and About dialog;
-- `collectSelection()` for the active store, and the shared `ShellViewModel` (profile, role, pending-invitation badge);
+- `collectSelection()` for the active store, and the shared `ShellViewModel` (profile and workspace chip);
 - the offline notice, shown above screens that declare `showsCachedData = true`.
 
 Three menu types (spec §6): **options** (top-bar overflow), **context** (long-press on list rows), **popup** (filter and sort choices).
@@ -135,7 +135,7 @@ Seven wizard steps: choose file → check file → map columns → validation �
 | Forecast API contract and polling | `ForecastContractTest` |
 | Chart/totals/verdict/formatting | `ForecastPresentationTest` |
 | Import wizard rules, upload request shape, DTO decoding, training/eligibility, store form checks | `ImportWizardTest` |
-| Team DTOs, assignable roles, password confirm | `TeamSettingsTest` |
+| Change password confirm | `ChangePasswordTest` |
 | Shown method (AI vs simple), totals, batch DTOs, sample-shop flag | `StoreForecastTest` |
 | Getting started checklist: steps, next step, AI stages, when it shows | `GettingStartedTest` |
 | Built-in sample sales file: header, products, days, determinism (writes a copy when `SAMPLE_SALES_OUT` is set; run with `--rerun`) | `SampleSalesFileTest` |

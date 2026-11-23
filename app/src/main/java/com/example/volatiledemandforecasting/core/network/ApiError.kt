@@ -67,9 +67,6 @@ object ApiErrorCodes {
     const val IMPORT_NOT_READY = "IMPORT_NOT_READY"
     const val REFERENCE_MODEL_FIXED = "REFERENCE_MODEL_FIXED"
     const val NOT_ELIGIBLE = "NOT_ELIGIBLE"
-    const val LAST_OWNER = "LAST_OWNER"
-    const val ALREADY_MEMBER = "ALREADY_MEMBER"
-    const val INVITATION_NOT_PENDING = "INVITATION_NOT_PENDING"
 }
 
 internal fun parseErrorBody(json: Json, body: String?): ErrorBody? =

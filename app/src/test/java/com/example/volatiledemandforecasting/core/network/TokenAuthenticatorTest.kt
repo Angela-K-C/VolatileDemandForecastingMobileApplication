@@ -90,7 +90,7 @@ class TokenAuthenticatorTest {
         val baseUrl = server.url("/").toString()
         val authApi = Network.retrofit(baseUrl, Network.publicClient()).create<AuthApi>()
         val authed = Network.retrofit(baseUrl, Network.authedClient(session, RetrofitTokenRefresher(authApi)))
-        users = UserRepository(authed.create<MeApi>(), Network.json)
+        users = UserRepository(authed.create<MeApi>(), session, Network.json)
         probe = authed.create<Probe>()
     }
 

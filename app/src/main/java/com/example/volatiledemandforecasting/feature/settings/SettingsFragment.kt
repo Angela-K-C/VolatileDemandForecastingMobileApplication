@@ -32,8 +32,8 @@ import com.example.volatiledemandforecasting.core.datastore.TableDisplay
 import com.example.volatiledemandforecasting.core.datastore.ThemeMode
 import com.example.volatiledemandforecasting.core.network.attempt
 import com.example.volatiledemandforecasting.core.ui.theme.Spacing
+import com.example.volatiledemandforecasting.data.workspace.Roles
 import com.example.volatiledemandforecasting.data.workspace.StoreDto
-import com.example.volatiledemandforecasting.feature.team.roleName
 import kotlinx.coroutines.launch
 
 class SettingsFragment : ShellFragment() {
@@ -56,7 +56,6 @@ class SettingsFragment : ShellFragment() {
             storeDetail = null
             selected?.let { s -> attempt { appContainer.workspaceRepository.store(s.storeId) }.onSuccess { storeDetail = it } }
         }
-        LaunchedEffect(Unit) { shell.refreshInvitations() }
 
         Column(
             Modifier.padding(padding).verticalScroll(rememberScrollState()).padding(Spacing.lg),
@@ -68,10 +67,6 @@ class SettingsFragment : ShellFragment() {
                     Value(stringResource(R.string.auth_email), it.email)
                 }
                 LinkRow(stringResource(R.string.set_change_password)) { navController.navigate(R.id.changePasswordFragment) }
-                LinkRow(
-                    if (shellState.pendingInvitations > 0) stringResource(R.string.set_my_invitations_count, shellState.pendingInvitations)
-                    else stringResource(R.string.set_my_invitations),
-                ) { navController.navigate(R.id.myInvitationsFragment) }
             }
 
             Section(R.string.set_workspace) {
@@ -142,6 +137,16 @@ private fun Section(title: Int, content: @Composable () -> Unit) {
         HorizontalDivider()
     }
 }
+
+@Composable
+private fun roleName(role: String): String = stringResource(
+    when (role) {
+        Roles.OWNER -> R.string.role_owner
+        Roles.MANAGER -> R.string.role_manager
+        Roles.VIEWER -> R.string.role_viewer
+        else -> R.string.role_reference
+    }
+)
 
 @Composable
 private fun Value(label: String, value: String) {

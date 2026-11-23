@@ -11,7 +11,7 @@ The spec's checklist was written for the research version. On `main` (the busine
 | 1 | Launches and routes after splash | Phone | Cold start signed out → Sign in; signed in → Dashboard. |
 | 2 | Only permitted workspaces; demo always available and marked | Phone | Your shops lists only your shops, with **Open the sample shop**; with no shop, the welcome screen offers **Try a sample shop**. The sample shop carries the "Sample shop: example data" banner. A second user does not see your shop. |
 | 3 | Compose only, no XML screen layouts, Fragments host `ComposeView` | Auto | `AcceptanceGuardTest`: no `res/layout`; every nav destination is a Fragment; no dangling destination ids. |
-| 4 | Options, context and popup menus with correct triggers | Phone | Options: top-bar overflow. Context: long-press a product, import, member or forecast row. Popup: filter and sort chips. |
+| 4 | Options, context and popup menus with correct triggers | Phone | Options: top-bar overflow. Context: long-press a product, import or readiness row. Popup: filter and sort chips. |
 | 5 | Next-day forecast for any of the 1,437 demo products, AI beside baseline | Phone | `main`: sample shop → any product → forecast; the result shows one number and **How accurate is this?** shows AI beside both baselines. `research`: handoff §8 script 2. |
 | 6 | Replay 2016-04-24..2016-05-21 shows forecast vs actual and model `1.1.0-bt` | Phone (`research` branch) | Handoff §8 script 1: `FOODS_3_090`, as-of 2016-05-08 → AI ≈ 57.1, last-day 77, actual 72. Run details show the model version. Leakage refusal (`NO_MODEL_FOR_AS_OF`) is research-only. `main` has no replays. |
 | 7 | ML parity tests | n/a | Lives in `SemProject_MLEngine` (already done). |

@@ -33,7 +33,7 @@ import com.example.volatiledemandforecasting.feature.auth.AuthValidation
 class ChangePasswordFragment : ShellFragment() {
     override val titleRes = R.string.screen_change_password
 
-    private val viewModel: ChangePasswordViewModel by appViewModels { ChangePasswordViewModel(it.teamRepository) }
+    private val viewModel: ChangePasswordViewModel by appViewModels { ChangePasswordViewModel(it.userRepository) }
 
     @Composable
     override fun ScreenContent(padding: PaddingValues) {

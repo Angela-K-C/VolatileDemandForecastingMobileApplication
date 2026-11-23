@@ -53,13 +53,11 @@ This describes `main`, the business version. Endpoints are from `SemProject_Back
 | Readiness | "X of Y products ready", the thresholds from the API, a stale-history notice, per-product reasons (not enough history, too many gaps, stale). States that simple forecasts work for every product | `GET /v1/stores/{sid}/readiness` |
 | AI for your store (in Model info) | Eligibility checks as "value of required" with Passed / Not yet. Train button for Owner/Manager once eligible. Progress while training; outcomes `TRAINED`, `GATE_FAILED` (plain wording with metrics, baseline stays in use), `NOT_ELIGIBLE`, `FAILED` (Retry only if `retryable`) | `GET …/models/eligibility`, `POST …/models/train`, `GET /v1/training-runs/{id}`, `POST …/retry` |
 
-## Team and settings
+## Settings
 
 | Screen | What it does | API |
 |--------|--------------|-----|
-| Team | Members with roles. Owners: invite by email with a role, change role, remove members, revoke pending invitations. Anyone can leave a workspace. Handles `LAST_OWNER`, `ALREADY_MEMBER`, `INVITATION_NOT_PENDING`. The demo workspace shows "no team" | members and invitations endpoints |
-| My invitations | Accept or decline pending invitations; accepting reloads the profile and workspace list. A badge on Settings counts pending ones | `GET /v1/me/invitations`, accept, decline |
-| Settings | Profile, current workspace/role/store with time zone and currency, theme (follow phone, light, dark), number display (one decimal or whole units), links to Change password, My invitations, workspace switcher, Help, app version | `GET /v1/me`, `GET /v1/stores/{sid}` |
+| Settings | Profile, current workspace/role/store with time zone and currency, theme (follow phone, light, dark), number display (one decimal or whole units), links to Change password, workspace switcher, Help, app version | `GET /v1/me`, `GET /v1/stores/{sid}` |
 | Change password | Current + new + confirm; wrong current password shown on that field; stays signed in on success (other sessions are ended by the backend) | `POST /v1/auth/change-password` |
 | Help | Getting started steps, Show the app tour, what the sales file needs, plain explanations of how forecasts work, when AI is available, limits (including the "lower error" caveat and ~4% high note), what happens to your data, and every "?" term | – |
 
@@ -84,4 +82,4 @@ See `ARCHITECTURE.md` (Offline cache). Viewable offline: products, imports, fore
 - `units: null` is drawn as a gap, never 0.
 - One decimal by default, with a whole-units option; totals use raw values.
 - Metrics blocks pair AI and baseline from the same block and carry the "lower error" caveat.
-- Roles: Viewers cannot generate (own workspace), upload or train; only Owners manage the team.
+- Roles: whoever creates a shop owns it. There is no team management or invitations (removed on 23 November 2026), so Manager and Viewer appear only if set directly in the backend; Viewers cannot generate (own workspace), upload or train.

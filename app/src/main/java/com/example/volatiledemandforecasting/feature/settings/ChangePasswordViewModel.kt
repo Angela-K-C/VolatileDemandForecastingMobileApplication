@@ -8,7 +8,7 @@ import com.example.volatiledemandforecasting.core.network.ApiException
 import com.example.volatiledemandforecasting.core.network.attempt
 import com.example.volatiledemandforecasting.core.network.toUiText
 import com.example.volatiledemandforecasting.core.ui.UiText
-import com.example.volatiledemandforecasting.data.team.TeamRepository
+import com.example.volatiledemandforecasting.data.user.UserRepository
 import com.example.volatiledemandforecasting.feature.auth.AuthValidation
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -35,7 +35,7 @@ object ChangePasswordRules {
         if (new != confirm) UiText.Res(R.string.cp_mismatch) else null
 }
 
-class ChangePasswordViewModel(private val team: TeamRepository) : ViewModel() {
+class ChangePasswordViewModel(private val users: UserRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(ChangePasswordState())
     val state: StateFlow<ChangePasswordState> = _state.asStateFlow()
@@ -59,7 +59,7 @@ class ChangePasswordViewModel(private val team: TeamRepository) : ViewModel() {
         }
         _state.update { it.copy(submitting = true, error = null) }
         viewModelScope.launch {
-            attempt { team.changePassword(s.current, s.new) }
+            attempt { users.changePassword(s.current, s.new) }
                 .onSuccess {
                     _state.update { it.copy(submitting = false) }
                     _done.send(Unit)
