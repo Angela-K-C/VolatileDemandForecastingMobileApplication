@@ -80,6 +80,8 @@ Sample-file expectations are in the README.
 
 ## Step 5: Team and settings
 
+> The team parts of this step (Team screen, My invitations, the Settings badge) were removed on 23 November 2026; see "After the business version".
+
 Built: Team screen (invite, change role, remove, revoke, leave), My invitations (accept/decline) with a Settings badge, Settings (profile, workspace and store details, theme, number display, links), Change password, Help. Theme is now a stored preference applied by `ComposeFragment`. The Options menu opens these screens instead of the earlier placeholders.
 
 Decisions: the demo workspace has no team screen content; the Reference role is never assignable; leaving a workspace clears the active selection and returns to the picker; a wrong current password appears on that field; API codes `LAST_OWNER`, `ALREADY_MEMBER` and `INVITATION_NOT_PENDING` have friendly messages.
