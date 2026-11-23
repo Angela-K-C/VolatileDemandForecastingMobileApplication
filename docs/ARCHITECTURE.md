@@ -69,7 +69,7 @@ Three menu types (spec §6): **options** (top-bar overflow), **context** (long-p
 
 `ActiveStore` (DataStore-backed) exposes the current `StoreSelection` (workspace, role, store, `isReference`). It also has a **data revision** counter: after an import, deleted import or finished training run, `dataChanged()` bumps it and the Dashboard, Products, Readiness, Training and Model screens reload instead of showing stale numbers.
 
-Permissions derive from the selection: `canGenerateForecasts` (reference store, or any role except Viewer) and `canManageData` (own workspace and Owner/Manager). The Reference (demo) workspace is read-only for data.
+Permissions derive from the selection: `canGenerateForecasts` (reference store, or any role except Viewer) and `canManageData` (own workspace and Owner/Manager). Since team management was removed, every own workspace has the Owner role, so in practice both are true for your own shops; the Manager and Viewer branches remain for the backend's unassignable roles. The Reference (demo) workspace is read-only for data.
 
 ## Networking and authentication
 

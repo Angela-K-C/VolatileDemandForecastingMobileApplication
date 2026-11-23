@@ -243,7 +243,7 @@ This is the central design decision (decision 7 in the ML engine's `docs/noteboo
 
 - An hourly backend maintenance pass fills in actual sales on past forecasts once a shop has uploaded sales for those days ("Actuals now available").
 - A forecast made before newer sales were imported is flagged as outdated, and the app offers to forecast again.
-- The first training is started by an owner or manager from the app's **AI model** screen. After that, the backend retrains the shop's model weekly if new sales have been uploaded since the last training, and the gate applies again each time.
+- The first training is started by the shop's owner from the app's **AI model** screen. After that, the backend retrains the shop's model weekly if new sales have been uploaded since the last training, and the gate applies again each time.
 
 ### 3.9 Showing the forecast (section 2.10)
 
@@ -301,7 +301,7 @@ What it does **not** do: forecast a business owner's own products. Its inputs in
 
    The app polls until the batch finishes, then lists every product with its expected units.
 6. **Open a product** to see the headline number, a chart of recent and expected sales, the day-by-day list, and "How accurate is this?".
-7. **Grow into AI.** As uploads add history, the AI model screen shows progress ("64 of 120 days"). Once eligible, an owner or manager taps Train. If the shop's model passes the gate, all later forecasts use it; if not, the app explains that the simple forecast was better and keeps using it.
+7. **Grow into AI.** As uploads add history, the AI model screen shows progress ("64 of 120 days"). Once eligible, the owner taps Train. If the shop's model passes the gate, all later forecasts use it; if not, the app explains that the simple forecast was better and keeps using it.
 
 ---
 

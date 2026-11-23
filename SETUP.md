@@ -180,7 +180,7 @@ On the `research` branch, sign in with a research user instead, choose the sampl
   ```
   Running it again for an existing email sets a new password.
 - **Research users** (add `--research` to the command above) matter only on the app's `research` branch, where they can choose model versions and past as-of dates and see the research summary and export. On `main` they behave like normal users.
-- **Roles:** whoever creates a shop is its Owner. There are no invitations, so each shop belongs to one account.
+- **Shops belong to one account:** whoever creates a shop owns it. There are no teams or invitations.
 - **Email** (password-reset codes) is not sent locally. It is printed in the API log:
   ```powershell
   docker compose -f docker-compose.yml -f docker-compose.dev.yml logs api
@@ -211,9 +211,9 @@ After `git pull` in the backend or ML engine, rebuild with `up -d --build`; the 
 
 | Repository | Command | Needs |
 |------------|---------|-------|
-| App | `.\gradlew.bat testDebugUnitTest` and `.\gradlew.bat lintDebug` | Nothing else (79 JVM tests; lint 0 errors) |
+| App | `.\gradlew.bat testDebugUnitTest` and `.\gradlew.bat lintDebug` | Nothing else (77 JVM tests; lint 0 errors) |
 | ML engine | `.\.venv\Scripts\python.exe -m pytest` | The setup script's environment (it installs the test tools). 23 tests in about 15 s, plus 3 full-data tests that are skipped unless `MLENGINE_FULL_TESTS=1` (needs the raw data, about 2 minutes) |
-| Backend | `pytest` with `TEST_DATABASE_URL` set | Python 3.12 with `pip install -e ".[dev]"` and a PostgreSQL test database; see `SemProject_Backend\README.md`. 67 tests |
+| Backend | `pytest` with `TEST_DATABASE_URL` set | Python 3.12 with `pip install -e ".[dev]"` and a PostgreSQL test database; see `SemProject_Backend\README.md`. 64 tests |
 
 ## 11. Manual setup (macOS, Linux, or without the script)
 

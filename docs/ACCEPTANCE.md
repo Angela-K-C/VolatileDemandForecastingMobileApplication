@@ -2,7 +2,7 @@
 
 Status key: **Auto** = proved by a unit test or lint in this repo. **Phone** = needs a signed-in person using the app against the local backend. Nothing here has been run signed in by the developer tooling; the Phone items are open until someone ticks them.
 
-Run the automatic checks: `./gradlew lintDebug testDebugUnitTest` (79 tests, lint 0 errors).
+Run the automatic checks: `./gradlew lintDebug testDebugUnitTest` (77 tests, lint 0 errors).
 
 The spec's checklist was written for the research version. On `main` (the business version) the demo store is the **sample shop**, results lead with one number, and replays, model-version choice and the research summary are gone; rows 5 and 6 are checked on the `research` branch. The business version's own checks follow the main table.
 
